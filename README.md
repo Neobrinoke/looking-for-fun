@@ -17,7 +17,7 @@ Ce projet permet de crée de groupe de jeu (ex: je recherche x personnes pour Lu
 Le diagramme des classes (**administration/lff-class-diag.jpeg**) et le UseCaseDiagram (**administration/lff-use_case-diag.jpeg**) sont consultables dans /administration  
 
 ## Maquettes
-- FrontPage V1 (susceptible d'être repensée): https://wireframe.cc/mcIEaG  
+- FrontPage V1 (susceptible d'être repensée): https://wireframe.cc/jHWJUw  
 
 ## Idées
 - Forum / Blog
