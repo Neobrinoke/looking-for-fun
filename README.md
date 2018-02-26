@@ -1,7 +1,7 @@
-## Looking-for-fun 
+# Looking-for-fun 
 Ce projet permet de crée de groupe de jeu (ex: je recherche x personnes pour Lundi 20H)
 
-# User Stories 
+## User Stories 
 -_**US1** : En tant que Visiteur_, je veux consulter (**Browse**) les demandes de groupe.  
 -_**US2** : En tant que Visiteur_, je veux lire (**Read**) une demande de groupe.  
 -_**US3** : En tant que Visiteur_, je veux pouvoir m'inscrire (**Register**) sur le site afin de participer.  
@@ -9,12 +9,12 @@ Ce projet permet de crée de groupe de jeu (ex: je recherche x personnes pour Lu
 -_**US5** : En tant que créateur du groupe_, je veux modifier (**Edit**) ou supprimer (**Delete**) le groupe et pouvoir expulser des personnes.  
 -_**US6** : En tant qu'Admin_, je veux modifier (**Edit**) ou supprimer (**Delete**) tous les groupes.  
 
-# Lots Fonctionnels (par ordre de priorité : 1 = priorité haute)
+## Lots Fonctionnels (par ordre de priorité : 1 = priorité haute)
 -LOT 1 : Système d'authentification: **US3** (Inscription / Connexion -> User).  
 -LOT 2 : Système de "Group": **US1, US2, US4, US5, US6** (BREAD).  
 
-# Diagrammes 
+## Diagrammes 
 Le diagramme des classes (**lff-diag-class.png**) et le UseCaseDiagram (**lff-uses_case-diag.png**) sont consultables dans /administration  
 
-# Maquettes
+## Maquettes
 -FrontPage V1 (susceptible d'être repensée): https://wireframe.cc/mcIEaG  
