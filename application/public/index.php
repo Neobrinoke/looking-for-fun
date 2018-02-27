@@ -1,11 +1,9 @@
 <?php
 
+use App\Controller\Controller;
+
 require('../vendor/autoload.php');
 
-use App\Model\Model;
+$controller = new Controller();
 
-$test = new Model();
-
-var_dump($test);
-
-echo phpinfo();
+$controller->indexAction();
