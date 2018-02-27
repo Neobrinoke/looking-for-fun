@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use DateTime;
 
-class GroupGame extends Entity
+class GameGroup extends Entity
 {
     /** @var int */
     private $id;

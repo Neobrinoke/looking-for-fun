@@ -10,8 +10,8 @@ class GameGroupUser extends Entity
     /** @var User|null */
     private $user;
 
-    /** @var GroupGame|null */
-    private $groupGame;
+    /** @var GameGroup|null */
+    private $gameGroup;
 
     /**
      * @return int
@@ -46,19 +46,19 @@ class GameGroupUser extends Entity
     }
 
     /**
-     * @return GroupGame|null
+     * @return GameGroup|null
      */
-    public function getGroupGame(): ?GroupGame
+    public function getGameGroup(): ?GameGroup
     {
-        return $this->groupGame;
+        return $this->gameGroup;
     }
 
     /**
-     * @param GroupGame|null $groupGame
+     * @param GameGroup|null $gameGroup
      */
-    public function setGroupGame(?GroupGame $groupGame): void
+    public function setGameGroup(?GameGroup $gameGroup): void
     {
-        $this->groupGame = $groupGame;
+        $this->gameGroup = $gameGroup;
     }
 
     /**
@@ -67,6 +67,6 @@ class GameGroupUser extends Entity
     public function __construct()
     {
         $this->setUser(null);
-        $this->setGroupGame(null);
+        $this->setGameGroup(null);
     }
 }

@@ -61,7 +61,7 @@ CREATE TABLE `game_groups` (
 CREATE TABLE `game_groups_users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `game_groups_id` int(10) UNSIGNED NOT NULL
+  `game_group_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -105,7 +105,7 @@ ALTER TABLE `game_groups`
 ALTER TABLE `game_groups_users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `game_groups_id` (`game_groups_id`);
+  ADD KEY `game_group_id` (`game_group_id`);
 
 --
 -- Index pour la table `users`
@@ -158,7 +158,7 @@ ALTER TABLE `game_groups`
 --
 ALTER TABLE `game_groups_users`
   ADD CONSTRAINT `game_groups_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `game_groups_users_ibfk_2` FOREIGN KEY (`game_groups_id`) REFERENCES `game_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `game_groups_users_ibfk_2` FOREIGN KEY (`game_group_id`) REFERENCES `game_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
