@@ -14,7 +14,7 @@ class Controller
     public function indexAction()
     {
         $oUserRepository = new UserRepository();
-        $user = $oUserRepository->findById(7);
+        $user = $oUserRepository->findById(1);
         var_dump($user);
 
         $gameAccountRepository = new GameAccountRepository();
