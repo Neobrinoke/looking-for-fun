@@ -15,10 +15,10 @@ class Controller
     {
         $oUserRepository = new UserRepository();
         $user = $oUserRepository->findById(1);
-        var_dump($user);
 
         $gameAccountRepository = new GameAccountRepository();
         $gameAccount = $gameAccountRepository->findById(1);
-        var_dump($gameAccount);
+
+        include(__DIR__ . '/../../resources/view/default/default.php');
     }
 }

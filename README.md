@@ -25,3 +25,6 @@ Le diagramme des classes (**administration/lff-class-diag.jpeg**) et le UseCaseD
 - Multi gaming
 - Guide page
 - Stuff troll sur certains jeux
+
+## Liens utils
+- https://slides.com/neobronoke/looking-for-fun/live#/
