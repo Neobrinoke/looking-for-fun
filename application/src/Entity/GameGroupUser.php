@@ -2,15 +2,27 @@
 
 namespace App\Entity;
 
+/**
+ * @Table(name="game_groups_users")
+ */
 class GameGroupUser extends Entity
 {
-	/** @var int */
+	/**
+	 * @var int
+	 * @Column(name="id")
+	 */
 	private $id;
 
-	/** @var User|null */
+	/**
+	 * @var User|null
+	 * @Column(name="user_id")
+	 */
 	private $user;
 
-	/** @var GameGroup|null */
+	/**
+	 * @var GameGroup|null
+	 * @Column(name="game_group_id")
+	 */
 	private $gameGroup;
 
 	/**

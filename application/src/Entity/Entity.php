@@ -14,6 +14,7 @@ abstract class Entity
 	public const METHOD_TYPE_SET = 'set';
 
 	abstract public function getId();
+
 	abstract public function setId(int $id);
 
 	private static $pdoInstance = null;
@@ -23,7 +24,7 @@ abstract class Entity
 	 */
 	private static function getPDO()
 	{
-		if(is_null(self::$pdoInstance)) {
+		if (is_null(self::$pdoInstance)) {
 			self::$pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
 		}
 		return self::$pdoInstance;
@@ -160,10 +161,10 @@ abstract class Entity
 	{
 		$fields = static::getAllDatabaseFields();
 
-		$sql = 'INSERT INTO ' . static::getTableName() . ' ';
-
 		$beforeValues = '';
 		$afterValues = '';
+
+		$sql = 'INSERT INTO ' . static::getTableName() . ' ';
 		foreach ($fields as $field) {
 			if ($fields[0] == $field) { // first
 				$beforeValues .= '(' . $field . ', ';
@@ -179,7 +180,7 @@ abstract class Entity
 		$sql .= $beforeValues . ' VALUES ' . $afterValues;
 
 		$statement = static::getPDO()->prepare($sql);
-		$result = $statement->execute($this->retreiveEntityProperties($this));
+		$result = $statement->execute($this->retrieveEntityProperties($this));
 
 		$lastId = static::getPDO()->lastInsertId();
 
@@ -192,22 +193,49 @@ abstract class Entity
 	 * Update current entity
 	 *
 	 * @return bool
+	 * @throws ReflectionException
+	 * @throws \Exception
 	 */
 	private function update(): bool
 	{
-		var_dump('Update');
-		return false;
+		$fields = static::getAllDatabaseFields();
+
+		$sql = 'UPDATE ' . static::getTableName() . ' ';
+		foreach ($fields as $field) {
+			if ($fields[0] == $field) { // first
+				$sql .= 'SET ' . $field . ' = :' . $field . ', ';
+			} else if (end($fields) == $field) { // last
+				$sql .= $field . ' = :' . $field;
+			} else {
+				$sql .= $field . ' = :' . $field . ', ';
+			}
+		}
+		$sql .= ' WHERE id = :id';
+
+		$statement = static::getPDO()->prepare($sql);
+
+		$options = $this->retrieveEntityProperties($this);
+		$options['id'] = $this->getId();
+
+		$result = $statement->execute($options);
+
+		return $result;
 	}
 
-	private function retreiveEntityProperties(Entity $entity): array
+	/**
+	 * Retrieve entity properties for PDO Execute
+	 *
+	 * @param Entity $entity
+	 * @return array
+	 * @throws ReflectionException
+	 * @throws \Exception
+	 */
+	private function retrieveEntityProperties(Entity $entity): array
 	{
 		$results = [];
 
 		$fields = static::getAllDatabaseFields();
 		$methods = static::getAllMethods(static::METHOD_TYPE_GET);
-
-//		var_dump($fields);
-//		var_dump($methods);
 
 		$i = 0;
 
@@ -228,6 +256,12 @@ abstract class Entity
 					/** @var \DateTime $var */
 					$var = $entity->$methodName();
 					$results[$fields[$i]] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
+				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					$entity2 = $entity->$methodName();
+					if (is_null($entity2)) {
+						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
+					}
+					$results[$fields[$i]] = $entity2->getId();
 				} else {
 					throw new \Exception(sprintf("Object type (%s) does not managed by this ORM actually", $className));
 				}
@@ -271,8 +305,15 @@ abstract class Entity
 
 			if (!is_null($reflectionClass)) { // need instantiable parameter
 				$className = $reflectionClass->getName();
+
 				if ($className == 'DateTime') {
 					$this->$methodName(is_null($result[$i]) ? null : new $className($result[$i]));
+				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					$entity = $className::find($result[$i]);
+					if (is_null($entity)) {
+						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
+					}
+					$this->$methodName($entity);
 				} else {
 					throw new \Exception(sprintf("Instantiable type (%s) does not managed by this ORM actually", $className));
 				}

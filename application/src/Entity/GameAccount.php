@@ -4,27 +4,51 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * @Table(name="game_accounts")
+ */
 class GameAccount extends Entity
 {
-	/** @var int */
+	/**
+	 * @var int
+	 * @Column(name="id")
+	 */
 	private $id;
 
-	/** @var User|null */
+	/**
+	 * @var User|null
+	 * @Column(name="user_id")
+	 */
 	private $user;
 
-	/** @var string */
+	/**
+	 * @var string
+	 * @Column(name="player_name")
+	 */
 	private $playerName;
 
-	/** @var string */
+	/**
+	 * @var string
+	 * @Column(name="server_location")
+	 */
 	private $serverLocation;
 
-	/** @var DateTime */
+	/**
+	 * @var DateTime
+	 * @Column(name="created_at")
+	 */
 	private $createdAt;
 
-	/** @var DateTime */
+	/**
+	 * @var DateTime
+	 * @Column(name="updated_at")
+	 */
 	private $updatedAt;
 
-	/** @var DateTime|null */
+	/**
+	 * @var DateTime|null
+	 * @Column(name="deleted_at")
+	 */
 	private $deletedAt;
 
 	/**

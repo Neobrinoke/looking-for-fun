@@ -2,10 +2,8 @@
 
 Default
 
-<?= var_dump($user); ?>
-
-<?= var_dump($gameAccount); ?>
-
+<?= $a ?>
+<?= $b ?>
 
 <?php
 $content = ob_get_clean();
