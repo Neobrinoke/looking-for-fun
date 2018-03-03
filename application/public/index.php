@@ -4,6 +4,9 @@ ini_set("display_errors", 1);
 
 require('../vendor/autoload.php');
 
-include('../config/routes.php');
+session_start();
 
-echo \App\Framework\Router::execute($_SERVER['REQUEST_URI']);
+require('../config/routes.php');
+
+$app = new \App\Framework\App();
+echo $app->run($_SERVER['REQUEST_URI']);

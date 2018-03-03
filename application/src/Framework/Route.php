@@ -16,6 +16,9 @@ class Route
 	/** @var string */
 	private $name;
 
+	/** @var array */
+	private $params = [];
+
 	/**
 	 * Route constructor.
 	 *
@@ -94,5 +97,21 @@ class Route
 	public function setName(string $name): void
 	{
 		$this->name = $name;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getParams(): array
+	{
+		return $this->params;
+	}
+
+	/**
+	 * @param array $params
+	 */
+	public function setParams(array $params): void
+	{
+		$this->params = $params;
 	}
 }

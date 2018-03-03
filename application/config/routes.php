@@ -2,4 +2,4 @@
 
 use App\Framework\Router;
 
-Router::get('/blog/(\w+)/(\w+)', 'Controller@indexAction', 'blog');
+Router::get('/', 'Controller@indexAction', 'index');
