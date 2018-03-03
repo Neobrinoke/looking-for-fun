@@ -4,151 +4,176 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * @Table(name="game_groups")
+ */
 class GameGroup extends Entity
 {
-    /** @var int */
-    private $id;
+	/**
+	 * @var int
+	 * @Column(name="id")
+	 */
+	private $id;
 
-    /** @var string */
-    private $name;
+	/**
+	 * @var string
+	 * @Column(name="name")
+	 */
+	private $name;
 
-    /** @var string */
-    private $description;
+	/**
+	 * @var string
+	 * @Column(name="description")
+	 */
+	private $description;
 
-    /** @var User|null */
-    private $owner;
+	/**
+	 * @var User|null
+	 * @Column(name="owner_id")
+	 */
+	private $owner;
 
-    /** @var DateTime */
-    private $createdAt;
+	/**
+	 * @var DateTime
+	 * @Column(name="created_at")
+	 */
+	private $createdAt;
 
-    /** @var DateTime */
-    private $updatedAt;
+	/**
+	 * @var DateTime
+	 * @Column(name="updated_at")
+	 */
+	private $updatedAt;
 
-    /** @var DateTime|null */
-    private $deletedAt;
+	/**
+	 * @var DateTime|null
+	 * @Column(name="deleted_at")
+	 */
+	private $deletedAt;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	/**
+	 * GroupGame constructor.
+	 */
+	public function __construct()
+	{
+		$this->setId(0);
+		$this->setName('');
+		$this->setDescription('');
+		$this->setOwner(null);
+		$this->setCreatedAt(new DateTime());
+		$this->setUpdatedAt(new DateTime());
+		$this->setDeletedAt(null);
+	}
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	/**
+	 * @param int $id
+	 */
+	public function setId(int $id): void
+	{
+		$this->id = $id;
+	}
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
+	/**
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
+	/**
+	 * @param string $name
+	 */
+	public function setName(string $name): void
+	{
+		$this->name = $name;
+	}
 
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
+	/**
+	 * @return string
+	 */
+	public function getDescription(): string
+	{
+		return $this->description;
+	}
 
-    /**
-     * @return User|null
-     */
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
+	/**
+	 * @param string $description
+	 */
+	public function setDescription(string $description): void
+	{
+		$this->description = $description;
+	}
 
-    /**
-     * @param User|null $owner
-     */
-    public function setOwner(?User $owner): void
-    {
-        $this->owner = $owner;
-    }
+	/**
+	 * @return User|null
+	 */
+	public function getOwner(): ?User
+	{
+		return $this->owner;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @param User|null $owner
+	 */
+	public function setOwner(?User $owner): void
+	{
+		$this->owner = $owner;
+	}
 
-    /**
-     * @param DateTime $createdAt
-     */
-    public function setCreatedAt(DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getCreatedAt(): DateTime
+	{
+		return $this->createdAt;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
+	/**
+	 * @param DateTime $createdAt
+	 */
+	public function setCreatedAt(DateTime $createdAt): void
+	{
+		$this->createdAt = $createdAt;
+	}
 
-    /**
-     * @param DateTime $updatedAt
-     */
-    public function setUpdatedAt(DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getUpdatedAt(): DateTime
+	{
+		return $this->updatedAt;
+	}
 
-    /**
-     * @return DateTime|null
-     */
-    public function getDeletedAt(): ?DateTime
-    {
-        return $this->deletedAt;
-    }
+	/**
+	 * @param DateTime $updatedAt
+	 */
+	public function setUpdatedAt(DateTime $updatedAt): void
+	{
+		$this->updatedAt = $updatedAt;
+	}
 
-    /**
-     * @param DateTime|null $deletedAt
-     */
-    public function setDeletedAt(?DateTime $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
+	/**
+	 * @return DateTime|null
+	 */
+	public function getDeletedAt(): ?DateTime
+	{
+		return $this->deletedAt;
+	}
 
-    /**
-     * GroupGame constructor.
-     */
-    public function __construct()
-    {
-        $this->setName('');
-        $this->setDescription('');
-        $this->setOwner(null);
-        $this->setCreatedAt(new DateTime());
-        $this->setUpdatedAt(new DateTime());
-        $this->setDeletedAt(null);
-    }
+	/**
+	 * @param DateTime|null $deletedAt
+	 */
+	public function setDeletedAt(?DateTime $deletedAt): void
+	{
+		$this->deletedAt = $deletedAt;
+	}
 }

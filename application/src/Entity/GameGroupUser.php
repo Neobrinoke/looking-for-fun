@@ -4,69 +4,70 @@ namespace App\Entity;
 
 class GameGroupUser extends Entity
 {
-    /** @var int */
-    private $id;
+	/** @var int */
+	private $id;
 
-    /** @var User|null */
-    private $user;
+	/** @var User|null */
+	private $user;
 
-    /** @var GameGroup|null */
-    private $gameGroup;
+	/** @var GameGroup|null */
+	private $gameGroup;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	/**
+	 * GameGroupUser constructor.
+	 */
+	public function __construct()
+	{
+		$this->setId(0);
+		$this->setUser(null);
+		$this->setGameGroup(null);
+	}
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
+	/**
+	 * @param int $id
+	 */
+	public function setId(int $id): void
+	{
+		$this->id = $id;
+	}
 
-    /**
-     * @param User|null $user
-     */
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
-    }
+	/**
+	 * @return User|null
+	 */
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @return GameGroup|null
-     */
-    public function getGameGroup(): ?GameGroup
-    {
-        return $this->gameGroup;
-    }
+	/**
+	 * @param User|null $user
+	 */
+	public function setUser(?User $user): void
+	{
+		$this->user = $user;
+	}
 
-    /**
-     * @param GameGroup|null $gameGroup
-     */
-    public function setGameGroup(?GameGroup $gameGroup): void
-    {
-        $this->gameGroup = $gameGroup;
-    }
+	/**
+	 * @return GameGroup|null
+	 */
+	public function getGameGroup(): ?GameGroup
+	{
+		return $this->gameGroup;
+	}
 
-    /**
-     * GameGroupUser constructor.
-     */
-    public function __construct()
-    {
-        $this->setUser(null);
-        $this->setGameGroup(null);
-    }
+	/**
+	 * @param GameGroup|null $gameGroup
+	 */
+	public function setGameGroup(?GameGroup $gameGroup): void
+	{
+		$this->gameGroup = $gameGroup;
+	}
 }

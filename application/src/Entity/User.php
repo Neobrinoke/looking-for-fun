@@ -4,171 +4,199 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * @Table(name="users")
+ */
 class User extends Entity
 {
-    /** @var int */
-    private $id;
+	/**
+	 * @var int
+	 * @Column(name="id")
+	 */
+	private $id;
 
-    /** @var string */
-    private $name;
+	/**
+	 * @var string
+	 * @Column(name="name")
+	 */
+	private $name;
 
-    /** @var string */
-    private $login;
+	/**
+	 * @var string
+	 * @Column(name="login")
+	 */
+	private $login;
 
-    /** @var string */
-    private $password;
+	/**
+	 * @var string
+	 * @Column(name="password")
+	 */
+	private $password;
 
-    /** @var string */
-    private $email;
+	/**
+	 * @var string
+	 * @Column(name="email")
+	 */
+	private $email;
 
-    /** @var DateTime */
-    private $createdAt;
+	/**
+	 * @var DateTime
+	 * @Column(name="created_at")
+	 */
+	private $createdAt;
 
-    /** @var DateTime */
-    private $updatedAt;
+	/**
+	 * @var DateTime
+	 * @Column(name="updated_at")
+	 */
+	private $updatedAt;
 
-    /** @var DateTime|null */
-    private $deletedAt;
+	/**
+	 * @var DateTime|null
+	 * @Column(name="deleted_at")
+	 */
+	private $deletedAt;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	/**
+	 * User constructor.
+	 */
+	public function __construct()
+	{
+		$this->setId(0);
+		$this->setName('');
+		$this->setLogin('');
+		$this->setPassword('');
+		$this->setEmail('');
+		$this->setCreatedAt(new DateTime());
+		$this->setUpdatedAt(new DateTime());
+		$this->setDeletedAt(null);
+	}
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	/**
+	 * @param int $id
+	 */
+	public function setId(int $id): void
+	{
+		$this->id = $id;
+	}
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
+	/**
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
-    /**
-     * @return string
-     */
-    public function getLogin(): string
-    {
-        return $this->login;
-    }
+	/**
+	 * @param string $name
+	 */
+	public function setName(string $name): void
+	{
+		$this->name = $name;
+	}
 
-    /**
-     * @param string $login
-     */
-    public function setLogin(string $login): void
-    {
-        $this->login = $login;
-    }
+	/**
+	 * @return string
+	 */
+	public function getLogin(): string
+	{
+		return $this->login;
+	}
 
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
+	/**
+	 * @param string $login
+	 */
+	public function setLogin(string $login): void
+	{
+		$this->login = $login;
+	}
 
-    /**
-     * @param string $password
-     */
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
+	/**
+	 * @return string
+	 */
+	public function getPassword(): string
+	{
+		return $this->password;
+	}
 
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
+	/**
+	 * @param string $password
+	 */
+	public function setPassword(string $password): void
+	{
+		$this->password = $password;
+	}
 
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
+	/**
+	 * @return string
+	 */
+	public function getEmail(): string
+	{
+		return $this->email;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @param string $email
+	 */
+	public function setEmail(string $email): void
+	{
+		$this->email = $email;
+	}
 
-    /**
-     * @param DateTime $createdAt
-     */
-    public function setCreatedAt(DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getCreatedAt(): DateTime
+	{
+		return $this->createdAt;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
+	/**
+	 * @param DateTime $createdAt
+	 */
+	public function setCreatedAt(DateTime $createdAt): void
+	{
+		$this->createdAt = $createdAt;
+	}
 
-    /**
-     * @param DateTime $updatedAt
-     */
-    public function setUpdatedAt(DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getUpdatedAt(): DateTime
+	{
+		return $this->updatedAt;
+	}
 
-    /**
-     * @return DateTime|null
-     */
-    public function getDeletedAt(): ?DateTime
-    {
-        return $this->deletedAt;
-    }
+	/**
+	 * @param DateTime $updatedAt
+	 */
+	public function setUpdatedAt(DateTime $updatedAt): void
+	{
+		$this->updatedAt = $updatedAt;
+	}
 
-    /**
-     * @param DateTime|null $deletedAt
-     */
-    public function setDeletedAt(?DateTime $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
+	/**
+	 * @return DateTime|null
+	 */
+	public function getDeletedAt(): ?DateTime
+	{
+		return $this->deletedAt;
+	}
 
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {
-        $this->setName('');
-        $this->setLogin('');
-        $this->setPassword('');
-        $this->setEmail('');
-        $this->setCreatedAt(new DateTime());
-        $this->setUpdatedAt(new DateTime());
-        $this->setDeletedAt(null);
-    }
+	/**
+	 * @param DateTime|null $deletedAt
+	 */
+	public function setDeletedAt(?DateTime $deletedAt): void
+	{
+		$this->deletedAt = $deletedAt;
+	}
 }

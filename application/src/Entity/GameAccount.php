@@ -6,149 +6,150 @@ use DateTime;
 
 class GameAccount extends Entity
 {
-    /** @var int */
-    private $id;
+	/** @var int */
+	private $id;
 
-    /** @var User|null */
-    private $user;
+	/** @var User|null */
+	private $user;
 
-    /** @var string */
-    private $playerName;
+	/** @var string */
+	private $playerName;
 
-    /** @var string */
-    private $serverLocation;
+	/** @var string */
+	private $serverLocation;
 
-    /** @var DateTime */
-    private $createdAt;
+	/** @var DateTime */
+	private $createdAt;
 
-    /** @var DateTime */
-    private $updatedAt;
+	/** @var DateTime */
+	private $updatedAt;
 
-    /** @var DateTime|null */
-    private $deletedAt;
+	/** @var DateTime|null */
+	private $deletedAt;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+	/**
+	 * AccountGame constructor.
+	 */
+	public function __construct()
+	{
+		$this->setId(0);
+		$this->setUser(null);
+		$this->setPlayerName('');
+		$this->setServerLocation('');
+		$this->setCreatedAt(new DateTime());
+		$this->setUpdatedAt(new DateTime());
+		$this->setDeletedAt(null);
+	}
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
+	/**
+	 * @param int $id
+	 */
+	public function setId(int $id): void
+	{
+		$this->id = $id;
+	}
 
-    /**
-     * @param User|null $user
-     */
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
-    }
+	/**
+	 * @return User|null
+	 */
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @return string
-     */
-    public function getPlayerName(): string
-    {
-        return $this->playerName;
-    }
+	/**
+	 * @param User|null $user
+	 */
+	public function setUser(?User $user): void
+	{
+		$this->user = $user;
+	}
 
-    /**
-     * @param string $playerName
-     */
-    public function setPlayerName(string $playerName): void
-    {
-        $this->playerName = $playerName;
-    }
+	/**
+	 * @return string
+	 */
+	public function getPlayerName(): string
+	{
+		return $this->playerName;
+	}
 
-    /**
-     * @return string
-     */
-    public function getServerLocation(): string
-    {
-        return $this->serverLocation;
-    }
+	/**
+	 * @param string $playerName
+	 */
+	public function setPlayerName(string $playerName): void
+	{
+		$this->playerName = $playerName;
+	}
 
-    /**
-     * @param string $serverLocation
-     */
-    public function setServerLocation(string $serverLocation): void
-    {
-        $this->serverLocation = $serverLocation;
-    }
+	/**
+	 * @return string
+	 */
+	public function getServerLocation(): string
+	{
+		return $this->serverLocation;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @param string $serverLocation
+	 */
+	public function setServerLocation(string $serverLocation): void
+	{
+		$this->serverLocation = $serverLocation;
+	}
 
-    /**
-     * @param DateTime $createdAt
-     */
-    public function setCreatedAt(DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getCreatedAt(): DateTime
+	{
+		return $this->createdAt;
+	}
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
+	/**
+	 * @param DateTime $createdAt
+	 */
+	public function setCreatedAt(DateTime $createdAt): void
+	{
+		$this->createdAt = $createdAt;
+	}
 
-    /**
-     * @param DateTime $updatedAt
-     */
-    public function setUpdatedAt(DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
+	/**
+	 * @return DateTime
+	 */
+	public function getUpdatedAt(): DateTime
+	{
+		return $this->updatedAt;
+	}
 
-    /**
-     * @return DateTime|null
-     */
-    public function getDeletedAt(): ?DateTime
-    {
-        return $this->deletedAt;
-    }
+	/**
+	 * @param DateTime $updatedAt
+	 */
+	public function setUpdatedAt(DateTime $updatedAt): void
+	{
+		$this->updatedAt = $updatedAt;
+	}
 
-    /**
-     * @param DateTime|null $deletedAt
-     */
-    public function setDeletedAt(?DateTime $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
+	/**
+	 * @return DateTime|null
+	 */
+	public function getDeletedAt(): ?DateTime
+	{
+		return $this->deletedAt;
+	}
 
-    /**
-     * AccountGame constructor.
-     */
-    public function __construct()
-    {
-        $this->setUser(null);
-        $this->setPlayerName('');
-        $this->setServerLocation('');
-        $this->setCreatedAt(new DateTime());
-        $this->setUpdatedAt(new DateTime());
-        $this->setDeletedAt(null);
-    }
+	/**
+	 * @param DateTime|null $deletedAt
+	 */
+	public function setDeletedAt(?DateTime $deletedAt): void
+	{
+		$this->deletedAt = $deletedAt;
+	}
 }
