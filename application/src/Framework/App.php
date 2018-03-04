@@ -14,7 +14,6 @@ class App
 	{
 		if (!empty($url) && $url !== "/" && $url[-1] === "/") {
 			header('Location: ' . substr($url, 0, -1) . '');
-			return '';
 		}
 		return Router::run($url);
 	}

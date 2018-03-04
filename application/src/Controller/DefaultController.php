@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+
 class DefaultController extends Controller
 {
 	public function homeAction()
@@ -11,6 +13,12 @@ class DefaultController extends Controller
 
 	public function testAction($id)
 	{
-		return "Je suis l'article $id";
+		/** @var User $user */
+		$user = User::find($id);
+		if(is_null($user)) {
+			return 'Bievenue';
+		} else {
+			return 'Bievenue ' . $user->getName();
+		}
 	}
 }
