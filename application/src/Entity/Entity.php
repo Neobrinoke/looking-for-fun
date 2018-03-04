@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use PDO;
+use App\Framework\QueryBuilder;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -17,19 +17,6 @@ abstract class Entity
 
 	abstract public function setId(int $id);
 
-	private static $pdoInstance = null;
-
-	/**
-	 * Function for get PDO
-	 */
-	private static function getPDO()
-	{
-		if (is_null(self::$pdoInstance)) {
-			self::$pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
-		}
-		return self::$pdoInstance;
-	}
-
 	/**
 	 * Find one by id
 	 *
@@ -40,12 +27,13 @@ abstract class Entity
 	 */
 	public static function find(int $id): ?Entity
 	{
-		$statement = static::getPDO()->prepare('SELECT * FROM ' . static::getTableName() . ' WHERE id = ?');
-		$statement->execute([$id]);
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(static::getTableName());
+		$queryBuilder->where('id = :id');
+		$queryBuilder->value($id, 'id');
 
-		$result = $statement->fetch(PDO::FETCH_NUM);
-
-		return (new static())->injectEntityProperties($result);
+		return (new static())->injectEntityProperties($queryBuilder->getResult());
 	}
 
 	/**
@@ -57,14 +45,12 @@ abstract class Entity
 	 */
 	public static function all(): array
 	{
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(static::getTableName());
+
 		$entities = [];
-
-		$statement = static::getPDO()->prepare('SELECT * FROM ' . static::getTableName());
-		$statement->execute();
-
-		$results = $statement->fetchAll(PDO::FETCH_NUM);
-
-		foreach ($results as $result) {
+		foreach ($queryBuilder->getResults() as $result) {
 			$entities[] = (new static())->injectEntityProperties($result);
 		}
 
@@ -85,18 +71,14 @@ abstract class Entity
 			return null;
 		}
 
-		$sql = 'SELECT * FROM ' . static::getTableName() . ' WHERE ';
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(static::getTableName());
 		foreach ($options as $key => $value) {
-			$sql .= $key . ' = :' . $key . ' ';
+			$queryBuilder->where($key . ' = :' . $key);
 		}
-		$sql = trim($sql);
 
-		$statement = static::getPDO()->prepare($sql);
-		$statement->execute($options);
-
-		$result = $statement->fetch(PDO::FETCH_NUM);
-
-		return (new static())->injectEntityProperties($result);
+		return (new static())->injectEntityProperties($queryBuilder->getResult());
 	}
 
 	/**
@@ -109,24 +91,19 @@ abstract class Entity
 	 */
 	public static function findBy(array $options = []): array
 	{
-		$entities = [];
-
 		if (empty($options)) {
-			return $entities;
+			return [];
 		}
 
-		$sql = 'SELECT * FROM ' . static::getTableName() . ' WHERE ';
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(static::getTableName());
 		foreach ($options as $key => $value) {
-			$sql .= $key . ' = :' . $key . ' ';
+			$queryBuilder->where($key . ' = :' . $key);
 		}
-		$sql = trim($sql);
 
-		$statement = static::getPDO()->prepare($sql);
-		$statement->execute($options);
-
-		$results = $statement->fetchAll(PDO::FETCH_NUM);
-
-		foreach ($results as $result) {
+		$entities = [];
+		foreach ($queryBuilder->getResults() as $result) {
 			$entities[] = (new static())->injectEntityProperties($result);
 		}
 
@@ -145,8 +122,7 @@ abstract class Entity
 		if (static::find($this->getId())) { // update
 			return $this->update();
 		} else { // create
-			var_dump('Create');
-			return $this->create();
+			return $this->insert();
 		}
 	}
 
@@ -157,34 +133,17 @@ abstract class Entity
 	 * @throws ReflectionException
 	 * @throws \Exception
 	 */
-	private function create(): bool
+	private function insert(): bool
 	{
 		$fields = static::getAllDatabaseFields();
 
-		$beforeValues = '';
-		$afterValues = '';
+		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_INSERT);
+		$queryBuilder->table(static::getTableName());
+		$queryBuilder->fields($fields);
+		$queryBuilder->values($this->retrieveEntityProperties($this));
+		$result = $queryBuilder->execute();
 
-		$sql = 'INSERT INTO ' . static::getTableName() . ' ';
-		foreach ($fields as $field) {
-			if ($fields[0] == $field) { // first
-				$beforeValues .= '(' . $field . ', ';
-				$afterValues .= '(:' . $field . ', ';
-			} else if (end($fields) == $field) { // last
-				$beforeValues .= $field . ')';
-				$afterValues .= ':' . $field . ')';
-			} else {
-				$beforeValues .= $field . ', ';
-				$afterValues .= ':' . $field . ', ';
-			}
-		}
-		$sql .= $beforeValues . ' VALUES ' . $afterValues;
-
-		$statement = static::getPDO()->prepare($sql);
-		$result = $statement->execute($this->retrieveEntityProperties($this));
-
-		$lastId = static::getPDO()->lastInsertId();
-
-		$this->setId($lastId);
+		$this->setId($queryBuilder->getLastInsertId());
 
 		return $result;
 	}
@@ -200,26 +159,16 @@ abstract class Entity
 	{
 		$fields = static::getAllDatabaseFields();
 
-		$sql = 'UPDATE ' . static::getTableName() . ' ';
-		foreach ($fields as $field) {
-			if ($fields[0] == $field) { // first
-				$sql .= 'SET ' . $field . ' = :' . $field . ', ';
-			} else if (end($fields) == $field) { // last
-				$sql .= $field . ' = :' . $field;
-			} else {
-				$sql .= $field . ' = :' . $field . ', ';
-			}
-		}
-		$sql .= ' WHERE id = :id';
-
-		$statement = static::getPDO()->prepare($sql);
-
 		$options = $this->retrieveEntityProperties($this);
 		$options['id'] = $this->getId();
 
-		$result = $statement->execute($options);
+		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_UPDATE);
+		$queryBuilder->table(static::getTableName());
+		$queryBuilder->fields($fields);
+		$queryBuilder->where('id = :id');
+		$queryBuilder->values($options);
 
-		return $result;
+		return $queryBuilder->execute();
 	}
 
 	/**
@@ -257,6 +206,7 @@ abstract class Entity
 					$var = $entity->$methodName();
 					$results[$fields[$i]] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					/** @var Entity $entity2 */
 					$entity2 = $entity->$methodName();
 					if (is_null($entity2)) {
 						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
@@ -309,6 +259,7 @@ abstract class Entity
 				if ($className == 'DateTime') {
 					$this->$methodName(is_null($result[$i]) ? null : new $className($result[$i]));
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					/** @var Entity $className */
 					$entity = $className::find($result[$i]);
 					if (is_null($entity)) {
 						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
