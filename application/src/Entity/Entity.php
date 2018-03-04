@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Framework\QueryBuilder;
+use App\Framework\QueryBuilder\QueryBuilder;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework;
+namespace App\Framework\Router;
 
 class Router
 {
@@ -37,21 +37,33 @@ class Router
 	 * @param string $url
 	 * @return Route|null
 	 */
-	public static function match(string $url): ?Route
+	public static function run(string $url): string
 	{
 		/** @var Route $route */
 		foreach (self::$routes as $route) {
-			if (preg_match($route->getPath(), $url, $params)) {
-				if ($_SERVER['REQUEST_METHOD'] === $route->getMethod()) {
-					$params = array_shift($params);
-					if (is_array($params)) {
-						$route->setParams($params);
-					}
-					return $route;
-				}
+			if ($route->match($url)) {
+				return $route->call();
 			}
 		}
-		return null;
+		return '<h1>Error 404</h1>';
+	}
+
+	/**
+	 * Generate uri
+	 *
+	 * @param string $name
+	 * @param array $params
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public static function generateUri(string $name, array $params = [])
+	{
+		$route = self::$routes[$name];
+		if (!isset($route)) {
+			throw new \Exception('No route match this name');
+		}
+
+		return $route->getUri($params);
 	}
 
 	/**
@@ -64,13 +76,7 @@ class Router
 	 */
 	private static function addRoute(string $method, string $path, string $action, string $name)
 	{
-		$path = '/^' . str_replace('/', '\/', $path) . '$/';
-
-		$actions = explode('@', $action);
-
-		$className = '\\App\\Controller\\' . $actions[0];
-		$actionName = $actions[1];
-
-		self::$routes[$name] = new Route($method, $path, [new $className, $actionName], $name);
+		$regex = "#^" . preg_replace('#{([\w]+)}#', '([^/]+)', trim($path, '/')) . "$#i";
+		self::$routes[$name] = new Route($method, $path, $regex, $action, $name);
 	}
 }

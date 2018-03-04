@@ -1,5 +1,6 @@
 <?php
 
-use App\Framework\Router;
+use App\Framework\Router\Router;
 
-Router::get('/', 'Controller@indexAction', 'index');
+Router::get('/', 'DefaultController@homeAction', 'home');
+Router::get('/article/{id}', 'DefaultController@testAction', 'test');

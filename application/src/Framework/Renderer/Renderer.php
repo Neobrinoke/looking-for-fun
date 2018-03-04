@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Framework;
+namespace App\Framework\Renderer;
 
 class Renderer
 {
-	public const BASE_DIR_VIEWS = __DIR__ . '/../../resources/view/';
+	public const BASE_DIR_VIEWS = __DIR__ . '/../../../resources/view/';
 
 	public function renderView(string $view, array $params = []): string
 	{
