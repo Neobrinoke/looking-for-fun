@@ -7,6 +7,8 @@ use App\Framework\Router\Router;
 class App
 {
 	/**
+	 * Run the main application
+	 *
 	 * @param string $url
 	 * @return string
 	 */

@@ -79,6 +79,12 @@ class Route
 		return call_user_func_array($callable, $this->params);
 	}
 
+	/**
+	 * Get uri from current route
+	 *
+	 * @param array $params
+	 * @return mixed|string
+	 */
 	public function getUri(array $params)
 	{
 		$path = $this->path;

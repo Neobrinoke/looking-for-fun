@@ -136,6 +136,8 @@ class QueryBuilder
 	}
 
 	/**
+	 * Return formatted query
+	 *
 	 * @return string
 	 * @throws \Exception
 	 */
@@ -203,6 +205,8 @@ class QueryBuilder
 	}
 
 	/**
+	 * Return the last inserted id
+	 *
 	 * @return int
 	 */
 	public function getLastInsertId(): int
