@@ -13,8 +13,15 @@ abstract class Entity
 	public const METHOD_TYPE_GET = 'get';
 	public const METHOD_TYPE_SET = 'set';
 
-	abstract public function getId();
+	/**
+	 * @return int
+	 */
+	abstract public function getId(): int;
 
+	/**
+	 * @param int $id
+	 * @return mixed
+	 */
 	abstract public function setId(int $id);
 
 	/**

@@ -2,6 +2,8 @@
 
 namespace App\Framework\Router;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class Route
 {
 	public const DEFAULT_CONTROLLER_PATH = 'App\\Controller\\';
@@ -45,18 +47,19 @@ class Route
 	/**
 	 * Return true or false
 	 *
-	 * @param $url
+	 * @param ServerRequestInterface $request
 	 * @return bool
 	 */
-	public function match($url): bool
+	public function match(ServerRequestInterface $request): bool
 	{
-		if ($_SERVER['REQUEST_METHOD'] === $this->method) {
-			if (preg_match($this->regex, trim($url, '/'), $params)) {
+		if ($request->getMethod() === $this->method) {
+			if (preg_match($this->regex, trim($request->getUri()->getPath(), '/'), $params)) {
 				array_shift($params);
 				$this->params = $params;
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -83,14 +86,111 @@ class Route
 	 * Get uri from current route
 	 *
 	 * @param array $params
-	 * @return mixed|string
+	 * @return string
 	 */
-	public function getUri(array $params)
+	public function getUri(array $params): string
 	{
 		$path = $this->path;
 		foreach ($params as $key => $value) {
 			$path = str_replace('{' . $key . '}', $value, $path);
 		}
+
 		return $path;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMethod(): string
+	{
+		return $this->method;
+	}
+
+	/**
+	 * @param string $method
+	 */
+	public function setMethod(string $method): void
+	{
+		$this->method = $method;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPath(): string
+	{
+		return $this->path;
+	}
+
+	/**
+	 * @param string $path
+	 */
+	public function setPath(string $path): void
+	{
+		$this->path = $path;
+	}
+
+	/**
+	 * @return callable|string
+	 */
+	public function getCallback()
+	{
+		return $this->callback;
+	}
+
+	/**
+	 * @param callable|string $callback
+	 */
+	public function setCallback($callback): void
+	{
+		$this->callback = $callback;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName(string $name): void
+	{
+		$this->name = $name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRegex(): string
+	{
+		return $this->regex;
+	}
+
+	/**
+	 * @param string $regex
+	 */
+	public function setRegex(string $regex): void
+	{
+		$this->regex = $regex;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getParams(): array
+	{
+		return $this->params;
+	}
+
+	/**
+	 * @param array $params
+	 */
+	public function setParams(array $params): void
+	{
+		$this->params = $params;
 	}
 }

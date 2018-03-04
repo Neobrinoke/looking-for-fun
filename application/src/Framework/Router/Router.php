@@ -2,50 +2,52 @@
 
 namespace App\Framework\Router;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class Router
 {
 	/** @var array */
-	private static $routes = [];
+	private $routes = [];
 
 	/**
 	 * Add get route
 	 *
 	 * @param string $path
-	 * @param string $name
 	 * @param string|callable $callback
+	 * @param string $name
 	 */
-	public static function get(string $path, string $name, $callback)
+	public function get(string $path, $callback, string $name)
 	{
-		self::addRoute('GET', $path, $name, $callback);
+		self::addRoute('GET', $path, $callback, $name);
 	}
 
 	/**
 	 * Add post route
 	 *
 	 * @param string $path
-	 * @param string $name
 	 * @param string|callable $callback
+	 * @param string $name
 	 */
-	public static function post(string $path, string $name, $callback)
+	public function post(string $path, $callback, string $name)
 	{
-		self::addRoute('POST', $path, $name, $callback);
+		self::addRoute('POST', $path, $callback, $name);
 	}
 
 	/**
 	 * Return the matched route
 	 *
-	 * @param string $url
+	 * @param ServerRequestInterface $request
 	 * @return Route|null
 	 */
-	public static function run(string $url): string
+	public function run(ServerRequestInterface $request): ?Route
 	{
 		/** @var Route $route */
-		foreach (self::$routes as $route) {
-			if ($route->match($url)) {
-				return $route->call();
+		foreach ($this->routes as $route) {
+			if ($route->match($request)) {
+				return $route;
 			}
 		}
-		return '<h1>Error 404</h1>';
+		return null;
 	}
 
 	/**
@@ -56,9 +58,9 @@ class Router
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public static function generateUri(string $name, array $params = [])
+	public function generateUri(string $name, array $params = [])
 	{
-		$route = self::$routes[$name];
+		$route = $this->routes[$name];
 		if (!isset($route)) {
 			throw new \Exception('No route match this name');
 		}
@@ -71,12 +73,12 @@ class Router
 	 *
 	 * @param string $method
 	 * @param string $path
-	 * @param string $name
 	 * @param $callback
+	 * @param string $name
 	 */
-	private static function addRoute(string $method, string $path, string $name, $callback)
+	private function addRoute(string $method, string $path, $callback, string $name)
 	{
 		$regex = "#^" . preg_replace('#{([\w]+)}#', '([^/]+)', trim($path, '/')) . "$#i";
-		self::$routes[$name] = new Route($method, $path, $regex, $name, $callback);
+		$this->routes[$name] = new Route($method, $path, $regex, $name, $callback);
 	}
 }
