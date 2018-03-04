@@ -12,7 +12,7 @@ class Route
 	/** @var string */
 	private $path;
 
-	/** @var string */
+	/** @var string|callable */
 	private $callback;
 
 	/** @var string */
@@ -30,16 +30,16 @@ class Route
 	 * @param string $method
 	 * @param string $path
 	 * @param string $regex
-	 * @param string $callback
 	 * @param string $name
+	 * @param string|callable $callback
 	 */
-	public function __construct(string $method, string $path, string $regex, string $callback, string $name)
+	public function __construct(string $method, string $path, string $regex, string $name, $callback)
 	{
 		$this->method = $method;
 		$this->regex = $regex;
 		$this->path = $path;
-		$this->callback = $callback;
 		$this->name = $name;
+		$this->callback = $callback;
 	}
 
 	/**
@@ -67,11 +67,16 @@ class Route
 	 */
 	public function call()
 	{
-		$actions = explode('@', $this->callback);
-		$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
-		$methodName = $actions[1];
+		$callable = $this->callback;
 
-		return call_user_func_array([new $className, $methodName], $this->params);
+		if(is_string($this->callback)) {
+			$actions = explode('@', $this->callback);
+			$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
+			$methodName = $actions[1];
+			$callable = [new $className, $methodName];
+		}
+
+		return call_user_func_array($callable, $this->params);
 	}
 
 	public function getUri(array $params)

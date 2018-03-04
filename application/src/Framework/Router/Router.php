@@ -11,24 +11,24 @@ class Router
 	 * Add get route
 	 *
 	 * @param string $path
-	 * @param string $action
 	 * @param string $name
+	 * @param string|callable $callback
 	 */
-	public static function get(string $path, string $action, string $name)
+	public static function get(string $path, string $name, $callback)
 	{
-		self::addRoute('GET', $path, $action, $name);
+		self::addRoute('GET', $path, $name, $callback);
 	}
 
 	/**
 	 * Add post route
 	 *
 	 * @param string $path
-	 * @param string $action
 	 * @param string $name
+	 * @param string|callable $callback
 	 */
-	public static function post(string $path, string $action, string $name)
+	public static function post(string $path, string $name, $callback)
 	{
-		self::addRoute('POST', $path, $action, $name);
+		self::addRoute('POST', $path, $name, $callback);
 	}
 
 	/**
@@ -71,12 +71,12 @@ class Router
 	 *
 	 * @param string $method
 	 * @param string $path
-	 * @param string $action
 	 * @param string $name
+	 * @param $callback
 	 */
-	private static function addRoute(string $method, string $path, string $action, string $name)
+	private static function addRoute(string $method, string $path, string $name, $callback)
 	{
 		$regex = "#^" . preg_replace('#{([\w]+)}#', '([^/]+)', trim($path, '/')) . "$#i";
-		self::$routes[$name] = new Route($method, $path, $regex, $action, $name);
+		self::$routes[$name] = new Route($method, $path, $regex, $name, $callback);
 	}
 }
