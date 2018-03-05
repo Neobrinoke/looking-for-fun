@@ -50,7 +50,7 @@ class App
 	}
 
 	/**
-	 * Send info on the browser
+	 * Send response on the browser
 	 *
 	 * @param ResponseInterface $response
 	 */

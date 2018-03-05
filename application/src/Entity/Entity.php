@@ -133,13 +133,12 @@ abstract class Entity
 		}
 	}
 
-	/**
-	 * Create current entity
-	 *
-	 * @return bool
-	 * @throws ReflectionException
-	 * @throws \Exception
-	 */
+    /**
+     * Create current entity
+     *
+     * @return bool
+     * @throws \Exception
+     */
 	private function insert(): bool
 	{
 		$fields = static::getAllDatabaseFields();
@@ -155,13 +154,12 @@ abstract class Entity
 		return $result;
 	}
 
-	/**
-	 * Update current entity
-	 *
-	 * @return bool
-	 * @throws ReflectionException
-	 * @throws \Exception
-	 */
+    /**
+     * Update current entity
+     *
+     * @return bool
+     * @throws \Exception
+     */
 	private function update(): bool
 	{
 		$fields = static::getAllDatabaseFields();
@@ -178,14 +176,13 @@ abstract class Entity
 		return $queryBuilder->execute();
 	}
 
-	/**
-	 * Retrieve entity properties for PDO Execute
-	 *
-	 * @param Entity $entity
-	 * @return array
-	 * @throws ReflectionException
-	 * @throws \Exception
-	 */
+    /**
+     * Retrieve entity properties for PDO Execute
+     *
+     * @param Entity $entity
+     * @return array
+     * @throws \Exception
+     */
 	private function retrieveEntityProperties(Entity $entity): array
 	{
 		$results = [];
@@ -284,13 +281,12 @@ abstract class Entity
 		return $this;
 	}
 
-	/**
-	 * Parse php doc for get table name
-	 *
-	 * @return string|null
-	 * @throws \Exception
-	 * @throws ReflectionException
-	 */
+    /**
+     * Parse php doc for get table name
+     *
+     * @return string|null
+     * @throws \Exception
+     */
 	private static function getTableName()
 	{
 		$reflectClass = new ReflectionClass(static::class);
@@ -304,13 +300,12 @@ abstract class Entity
 		throw new \Exception(sprintf("Invalid database table name in entity (%s)", static::class));
 	}
 
-	/**
-	 * Parse php doc for get all database column name
-	 *
-	 * @return array
-	 * @throws \Exception
-	 * @throws ReflectionException
-	 */
+    /**
+     * Parse php doc for get all database column name
+     *
+     * @return array
+     * @throws \Exception
+     */
 	private static function getAllDatabaseFields()
 	{
 		$reflectClass = new ReflectionClass(static::class);
@@ -333,14 +328,13 @@ abstract class Entity
 	}
 
 
-	/**
-	 * Return all method by type ['get', 'set']
-	 *
-	 * @param string $type
-	 * @return array
-	 * @throws ReflectionException
-	 * @throws \Exception
-	 */
+    /**
+     * Return all method by type ['get', 'set']
+     *
+     * @param string $type
+     * @return array
+     * @throws \Exception
+     */
 	private static function getAllMethods(string $type)
 	{
 		$reflectClass = new ReflectionClass(static::class);
