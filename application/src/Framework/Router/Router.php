@@ -60,9 +60,10 @@ class Router
 	 */
 	public function generateUri(string $name, array $params = [])
 	{
+		/** @var Route $route */
 		$route = $this->routes[$name];
 		if (!isset($route)) {
-			throw new \Exception('No route match this name');
+			throw new \Exception(sprintf("No route matched for this name [%s]", $name));
 		}
 
 		return $route->getUri($params);

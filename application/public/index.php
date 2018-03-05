@@ -12,12 +12,17 @@ require('../vendor/autoload.php');
 // Application start
 $app = new \App\Framework\App();
 
-// Routing
+/**
+ * Routes
+ */
+// Base routes
 $app->router->get('/', 'DefaultController@homeAction', 'home');
 $app->router->get('/article/{id}', 'DefaultController@testAction', 'test.index');
 $app->router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
+// Security
 $app->router->get('/login', 'SecurityController@loginAction', 'security.login');
 $app->router->get('/register', 'SecurityController@registerAction', 'security.register');
+$app->router->post('/register/create', 'SecurityController@storeAction', 'security.store');
 
 // Response
 $response = $app->run(\GuzzleHttp\Psr7\ServerRequest::fromGlobals());

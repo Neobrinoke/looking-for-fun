@@ -50,16 +50,29 @@ class Controller
 	}
 
 	/**
-	 * Generate path for url
+	 * Redirect to route
 	 *
-	 * @param string $name
+	 * @param string $route
+	 * @param array $params
+	 * @return Response
+	 * @throws \Exception
+	 */
+	protected function redirectToRoute(string $route, array $params = [])
+	{
+		return $this->redirect($this->generateUri($route, $params));
+	}
+
+	/**
+	 * Generate uri for route
+	 *
+	 * @param string $route
 	 * @param array $params
 	 * @return Router
 	 * @throws \Exception
 	 */
-	protected function path(string $name, array $params = [])
+	protected function generateUri(string $route, array $params = [])
 	{
-		return $this->router->generateUri($name, $params);
+		return $this->router->generateUri($route, $params);
 	}
 
 	/**
