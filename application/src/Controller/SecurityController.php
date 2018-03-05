@@ -36,6 +36,9 @@ class SecurityController extends Controller
 	public function storeAction(ServerRequestInterface $request)
 	{
 		$old = $request->getParsedBody();
+
+		// @Todo traitement des infos.
+
 		return $this->renderView('security.register', compact('old'));
 	}
 }
