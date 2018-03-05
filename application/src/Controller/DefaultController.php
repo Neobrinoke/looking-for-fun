@@ -15,10 +15,7 @@ class DefaultController extends Controller
 	{
 		/** @var User $user */
 		$user = User::find($id);
-		if(is_null($user)) {
-			return 'Bievenue';
-		} else {
-			return 'Bievenue ' . $user->getName();
-		}
+		var_dump($user);
+		return $this->response();
 	}
 }
