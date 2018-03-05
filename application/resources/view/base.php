@@ -6,12 +6,12 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Looking-for-fun</title>
 		<link rel="stylesheet" href="/css/semantic.css">
-		<link rel="stylesheet" href="/css/style.css">
+		<?= $css ?>
 	</head>
 	<body>
-		<?= $layout ?>
+		<?= $content ?>
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 		<script src="/js/semantic.js"></script>
-		<script src="/js/script.js"></script>
+		<?= $js ?>
 	</body>
 </html>

@@ -36,7 +36,7 @@ class App
 
 		$route = $this->router->run($request);
 		if (!is_null($route)) {
-			$response = $route->call();
+			$response = $route->call($this->router);
 			if (is_string($response)) {
 				return new Response(200, [], $response);
 			} else if ($response instanceof Response) {

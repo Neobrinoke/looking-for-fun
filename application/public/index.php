@@ -14,7 +14,10 @@ $app = new \App\Framework\App();
 
 // Routing
 $app->router->get('/', 'DefaultController@homeAction', 'home');
-$app->router->get('/article/{id}', 'DefaultController@testAction', 'test');
+$app->router->get('/article/{id}', 'DefaultController@testAction', 'test.index');
+$app->router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
+$app->router->get('/login', 'SecurityController@loginAction', 'security.login');
+$app->router->get('/register', 'SecurityController@registerAction', 'security.register');
 
 // Response
 $response = $app->run(\GuzzleHttp\Psr7\ServerRequest::fromGlobals());

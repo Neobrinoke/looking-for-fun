@@ -2,6 +2,7 @@
 
 namespace App\Framework\Router;
 
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Route
@@ -55,6 +56,11 @@ class Route
 		if ($request->getMethod() === $this->method) {
 			if (preg_match($this->regex, trim($request->getUri()->getPath(), '/'), $params)) {
 				array_shift($params);
+
+				if ($request->getMethod() === 'POST') {
+					array_unshift($params, $request);
+				}
+
 				$this->params = $params;
 				return true;
 			}
@@ -66,17 +72,18 @@ class Route
 	/**
 	 * Execute the callback
 	 *
+	 * @param Router $router
 	 * @return mixed
 	 */
-	public function call()
+	public function call(Router $router)
 	{
 		$callable = $this->callback;
 
-		if(is_string($this->callback)) {
+		if (is_string($this->callback)) {
 			$actions = explode('@', $this->callback);
 			$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
 			$methodName = $actions[1];
-			$callable = [new $className, $methodName];
+			$callable = [new $className($router), $methodName];
 		}
 
 		return call_user_func_array($callable, $this->params);

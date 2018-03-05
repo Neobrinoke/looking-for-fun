@@ -30,7 +30,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('groups', $route->getName());
-		$this->assertEquals('hello', call_user_func_array($route->getCallBack(), [$request]));
+		$this->assertEquals('hello', $route->call($this->router));
 	}
 
 	/**
@@ -67,7 +67,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('group.delete', $route->getName());
-		$this->assertEquals('hello 8', $route->call());
+		$this->assertEquals('hello 8', $route->call($this->router));
 		$this->assertContains('8', $route->getParams());
 
 		// Test invalid route

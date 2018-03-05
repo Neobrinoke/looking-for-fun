@@ -1,4 +1,9 @@
 <?php ob_start(); ?>
+	<link rel="stylesheet" href="/css/home.css">
+	<?php if(isset($css)) echo $css; ?>
+<?php $css = ob_get_clean(); ?>
+
+<?php ob_start(); ?>
 
 	<div class="ui large top fixed hidden menu">
 		<div class="ui container">
@@ -8,10 +13,10 @@
 			<a class="item">Careers</a>
 			<div class="right menu">
 				<div class="item">
-					<a class="ui button">Log in</a>
+					<a class="ui button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
 				</div>
 				<div class="item">
-					<a class="ui primary button">Sign Up</a>
+					<a class="ui primary button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
 				</div>
 			</div>
 		</div>
@@ -23,15 +28,39 @@
 		<a class="item">Work</a>
 		<a class="item">Company</a>
 		<a class="item">Careers</a>
-		<a class="item">Login</a>
-		<a class="item">Signup</a>
+		<a class="item" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
+		<a class="item" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
 	</div>
 
 
 	<!-- Page Contents -->
 	<div class="pusher">
 
-		<?= $container ?>
+		<div class="ui inverted vertical masthead center aligned segment"
+			 style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),url('/img/Wallpaper-Gaming-049.jpg') center center no-repeat;">
+			<div class="ui container">
+				<div class="ui large secondary inverted pointing menu">
+					<a class="toc item">
+						<i class="sidebar icon"></i>
+					</a>
+					<a class="active item">Home</a>
+					<a class="item">Work</a>
+					<a class="item">Company</a>
+					<a class="item">Careers</a>
+					<div class="right item">
+						<a class="ui inverted button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
+						<a class="ui inverted button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+					</div>
+				</div>
+			</div>
+			<div class="ui text container">
+				<h1 class="ui inverted header">À la recherche de joueurs ?</h1>
+				<h2>Trouve des personnes avec qui jouer !<br>Que ce sois pour le fun ou pour tryhard !</h2>
+				<div class="ui huge primary button">Crée un groupe !<i class="right arrow icon"></i></div>
+			</div>
+		</div>
+
+		<?= $layout ?>
 
 		<div class="ui inverted vertical footer segment">
 			<div class="ui container">
@@ -63,5 +92,11 @@
 		</div>
 	</div>
 
-<?php $layout = ob_get_clean(); ?>
-<?= $renderer->renderView('base', compact('layout')); ?>
+<?php $content = ob_get_clean(); ?>
+
+<?php ob_start(); ?>
+	<script src="/js/home.js"></script>
+	<?php if(isset($js)) echo $js; ?>
+<?php $js = ob_get_clean(); ?>
+
+<?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>

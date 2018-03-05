@@ -1,29 +1,5 @@
 <?php ob_start(); ?>
 
-	<div class="ui inverted vertical masthead center aligned segment"
-		 style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),url('/img/Wallpaper-Gaming-049.jpg') center center no-repeat;">
-		<div class="ui container">
-			<div class="ui large secondary inverted pointing menu">
-				<a class="toc item">
-					<i class="sidebar icon"></i>
-				</a>
-				<a class="active item">Home</a>
-				<a class="item">Work</a>
-				<a class="item">Company</a>
-				<a class="item">Careers</a>
-				<div class="right item">
-					<a class="ui inverted button">Se connecter</a>
-					<a class="ui inverted button">S'inscrire</a>
-				</div>
-			</div>
-		</div>
-		<div class="ui text container">
-			<h1 class="ui inverted header">À la recherche de joueurs ?</h1>
-			<h2>Trouve des personnes avec qui jouer !<br>Que ce sois pour le fun ou pour tryhard !</h2>
-			<div class="ui huge primary button">Crée un groupe !<i class="right arrow icon"></i></div>
-		</div>
-	</div>
-
 	<div class="ui vertical stripe segment">
 		<div class="ui middle aligned stackable grid container">
 			<div class="row">
@@ -44,7 +20,6 @@
 			</div>
 		</div>
 	</div>
-
 
 	<div class="ui vertical stripe quote segment">
 		<div class="ui equal width stackable internally celled grid">
@@ -77,5 +52,6 @@
 		</div>
 	</div>
 
-<?php $container = ob_get_clean(); ?>
-<?= $renderer->renderView('template.home', compact('container')); ?>
+<?php $layout = ob_get_clean(); ?>
+
+<?= $renderer->renderView('template.home', compact('layout')); ?>
