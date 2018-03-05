@@ -60,14 +60,14 @@ class RouterTest extends TestCase
 			return 'dqsdqsdqas';
 		}, 'groups');
 
-		$this->router->get('/group/remove/{id}', function () {
-			return 'hello';
+		$this->router->get('/group/remove/{id}', function ($id) {
+			return 'hello ' . $id;
 		}, 'group.delete');
 
 		$route = $this->router->run($request);
 
 		$this->assertEquals('group.delete', $route->getName());
-		$this->assertEquals('hello', call_user_func_array($route->getCallBack(), [$request]));
+		$this->assertEquals('hello 8', $route->call());
 		$this->assertContains('8', $route->getParams());
 
 		// Test invalid route
