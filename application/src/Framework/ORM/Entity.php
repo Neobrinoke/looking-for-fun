@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Entity;
+namespace App\Framework\ORM;
 
-use App\Framework\QueryBuilder\QueryBuilder;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -138,14 +137,13 @@ abstract class Entity
 	 *
 	 * @return bool
 	 * @throws \Exception
-	 * @throws ReflectionException
 	 */
 	public function save(): bool
 	{
-		if (static::find($this->getId())) { // update
-			return $this->update();
-		} else { // create
+		if ($this->getId() == 0) {
 			return $this->insert();
+		} else {
+			return $this->update();
 		}
 	}
 

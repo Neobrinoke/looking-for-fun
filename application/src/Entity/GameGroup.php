@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Framework\ORM\Entity;
 use DateTime;
 
 /**

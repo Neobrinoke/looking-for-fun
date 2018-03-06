@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\QueryBuilder;
+namespace App\Framework\ORM;
 
 use PDO;
 

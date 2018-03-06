@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Framework\ORM\Entity;
+
 /**
  * @Table(name="game_groups_users")
  */
