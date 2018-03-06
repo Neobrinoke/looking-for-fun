@@ -9,7 +9,6 @@ session_start();
 // Autoloading
 require('../vendor/autoload.php');
 
-
 // Application start
 $app = new \App\Framework\App();
 
