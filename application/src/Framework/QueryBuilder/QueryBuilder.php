@@ -9,7 +9,7 @@ class QueryBuilder
 	public const QUERY_TYPE_SELECT = 'SELECT';
 	public const QUERY_TYPE_INSERT = 'INSERT';
 	public const QUERY_TYPE_UPDATE = 'UPDATE';
-	public const QUERY_FETCH_TYPE = PDO::FETCH_NUM;
+	public const QUERY_FETCH_TYPE = PDO::FETCH_ASSOC;
 
 	/** @var string */
 	private $table = '';

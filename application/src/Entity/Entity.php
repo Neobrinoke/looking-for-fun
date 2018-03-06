@@ -84,6 +84,7 @@ abstract class Entity
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
+		$queryBuilder->values($options);
 
 		return (new static())->injectEntityProperties($queryBuilder->getResult());
 	}
@@ -108,6 +109,7 @@ abstract class Entity
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
+		$queryBuilder->values($options);
 
 		$entities = [];
 		foreach ($queryBuilder->getResults() as $result) {
@@ -115,6 +117,20 @@ abstract class Entity
 		}
 
 		return $entities;
+	}
+
+	/**
+	 * Generate entity with form values
+	 *
+	 * @param array $values
+	 * @return Entity
+	 * @throws ReflectionException
+	 * @throws \Exception
+	 */
+	public static function generateWithForm(array $values): Entity
+	{
+		$values['id'] = 0;
+		return (new static())->injectEntityProperties($values);
 	}
 
 	/**
@@ -133,20 +149,20 @@ abstract class Entity
 		}
 	}
 
-    /**
-     * Create current entity
-     *
-     * @return bool
-     * @throws \Exception
-     */
-	private function insert(): bool
+	/**
+	 * Create current entity
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function insert(): bool
 	{
 		$fields = static::getAllDatabaseFields();
 
 		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_INSERT);
 		$queryBuilder->table(static::getTableName());
 		$queryBuilder->fields($fields);
-		$queryBuilder->values($this->retrieveEntityProperties($this));
+		$queryBuilder->values($this->retrieveEntityProperties());
 		$result = $queryBuilder->execute();
 
 		$this->setId($queryBuilder->getLastInsertId());
@@ -154,17 +170,17 @@ abstract class Entity
 		return $result;
 	}
 
-    /**
-     * Update current entity
-     *
-     * @return bool
-     * @throws \Exception
-     */
-	private function update(): bool
+	/**
+	 * Update current entity
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function update(): bool
 	{
 		$fields = static::getAllDatabaseFields();
 
-		$options = $this->retrieveEntityProperties($this);
+		$options = $this->retrieveEntityProperties();
 		$options['id'] = $this->getId();
 
 		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_UPDATE);
@@ -176,25 +192,22 @@ abstract class Entity
 		return $queryBuilder->execute();
 	}
 
-    /**
-     * Retrieve entity properties for PDO Execute
-     *
-     * @param Entity $entity
-     * @return array
-     * @throws \Exception
-     */
-	private function retrieveEntityProperties(Entity $entity): array
+	/**
+	 * Retrieve entity properties for PDO Execute
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function retrieveEntityProperties(): array
 	{
 		$results = [];
 
-		$fields = static::getAllDatabaseFields();
 		$methods = static::getAllMethods(static::METHOD_TYPE_GET);
-
-		$i = 0;
 
 		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
+			$key = camelToSnakeCase(substr($methodName, 3));
 
 			try {
 				$reflectionClass = new ReflectionClass($method->getReturnType()->getName());
@@ -207,23 +220,21 @@ abstract class Entity
 
 				if ($className == 'DateTime') {
 					/** @var \DateTime $var */
-					$var = $entity->$methodName();
-					$results[$fields[$i]] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
+					$var = $this->$methodName();
+					$results[$key] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
 					/** @var Entity $entity2 */
-					$entity2 = $entity->$methodName();
+					$entity2 = $this->$methodName();
 					if (is_null($entity2)) {
 						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
 					}
-					$results[$fields[$i]] = $entity2->getId();
+					$results[$key] = $entity2->getId();
 				} else {
 					throw new \Exception(sprintf("Object type (%s) does not managed by this ORM actually", $className));
 				}
 			} else {
-				$results[$fields[$i]] = $entity->$methodName();
+				$results[$key] = $this->$methodName();
 			}
-
-			$i++;
 		}
 
 		return $results;
@@ -232,24 +243,26 @@ abstract class Entity
 	/**
 	 * Set current entity properties with array pdo result
 	 *
-	 * @param mixed $result
+	 * @param $results
 	 * @return Entity|null
-	 * @throws \Exception
 	 * @throws ReflectionException
+	 * @throws \Exception
 	 */
-	private function injectEntityProperties($result): ?Entity
+	private function injectEntityProperties($results): ?Entity
 	{
-		if (!is_array($result)) {
+		if (!is_array($results)) {
 			return null;
 		}
 
 		$methods = static::getAllMethods(static::METHOD_TYPE_SET);
 
-		$i = 0;
-
 		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
+			$value = @$results[camelToSnakeCase(substr($methodName, 3))]; // @ for bypass the notice
+			if (!isset($value)) {
+				continue;
+			}
 
 			try {
 				$reflectionClass = new ReflectionClass($method->getParameters()[0]->getType()->getName());
@@ -261,10 +274,10 @@ abstract class Entity
 				$className = $reflectionClass->getName();
 
 				if ($className == 'DateTime') {
-					$this->$methodName(is_null($result[$i]) ? null : new $className($result[$i]));
+					$this->$methodName(is_null($value) ? null : new $className($value));
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
 					/** @var Entity $className */
-					$entity = $className::find($result[$i]);
+					$entity = $className::find($value);
 					if (is_null($entity)) {
 						throw new \Exception(sprintf("%s::%s method find a %s with null value", static::class, $methodName, $className));
 					}
@@ -273,21 +286,20 @@ abstract class Entity
 					throw new \Exception(sprintf("Instantiable type (%s) does not managed by this ORM actually", $className));
 				}
 			} else {
-				$this->$methodName($result[$i]);
+				$this->$methodName($value);
 			}
-			$i++;
 		}
 
 		return $this;
 	}
 
-    /**
-     * Parse php doc for get table name
-     *
-     * @return string|null
-     * @throws \Exception
-     */
-	private static function getTableName()
+	/**
+	 * Parse php doc for get table name
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	private static function getTableName(): string
 	{
 		$reflectClass = new ReflectionClass(static::class);
 
@@ -300,13 +312,13 @@ abstract class Entity
 		throw new \Exception(sprintf("Invalid database table name in entity (%s)", static::class));
 	}
 
-    /**
-     * Parse php doc for get all database column name
-     *
-     * @return array
-     * @throws \Exception
-     */
-	private static function getAllDatabaseFields()
+	/**
+	 * Parse php doc for get all database column name
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	private static function getAllDatabaseFields(): array
 	{
 		$reflectClass = new ReflectionClass(static::class);
 
@@ -328,14 +340,14 @@ abstract class Entity
 	}
 
 
-    /**
-     * Return all method by type ['get', 'set']
-     *
-     * @param string $type
-     * @return array
-     * @throws \Exception
-     */
-	private static function getAllMethods(string $type)
+	/**
+	 * Return all method by type ['get', 'set']
+	 *
+	 * @param string $type
+	 * @return array
+	 * @throws \Exception
+	 */
+	private static function getAllMethods(string $type): array
 	{
 		$reflectClass = new ReflectionClass(static::class);
 

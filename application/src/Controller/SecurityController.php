@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Framework\Validator\Validator;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -37,16 +38,21 @@ class SecurityController extends Controller
 	public function storeAction(ServerRequestInterface $request)
 	{
 		$old = $request->getParsedBody();
-		$errors = [];
 
 		$validator = new Validator($request->getParsedBody(), [
-			'name' => 'min:5|required',
-			'login' => 'min:5|required',
+			'name' => 'min:3|required',
+			'login' => 'min:3|required',
 			'email' => 'email|required',
 			'password' => 'password|required'
 		]);
 
 		$errors = $validator->validate();
+
+		if (empty($errors)) {
+			$user = User::generateWithForm($request->getParsedBody());
+			$user->save();
+			return $this->redirectToRoute('home');
+		}
 
 		return $this->renderView('security.register', compact('old', 'errors'));
 	}

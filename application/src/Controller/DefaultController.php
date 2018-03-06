@@ -21,9 +21,6 @@ class DefaultController extends Controller
 	 */
 	public function testAction($id)
 	{
-		/** @var User $user */
-		/*$user = User::find($id);
-		var_dump($user);*/
 		return $this->renderView('default.test', compact('id'));
 	}
 
