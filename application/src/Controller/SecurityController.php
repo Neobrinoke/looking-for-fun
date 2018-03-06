@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Framework\Validator\Validator;
 use Psr\Http\Message\ServerRequestInterface;
 
 class SecurityController extends Controller
@@ -36,9 +37,17 @@ class SecurityController extends Controller
 	public function storeAction(ServerRequestInterface $request)
 	{
 		$old = $request->getParsedBody();
+		$errors = [];
 
-		// @Todo traitement des infos.
+		$validator = new Validator($request->getParsedBody(), [
+			'name' => 'min:5|required',
+			'login' => 'min:5|required',
+			'email' => 'email|required',
+			'password' => 'password|required'
+		]);
 
-		return $this->renderView('security.register', compact('old'));
+		$errors = $validator->validate();
+
+		return $this->renderView('security.register', compact('old', 'errors'));
 	}
 }

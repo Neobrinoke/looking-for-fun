@@ -1,15 +1,31 @@
 body {
     background-color: #DADADA;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-body > .grid {
-    height: 100%;
+main {
+    padding: 20px;
+    width: 450px;
+    text-align: center;
 }
 
-.image {
-    margin-top: -100px;
+.ui.message.error {
+    text-align: left;
 }
 
-.column {
-    max-width: 450px;
+@media screen and (max-width: 500px) {
+
+    body {
+        justify-content: normal;
+        align-items: normal;
+    }
+
+    main {
+        width: 100%;
+    }
+
 }

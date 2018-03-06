@@ -4,11 +4,9 @@
 
 <?php ob_start(); ?>
 
-	<div class="ui middle aligned center aligned grid">
-		<div class="column">
-			<?= $layout ?>
-		</div>
-	</div>
+	<main>
+		<?= $layout ?>
+	</main>
 
 <?php $content = ob_get_clean(); ?>
 
