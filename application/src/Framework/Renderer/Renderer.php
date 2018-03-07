@@ -32,14 +32,8 @@ class Renderer
 	{
 		$params['renderer'] = $this;
 		$params['router'] = $this->router;
-
-		if (!isset($params['errors'])) {
-			$params['errors'] = [];
-		}
-		
-		if (!isset($params['old'])) {
-			$params['old'] = [];
-		}
+		$params['errors'] = $params['errors'] ?? [];
+		$params['old'] = $params['old'] ?? [];
 
 		ob_start();
 		extract($params);
