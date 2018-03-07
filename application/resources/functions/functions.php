@@ -42,3 +42,15 @@ function camelToSnakeCase(string $input): string
 	}
 	return implode('_', $ret);
 }
+
+/**
+ * Return old value with array and key
+ *
+ * @param array $values
+ * @param string $key
+ * @return mixed|string
+ */
+function old(array $values, string $key)
+{
+	return isset($values[$key]) ? $values[$key] : '';
+}

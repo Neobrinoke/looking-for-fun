@@ -22,19 +22,19 @@
 			<div class="field <?= isset($errors['name']) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="name" placeholder="Nom d'utilisateur" <?= isset($old['name']) ? 'value="' . $old['name'] . '"' : '' ?>>
+					<input type="text" name="name" placeholder="Nom d'utilisateur" value="<?= old($old, 'name') ?>">
 				</div>
 			</div>
 			<div class="field <?= isset($errors['login']) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="login" placeholder="Identifiant" <?= isset($old['login']) ? 'value="' . $old['login'] . '"' : '' ?>>
+					<input type="text" name="login" placeholder="Identifiant" value="<?= old($old, 'login') ?>">
 				</div>
 			</div>
 			<div class="field <?= isset($errors['email']) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="envelope icon"></i>
-					<input type="text" name="email" placeholder="Adresse e-mail" <?= isset($old['email']) ? 'value="' . $old['email'] . '"' : '' ?>>
+					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old($old, 'email') ?>">
 				</div>
 			</div>
 			<div class="field <?= isset($errors['password']) ? 'error' : '' ?>">

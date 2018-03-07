@@ -22,7 +22,7 @@
 			<div class="field <?= !empty($errors) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="login" placeholder="Identifiant" <?= isset($old['login']) ? 'value="' . $old['login'] . '"' : '' ?>>
+					<input type="text" name="login" placeholder="Identifiant" value="<?= old($old, 'login') ?>">
 				</div>
 			</div>
 			<div class="field <?= !empty($errors) ? 'error' : '' ?>">
