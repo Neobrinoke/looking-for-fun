@@ -19,6 +19,36 @@ class SecurityController extends Controller
 	}
 
 	/**
+	 * Show form for login
+	 *
+	 * @param ServerRequestInterface $request
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 * @throws \ReflectionException
+	 */
+	public function loginCheckAction(ServerRequestInterface $request)
+	{
+		$old = $request->getParsedBody();
+
+		$errors = [];
+
+		$user = User::findOneBy([
+			'login' => $request->getParsedBody()['login'],
+			'password' => $request->getParsedBody()['password']
+		]);
+
+		if(is_null($user)) {
+			$errors[] = 'Utilisateur introuvable';
+		}
+
+		if (empty($errors)) {
+			return $this->redirectToRoute('home');
+		}
+
+		return $this->renderView('security.login', compact('old', 'errors'));
+	}
+
+	/**
 	 * Show form for register
 	 *
 	 * @return \GuzzleHttp\Psr7\Response

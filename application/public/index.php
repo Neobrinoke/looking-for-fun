@@ -21,6 +21,7 @@ $app->router->get('/article/{id}', 'DefaultController@testAction', 'test.index')
 $app->router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
 // Security
 $app->router->get('/login', 'SecurityController@loginAction', 'security.login');
+$app->router->post('/login', 'SecurityController@loginCheckAction', 'security.loginCheck');
 $app->router->get('/register', 'SecurityController@registerAction', 'security.register');
 $app->router->post('/register', 'SecurityController@storeAction', 'security.store');
 
