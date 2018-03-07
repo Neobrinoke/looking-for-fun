@@ -32,6 +32,15 @@ class Renderer
 	{
 		$params['renderer'] = $this;
 		$params['router'] = $this->router;
+
+		if (!isset($params['errors'])) {
+			$params['errors'] = [];
+		}
+		
+		if (!isset($params['old'])) {
+			$params['old'] = [];
+		}
+
 		ob_start();
 		extract($params);
 		require(self::BASE_DIR_VIEWS . str_replace('.', '/', $view) . '.php');
