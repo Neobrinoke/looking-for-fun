@@ -356,7 +356,7 @@ abstract class Entity
 			$methodName = $type . ucfirst($property->getName());
 			$method = new ReflectionMethod(static::class, $methodName);
 			if ($method) {
-				if ($type !== 'get' || $method->getName() != 'getId') {
+				if ($type !== static::METHOD_TYPE_GET || $method->getName() != 'getId') {
 					$methods[] = $method;
 				}
 			}
