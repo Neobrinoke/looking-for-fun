@@ -368,4 +368,6 @@ abstract class Entity
 
 		return $methods;
 	}
+
+	// @Todo faire la method delete();
 }
