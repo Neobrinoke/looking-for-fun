@@ -71,8 +71,8 @@ class SecurityController extends Controller
 
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|required',
-			'login' => 'min:3|required',
-			'email' => 'email|required',
+			'login' => 'min:3|required|unique:User',
+			'email' => 'email|required|unique:User',
 			'password' => 'password|required'
 		]);
 

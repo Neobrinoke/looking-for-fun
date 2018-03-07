@@ -136,4 +136,30 @@ class ValidatorTest extends TestCase
 
 		$this->assertEquals(['password' => 'Le mot de passe et le mot de passe de confirmation doivent être identique.'], $validator->validate());
 	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function testUniqueWithValidValues()
+	{
+		$values = ['email' => 'unique@email.com'];
+		$rules = ['email' => 'unique:User'];
+
+		$validator = new Validator($values, $rules);
+
+		$this->assertEquals([], $validator->validate());
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function testUniqueWithWrongValues()
+	{
+		$values = ['email' => 'neobrinoke@gmail.com'];
+		$rules = ['email' => 'unique:User'];
+
+		$validator = new Validator($values, $rules);
+
+		$this->assertEquals(['email' => 'Le champ email doit être unique.'], $validator->validate());
+	}
 }

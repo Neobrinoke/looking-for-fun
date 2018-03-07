@@ -2,12 +2,15 @@
 
 namespace App\Framework\Validator;
 
+use App\Framework\ORM\Entity;
+
 class Validator
 {
 	public const VALIDATOR_TYPES = [
 		self::VALIDATOR_MIN,
 		self::VALIDATOR_MAX,
 		self::VALIDATOR_EMAIL,
+		self::VALIDATOR_UNIQUE,
 		self::VALIDATOR_REQUIRED,
 		self::VALIDATOR_PASSWORD
 	];
@@ -15,6 +18,7 @@ class Validator
 	public const VALIDATOR_MIN = 'min';
 	public const VALIDATOR_MAX = 'max';
 	public const VALIDATOR_EMAIL = 'email';
+	public const VALIDATOR_UNIQUE = 'unique';
 	public const VALIDATOR_REQUIRED = 'required';
 	public const VALIDATOR_PASSWORD = 'password';
 
@@ -78,6 +82,15 @@ class Validator
 				if ($key == self::VALIDATOR_PASSWORD) {
 					if($this->values[$var] != @$this->values[$var . '_conf']) {
 						$errors[$var] = 'Le mot de passe et le mot de passe de confirmation doivent être identique.';
+					}
+				}
+
+				if ($key == self::VALIDATOR_UNIQUE) {
+					$value = 'App\\Entity\\' . $value;
+					/** @var Entity $value */
+					$entity = $value::findOneBy([$var => $this->values[$var]]);
+					if(!is_null($entity)) {
+						$errors[$var] = 'Le champ ' . $var . ' doit être unique.';
 					}
 				}
 			}
