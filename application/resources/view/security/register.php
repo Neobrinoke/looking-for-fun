@@ -37,6 +37,12 @@
 					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old($old, 'email') ?>">
 				</div>
 			</div>
+			<div class="field <?= isset($errors['email']) ? 'error' : '' ?>">
+				<div class="ui left icon input">
+					<i class="envelope icon"></i>
+					<input type="text" name="email_conf" placeholder="Adresse e-mail (confirmation)" value="<?= old($old, 'email_conf') ?>">
+				</div>
+			</div>
 			<div class="field <?= isset($errors['password']) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
@@ -46,7 +52,7 @@
 			<div class="field <?= isset($errors['password']) ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
-					<input type="password" name="password_conf" placeholder="Confirmer le mot de passe">
+					<input type="password" name="password_conf" placeholder="Mot de passe (confirmation)">
 				</div>
 			</div>
 

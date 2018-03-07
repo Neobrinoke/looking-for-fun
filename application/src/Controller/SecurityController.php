@@ -30,7 +30,12 @@ class SecurityController extends Controller
 	{
 		$old = $request->getParsedBody();
 
-		$errors = [];
+		$validator = new Validator($request->getParsedBody(), [
+			'login' => 'min:3|required',
+			'password' => 'required'
+		]);
+
+		$errors = $validator->validate();
 
 		$user = User::findOneBy([
 			'login' => $request->getParsedBody()['login'],
@@ -72,8 +77,8 @@ class SecurityController extends Controller
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|required',
 			'login' => 'min:3|required|unique:User',
-			'email' => 'email|required|unique:User',
-			'password' => 'password|required'
+			'email' => 'email|confirm|required|unique:User',
+			'password' => 'min:8|confirm|required'
 		]);
 
 		$errors = $validator->validate();

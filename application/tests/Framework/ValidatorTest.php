@@ -114,10 +114,10 @@ class ValidatorTest extends TestCase
 	/**
 	 * @throws \Exception
 	 */
-	public function testPasswordWithValidValues()
+	public function testConfirmWithValidValues()
 	{
 		$values = ['password' => 'neobrinoke', 'password_conf' => 'neobrinoke'];
-		$rules = ['password' => 'password'];
+		$rules = ['password' => 'confirm'];
 
 		$validator = new Validator($values, $rules);
 
@@ -127,14 +127,14 @@ class ValidatorTest extends TestCase
 	/**
 	 * @throws \Exception
 	 */
-	public function testPasswordWithWrongValues()
+	public function testConfirmWithWrongValues()
 	{
 		$values = ['password' => 'neobrinoke', 'password_conf' => ''];
-		$rules = ['password' => 'password'];
+		$rules = ['password' => 'confirm'];
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['password' => 'Le mot de passe et le mot de passe de confirmation doivent être identique.'], $validator->validate());
+		$this->assertEquals(['password' => 'Le champ password doit être identique au champ de confirmation.'], $validator->validate());
 	}
 
 	/**

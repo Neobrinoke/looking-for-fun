@@ -11,16 +11,16 @@ class Validator
 		self::VALIDATOR_MAX,
 		self::VALIDATOR_EMAIL,
 		self::VALIDATOR_UNIQUE,
-		self::VALIDATOR_REQUIRED,
-		self::VALIDATOR_PASSWORD
+		self::VALIDATOR_CONFIRM,
+		self::VALIDATOR_REQUIRED
 	];
 
 	public const VALIDATOR_MIN = 'min';
 	public const VALIDATOR_MAX = 'max';
 	public const VALIDATOR_EMAIL = 'email';
 	public const VALIDATOR_UNIQUE = 'unique';
+	public const VALIDATOR_CONFIRM = 'confirm';
 	public const VALIDATOR_REQUIRED = 'required';
-	public const VALIDATOR_PASSWORD = 'password';
 
 	/** @var array */
 	private $values;
@@ -79,9 +79,9 @@ class Validator
 					}
 				}
 
-				if ($key == self::VALIDATOR_PASSWORD) {
+				if ($key == self::VALIDATOR_CONFIRM) {
 					if ($this->values[$var] != @$this->values[$var . '_conf']) {
-						$errors[$var] = 'Le mot de passe et le mot de passe de confirmation doivent être identique.';
+						$errors[$var] = 'Le champ ' . $var . ' doit être identique au champ de confirmation.';
 					}
 				}
 
