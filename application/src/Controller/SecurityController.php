@@ -37,7 +37,7 @@ class SecurityController extends Controller
 			'password' => $request->getParsedBody()['password']
 		]);
 
-		if(is_null($user)) {
+		if (is_null($user)) {
 			$errors[] = 'Utilisateur introuvable';
 		}
 

@@ -74,13 +74,13 @@ class Validator
 				}
 
 				if ($key == self::VALIDATOR_EMAIL) {
-					if(!filter_var($this->values[$var], FILTER_VALIDATE_EMAIL)) {
+					if (!filter_var($this->values[$var], FILTER_VALIDATE_EMAIL)) {
 						$errors[$var] = 'L\'email doit être un email valide.';
 					}
 				}
 
 				if ($key == self::VALIDATOR_PASSWORD) {
-					if($this->values[$var] != @$this->values[$var . '_conf']) {
+					if ($this->values[$var] != @$this->values[$var . '_conf']) {
 						$errors[$var] = 'Le mot de passe et le mot de passe de confirmation doivent être identique.';
 					}
 				}
@@ -89,7 +89,7 @@ class Validator
 					$value = 'App\\Entity\\' . $value;
 					/** @var Entity $value */
 					$entity = $value::findOneBy([$var => $this->values[$var]]);
-					if(!is_null($entity)) {
+					if (!is_null($entity)) {
 						$errors[$var] = 'Le champ ' . $var . ' doit être unique.';
 					}
 				}
