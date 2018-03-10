@@ -22,11 +22,6 @@ class RouterTest extends TestCase
 		$this->container = (new ContainerBuilder())->build();
 	}
 
-	/**
-	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 */
 	public function testGetMethod()
 	{
 		$request = new ServerRequest('GET', '/groups');
@@ -41,9 +36,6 @@ class RouterTest extends TestCase
 		$this->assertEquals('hello', $route->call($this->container));
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testGetMethodIfUrlDoesNotExist()
 	{
 		$request = new ServerRequest('GET', '/groupsaze');
@@ -57,11 +49,6 @@ class RouterTest extends TestCase
 		$this->assertEquals(null, $route);
 	}
 
-	/**
-	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 */
 	public function testGetMethodWithParameters()
 	{
 		$request = new ServerRequest('GET', '/group/remove/8');
@@ -85,9 +72,6 @@ class RouterTest extends TestCase
 		$this->assertEquals(null, $route);
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testGenerateUri()
 	{
 		$this->router->get('/groups', function () {

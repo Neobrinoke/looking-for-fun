@@ -7,9 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
-	/**
-	 * @throws \Exception
-	 */
 	public function testRequiredWithValidValues()
 	{
 		$values = ['name' => 'neobrinoke'];
@@ -20,9 +17,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testRequiredWithWrongValues()
 	{
 		$values = ['name' => ''];
@@ -33,9 +27,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals(['name' => 'Le champ name est requis.'], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testMaxWithValidValues()
 	{
 		$values = ['name' => 'neobrinoke'];
@@ -46,9 +37,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testMaxWithWrongValues()
 	{
 		$values = ['name' => 'neobrinoke'];
@@ -59,9 +47,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals(['name' => 'Le champ name doit être inférieur à 5 caractères.'], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testMinWithValidValues()
 	{
 		$values = ['name' => 'neobrinoke'];
@@ -72,9 +57,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testMinWithWrongValues()
 	{
 		$values = ['name' => 'neobrinoke'];
@@ -85,9 +67,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals(['name' => 'Le champ name doit être supérieur à 50 caractères.'], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testEmailWithValidValues()
 	{
 		$values = ['email' => 'neobrinoke@gmail.com'];
@@ -98,9 +77,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testEmailWithWrongValues()
 	{
 		$values = ['email' => 'neobrinoke'];
@@ -111,9 +87,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals(['email' => 'L\'email doit être un email valide.'], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testConfirmWithValidValues()
 	{
 		$values = ['password' => 'neobrinoke', 'password_conf' => 'neobrinoke'];
@@ -124,9 +97,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testConfirmWithWrongValues()
 	{
 		$values = ['password' => 'neobrinoke', 'password_conf' => ''];
@@ -137,9 +107,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals(['password' => 'Le champ password doit être identique au champ de confirmation.'], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testUniqueWithValidValues()
 	{
 		$values = ['email' => 'unique@email.com'];
@@ -150,9 +117,6 @@ class ValidatorTest extends TestCase
 		$this->assertEquals([], $validator->validate());
 	}
 
-	/**
-	 * @throws \Exception
-	 */
 	public function testUniqueWithWrongValues()
 	{
 		$values = ['email' => 'neobrinoke@gmail.com'];

@@ -22,11 +22,6 @@ class AppTest extends TestCase
 		$this->container = (new ContainerBuilder())->build();
 	}
 
-	/**
-	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 */
 	public function testRedirectTrailingSlash()
 	{
 		$app = new App($this->container);
@@ -36,11 +31,6 @@ class AppTest extends TestCase
 		$this->assertEquals(301, $response->getStatusCode());
 	}
 
-	/**
-	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 */
 	public function testUrl()
 	{
 		$this->container->get(Router::class)->get('/azerty', function () {
@@ -54,11 +44,6 @@ class AppTest extends TestCase
 		$this->assertEquals(200, $response->getStatusCode());
 	}
 
-	/**
-	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 */
 	public function testError404()
 	{
 		$app = new App($this->container);
