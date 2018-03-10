@@ -159,7 +159,9 @@ class QueryBuilder
 					$sql .= $field . ' = :' . $field . ', ';
 				}
 			}
-			$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
+			if (!empty($this->conditions)) {
+				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
+			}
 		} else {
 			throw new \Exception('Invalid query builder type');
 		}
