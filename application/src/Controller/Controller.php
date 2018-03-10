@@ -18,11 +18,12 @@ class Controller
 	 * Controller constructor.
 	 *
 	 * @param Router $router
+	 * @param Renderer $renderer
 	 */
-	public function __construct(Router $router)
+	public function __construct(Router $router, Renderer $renderer)
 	{
 		$this->router = $router;
-		$this->renderer = new Renderer($router);
+		$this->renderer = $renderer;
 	}
 
 	/**

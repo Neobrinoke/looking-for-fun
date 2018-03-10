@@ -3,6 +3,7 @@
 namespace App\Framework\Router;
 
 use GuzzleHttp\Psr7\Request;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Route
@@ -72,10 +73,12 @@ class Route
 	/**
 	 * Execute the callback
 	 *
-	 * @param Router $router
+	 * @param ContainerInterface $container
 	 * @return mixed
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function call(Router $router)
+	public function call(ContainerInterface $container)
 	{
 		$callable = $this->callback;
 
@@ -83,7 +86,7 @@ class Route
 			$actions = explode('@', $this->callback);
 			$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
 			$methodName = $actions[1];
-			$callable = [new $className($router), $methodName];
+			$callable = [$container->get($className), $methodName];
 		}
 
 		return call_user_func_array($callable, $this->params);

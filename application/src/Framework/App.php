@@ -2,22 +2,25 @@
 
 namespace App\Framework;
 
+use App\Framework\Router\Route;
 use App\Framework\Router\Router;
 use GuzzleHttp\Psr7\Response;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class App
 {
-	/** @var Router */
-	public $router;
+	/** @var ContainerInterface */
+	public $container;
 
 	/**
 	 * App constructor.
+	 * @param ContainerInterface $container
 	 */
-	public function __construct()
+	public function __construct(ContainerInterface $container)
 	{
-		$this->router = new Router();
+		$this->container = $container;
 	}
 
 	/**
@@ -26,6 +29,8 @@ class App
 	 * @param ServerRequestInterface $request
 	 * @return ResponseInterface
 	 * @throws \Exception
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
 	public function run(ServerRequestInterface $request): ResponseInterface
 	{
@@ -34,9 +39,10 @@ class App
 			return new Response(301, ['Location' => substr($uri, 0, -1)]);
 		}
 
-		$route = $this->router->run($request);
+		/** @var Route $route */
+		$route = $this->container->get(Router::class)->run($request);
 		if (!is_null($route)) {
-			$response = $route->call($this->router);
+			$response = $route->call($this->container);
 			if (is_string($response)) {
 				return new Response(200, [], $response);
 			} else if ($response instanceof Response) {

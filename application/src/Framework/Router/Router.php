@@ -18,7 +18,7 @@ class Router
 	 */
 	public function get(string $path, $callback, string $name)
 	{
-		self::addRoute('GET', $path, $callback, $name);
+		$this->addRoute('GET', $path, $callback, $name);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class Router
 	 */
 	public function post(string $path, $callback, string $name)
 	{
-		self::addRoute('POST', $path, $callback, $name);
+		$this->addRoute('POST', $path, $callback, $name);
 	}
 
 	/**

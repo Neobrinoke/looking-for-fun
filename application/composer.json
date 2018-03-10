@@ -19,6 +19,7 @@
 		"phpunit/phpunit": "7"
 	},
 	"require": {
-		"guzzlehttp/psr7": "^1.4"
+		"guzzlehttp/psr7": "^1.4",
+		"php-di/php-di": "^6.0"
 	}
 }

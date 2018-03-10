@@ -6,24 +6,18 @@ ini_set("display_errors", 1);
 // Session start
 session_start();
 
-// Autoloading
+// Autoload
 require('../vendor/autoload.php');
 
-// Application start
-$app = new \App\Framework\App();
+$builder = new \DI\ContainerBuilder();
+$container = $builder->build();
 
-/**
- * Routes
- */
-// Base routes
-$app->router->get('/', 'DefaultController@homeAction', 'home');
-$app->router->get('/article/{id}', 'DefaultController@testAction', 'test.index');
-$app->router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
-// Security
-$app->router->get('/login', 'SecurityController@loginAction', 'security.login');
-$app->router->post('/login', 'SecurityController@loginCheckAction', 'security.loginCheck');
-$app->router->get('/register', 'SecurityController@registerAction', 'security.register');
-$app->router->post('/register', 'SecurityController@storeAction', 'security.store');
+// Routes config
+$router = $container->get(\App\Framework\Router\Router::class);
+require('../config/routes.php');
+
+// Application start
+$app = new \App\Framework\App($container);
 
 // Response
 $response = $app->run(\GuzzleHttp\Psr7\ServerRequest::fromGlobals());

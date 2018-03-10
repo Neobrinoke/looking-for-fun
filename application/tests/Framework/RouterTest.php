@@ -3,21 +3,29 @@
 namespace Tests\Framework;
 
 use App\Framework\Router\Router;
+use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class RouterTest extends TestCase
 {
 	/** @var Router */
 	private $router;
 
+	/** @var ContainerInterface */
+	private $container;
+
 	public function setUp()
 	{
 		$this->router = new Router();
+		$this->container = (new ContainerBuilder())->build();
 	}
 
 	/**
 	 * @throws \Exception
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
 	public function testGetMethod()
 	{
@@ -30,7 +38,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('groups', $route->getName());
-		$this->assertEquals('hello', $route->call($this->router));
+		$this->assertEquals('hello', $route->call($this->container));
 	}
 
 	/**
@@ -51,6 +59,8 @@ class RouterTest extends TestCase
 
 	/**
 	 * @throws \Exception
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
 	public function testGetMethodWithParameters()
 	{
@@ -67,7 +77,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('group.delete', $route->getName());
-		$this->assertEquals('hello 8', $route->call($this->router));
+		$this->assertEquals('hello 8', $route->call($this->container));
 		$this->assertContains('8', $route->getParams());
 
 		// Test invalid route
