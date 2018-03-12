@@ -19,7 +19,7 @@ class DefaultController extends Controller
 	 * @param $id
 	 * @return \GuzzleHttp\Psr7\Response
 	 */
-	public function testAction($id)
+	public function testAction(int $id)
 	{
 		return $this->renderView('default.test', compact('id'));
 	}
@@ -29,7 +29,7 @@ class DefaultController extends Controller
 	 * @param $id
 	 * @return \GuzzleHttp\Psr7\Response
 	 */
-	public function storeAction(ServerRequestInterface $request, $id)
+	public function storeAction(ServerRequestInterface $request, int $id)
 	{
 		return $this->renderView('default.test', compact('id'));
 	}

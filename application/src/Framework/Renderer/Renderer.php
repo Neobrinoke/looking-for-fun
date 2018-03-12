@@ -2,7 +2,9 @@
 
 namespace App\Framework\Renderer;
 
+use App\Framework\Authentication\Auth;
 use App\Framework\Router\Router;
+use App\Framework\Session\Session;
 
 class Renderer
 {
@@ -10,15 +12,27 @@ class Renderer
 
 	/** @var Router */
 	private $router;
+	/**
+	 * @var Session
+	 */
+	private $session;
+	/**
+	 * @var Auth
+	 */
+	private $auth;
 
 	/**
 	 * Renderer constructor.
 	 *
 	 * @param Router $router
+	 * @param Session $session
+	 * @param Auth $auth
 	 */
-	public function __construct(Router $router)
+	public function __construct(Router $router, Session $session, Auth $auth)
 	{
 		$this->router = $router;
+		$this->session = $session;
+		$this->auth = $auth;
 	}
 
 	/**
@@ -32,6 +46,8 @@ class Renderer
 	{
 		$params['renderer'] = $this;
 		$params['router'] = $this->router;
+		$params['session'] = $this->session;
+		$params['auth'] = $this->auth;
 		$params['errors'] = $params['errors'] ?? [];
 		$params['old'] = $params['old'] ?? [];
 

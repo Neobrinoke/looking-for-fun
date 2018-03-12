@@ -37,16 +37,21 @@ class SecurityController extends Controller
 
 		$errors = $validator->validate();
 
-		$user = User::findOneBy([
-			'login' => $request->getParsedBody()['login'],
-			'password' => $request->getParsedBody()['password']
-		]);
+		/** @var User $user */
+		$user = null;
+		if (empty($errors)) {
+			$user = User::findOneBy([
+				'login' => $request->getParsedBody()['login'],
+				'password' => $request->getParsedBody()['password']
+			]);
 
-		if (is_null($user)) {
-			$errors[] = 'Utilisateur introuvable';
+			if (is_null($user)) {
+				$errors[] = 'Utilisateur introuvable';
+			}
 		}
 
-		if (empty($errors)) {
+		if (empty($errors) && !is_null($user)) {
+			$this->auth()->initUser($user);
 			return $this->redirectToRoute('home');
 		}
 

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Framework\Authentication\Auth;
 use App\Framework\Renderer\Renderer;
 use App\Framework\Router\Router;
+use App\Framework\Session\Session;
 use GuzzleHttp\Psr7\Response;
 
 class Controller
@@ -14,16 +16,26 @@ class Controller
 	/** @var Renderer */
 	private $renderer;
 
+	/** @var Session */
+	private $session;
+
+	/** @var Auth */
+	private $auth;
+
 	/**
 	 * Controller constructor.
 	 *
 	 * @param Router $router
 	 * @param Renderer $renderer
+	 * @param Session $session
+	 * @param Auth $auth
 	 */
-	public function __construct(Router $router, Renderer $renderer)
+	public function __construct(Router $router, Renderer $renderer, Session $session, Auth $auth)
 	{
 		$this->router = $router;
 		$this->renderer = $renderer;
+		$this->session = $session;
+		$this->auth = $auth;
 	}
 
 	/**
@@ -86,5 +98,25 @@ class Controller
 	protected function renderView(string $view, array $params = [])
 	{
 		return $this->response($this->renderer->renderView($view, $params));
+	}
+
+	/**
+	 * Retrieve session instance
+	 *
+	 * @return Session
+	 */
+	protected function session()
+	{
+		return $this->session;
+	}
+
+	/**
+	 * Retrieve auth instance
+	 *
+	 * @return Auth
+	 */
+	protected function auth()
+	{
+		return $this->auth;
 	}
 }
