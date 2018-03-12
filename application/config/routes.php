@@ -2,7 +2,7 @@
 
 /** Base routes */
 $router->get('/', 'DefaultController@homeAction', 'home');
-$router->get('/article/{id}', 'DefaultController@testAction', 'test.index');
+$router->get('/article/{id}', 'DefaultController@testAction', 'test.index', 'CheckLogin');
 $router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
 
 /** Security routes */

@@ -2,13 +2,16 @@
 
 namespace App\Framework\Router;
 
+use App\Controller\Controller;
 use GuzzleHttp\Psr7\Request;
+use function PHPSTORM_META\type;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Route
 {
 	public const DEFAULT_CONTROLLER_PATH = 'App\\Controller\\';
+	public const DEFAULT_MIDDLEWARE_PATH = 'App\\Middleware\\';
 
 	/** @var string */
 	private $method;
@@ -28,6 +31,9 @@ class Route
 	/** @var array */
 	private $params = [];
 
+	/** @var null|string */
+	private $middleware;
+
 	/**
 	 * Route constructor.
 	 *
@@ -36,14 +42,16 @@ class Route
 	 * @param string $regex
 	 * @param string $name
 	 * @param string|callable $callback
+	 * @param null|string $middleware
 	 */
-	public function __construct(string $method, string $path, string $regex, string $name, $callback)
+	public function __construct(string $method, string $path, string $regex, string $name, $callback, ?string $middleware = null)
 	{
 		$this->method = $method;
 		$this->regex = $regex;
 		$this->path = $path;
 		$this->name = $name;
 		$this->callback = $callback;
+		$this->middleware = $middleware;
 	}
 
 	/**
@@ -80,6 +88,14 @@ class Route
 	 */
 	public function call(ContainerInterface $container)
 	{
+		/** Middleware system */
+		if (!is_null($this->getMiddleware())) { // If we have a middleware defined
+			$middleware = $container->get(self::DEFAULT_MIDDLEWARE_PATH . $this->getMiddleware());
+			if (!is_bool($middleware->handle())) { // If return of middleware are not a boolean
+				return $middleware->handle(); // return the response of middleware
+			}
+		}
+
 		$callable = $this->callback;
 
 		if (is_string($this->callback)) {
@@ -202,5 +218,21 @@ class Route
 	public function setParams(array $params): void
 	{
 		$this->params = $params;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getMiddleware(): ?string
+	{
+		return $this->middleware;
+	}
+
+	/**
+	 * @param null|string $middleware
+	 */
+	public function setMiddleware(?string $middleware): void
+	{
+		$this->middleware = $middleware;
 	}
 }

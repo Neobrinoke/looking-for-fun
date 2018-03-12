@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Framework\Controller;
 
 use App\Framework\Authentication\Auth;
 use App\Framework\Renderer\Renderer;

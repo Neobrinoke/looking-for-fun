@@ -15,10 +15,11 @@ class Router
 	 * @param string $path
 	 * @param string|callable $callback
 	 * @param string $name
+	 * @param null|string $middleware
 	 */
-	public function get(string $path, $callback, string $name)
+	public function get(string $path, $callback, string $name, ?string $middleware = null)
 	{
-		$this->addRoute('GET', $path, $callback, $name);
+		$this->addRoute('GET', $path, $callback, $name, $middleware);
 	}
 
 	/**
@@ -27,10 +28,11 @@ class Router
 	 * @param string $path
 	 * @param string|callable $callback
 	 * @param string $name
+	 * @param null|string $middleware
 	 */
-	public function post(string $path, $callback, string $name)
+	public function post(string $path, $callback, string $name, ?string $middleware = null)
 	{
-		$this->addRoute('POST', $path, $callback, $name);
+		$this->addRoute('POST', $path, $callback, $name, $middleware);
 	}
 
 	/**
@@ -76,10 +78,11 @@ class Router
 	 * @param string $path
 	 * @param $callback
 	 * @param string $name
+	 * @param null|string $middleware
 	 */
-	private function addRoute(string $method, string $path, $callback, string $name)
+	private function addRoute(string $method, string $path, $callback, string $name, ?string $middleware = null)
 	{
 		$regex = "#^" . preg_replace('#{([\w]+)}#', '([^/]+)', trim($path, '/')) . "$#i";
-		$this->routes[$name] = new Route($method, $path, $regex, $name, $callback);
+		$this->routes[$name] = new Route($method, $path, $regex, $name, $callback, $middleware);
 	}
 }
