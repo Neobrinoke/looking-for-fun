@@ -221,6 +221,7 @@ abstract class Entity
 					$var = $this->$methodName();
 					$results[$key] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					$key = $key . '_id'; //@Todo Trouver une autre façon de rajouter le _id
 					/** @var Entity $entity2 */
 					$entity2 = $this->$methodName();
 					if (is_null($entity2)) {
