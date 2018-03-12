@@ -10,4 +10,4 @@ $router->get('/login', 'SecurityController@loginAction', 'security.login');
 $router->post('/login', 'SecurityController@loginCheckAction', 'security.loginCheck');
 $router->get('/register', 'SecurityController@registerAction', 'security.register');
 $router->post('/register', 'SecurityController@storeAction', 'security.store');
-$router->get('/logout', 'SecurityController@logoutAction', 'security.logout');
+$router->get('/loggout', 'SecurityController@logoutAction', 'security.logout');
