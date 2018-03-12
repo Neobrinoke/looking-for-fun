@@ -1,6 +1,6 @@
 <?php ob_start(); ?>
 	<link rel="stylesheet" href="/css/home.css">
-	<?php if(isset($css)) echo $css; ?>
+<?php if (isset($css)) echo $css; ?>
 <?php $css = ob_get_clean(); ?>
 
 <?php ob_start(); ?>
@@ -12,12 +12,21 @@
 			<a class="item">Company</a>
 			<a class="item">Careers</a>
 			<div class="right menu">
-				<div class="item">
-					<a class="ui button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
-				</div>
-				<div class="item">
-					<a class="ui primary button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
-				</div>
+				<?php if ($auth->isLogged()): ?>
+					<div class="item">
+						<a class="ui button" href="#"><?= $auth->user()->getName() ?></a>
+					</div>
+					<div class="item">
+						<a class="ui primary button" href="<?= $router->generateUri('security.logout') ?>">Deconnexion</a>
+					</div>
+				<?php else: ?>
+					<div class="item">
+						<a class="ui button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
+					</div>
+					<div class="item">
+						<a class="ui primary button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -28,10 +37,7 @@
 		<a class="item">Work</a>
 		<a class="item">Company</a>
 		<a class="item">Careers</a>
-		<a class="item" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
-		<a class="item" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
 	</div>
-
 
 	<!-- Page Contents -->
 	<div class="pusher">
@@ -48,8 +54,13 @@
 					<a class="item">Company</a>
 					<a class="item">Careers</a>
 					<div class="right item">
-						<a class="ui inverted button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
-						<a class="ui inverted button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+						<?php if ($auth->isLogged()): ?>
+							<a class="ui inverted button" href="#"><?= $auth->user()->getName() ?></a>
+							<a class="ui inverted button" href="<?= $router->generateUri('security.logout') ?>">Deconnexion</a>
+						<?php else: ?>
+							<a class="ui inverted button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
+							<a class="ui inverted button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
@@ -96,7 +107,7 @@
 
 <?php ob_start(); ?>
 	<script src="/js/home.js"></script>
-	<?php if(isset($js)) echo $js; ?>
+<?php if (isset($js)) echo $js; ?>
 <?php $js = ob_get_clean(); ?>
 
 <?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>

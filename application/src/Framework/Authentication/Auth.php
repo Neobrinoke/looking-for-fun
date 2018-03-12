@@ -27,13 +27,15 @@ class Auth
 	 */
 	public function initUser(User $user)
 	{
-		$this->session->set('user', $user);
+		$this->session->set('user_id', $user->getId());
 	}
 
 	/**
 	 * Return current logged user
 	 *
 	 * @return User
+	 * @throws \Exception
+	 * @throws \ReflectionException
 	 */
 	public function user()
 	{
@@ -41,7 +43,9 @@ class Auth
 			return null;
 		}
 
-		return $this->session->get('user');
+		/** @var User $user */
+		$user = User::find($this->session->get('user_id'));
+		return $user;
 	}
 
 	/**
@@ -51,6 +55,14 @@ class Auth
 	 */
 	public function isLogged()
 	{
-		return is_null($this->session->get('user')) ? false : true;
+		return is_null($this->session->get('user_id')) ? false : true;
+	}
+
+	/**
+	 * Logout current user
+	 */
+	public function logout()
+	{
+		$this->session->remove('user_id');
 	}
 }

@@ -96,4 +96,14 @@ class SecurityController extends Controller
 
 		return $this->renderView('security.register', compact('old', 'errors'));
 	}
+
+	/**
+	 * Logout current user
+	 * @throws \Exception
+	 */
+	public function logoutAction()
+	{
+		$this->auth()->logout();
+		return $this->redirectToRoute('home');
+	}
 }

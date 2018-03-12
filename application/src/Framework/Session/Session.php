@@ -37,4 +37,15 @@ class Session
 			session_start();
 		}
 	}
+
+	/**
+	 * Unset session value with key
+	 *
+	 * @param string $key
+	 */
+	public function remove(string $key)
+	{
+		$this->initSession();
+		unset($_SESSION[$key]);
+	}
 }
