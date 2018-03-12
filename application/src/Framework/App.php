@@ -42,7 +42,7 @@ class App
 		/** @var Route $route */
 		$route = $this->container->get(Router::class)->run($request);
 		if (!is_null($route)) {
-			$response = $route->call($this->container);
+			$response = $route->call($this->container, $uri);
 			if (is_string($response)) {
 				return new Response(200, [], $response);
 			} else if ($response instanceof Response) {

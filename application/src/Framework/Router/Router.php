@@ -2,12 +2,32 @@
 
 namespace App\Framework\Router;
 
+use App\Framework\Session\Session;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router
 {
 	/** @var array */
 	private $routes = [];
+
+	/** @var Session */
+	private $session;
+
+	public function __construct(Session $session)
+	{
+		$this->session = $session;
+	}
+
+	/**
+	 * Add multiple routes with same middleware
+	 *
+	 * @param string $middleware
+	 * @param callable $function
+	 */
+	public function middlewareGroup(string $middleware, callable $function)
+	{
+		$function($middleware);
+	}
 
 	/**
 	 * Add get route
@@ -49,6 +69,7 @@ class Router
 				return $route;
 			}
 		}
+
 		return null;
 	}
 

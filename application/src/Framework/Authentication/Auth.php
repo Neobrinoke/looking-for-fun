@@ -55,7 +55,7 @@ class Auth
 	 */
 	public function isLogged()
 	{
-		return is_null($this->session->get('user_id')) ? false : true;
+		return $this->session->has('user_id');
 	}
 
 	/**

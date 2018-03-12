@@ -2,8 +2,11 @@
 
 /** Base routes */
 $router->get('/', 'DefaultController@homeAction', 'home');
-$router->get('/article/{id}', 'DefaultController@testAction', 'test.index', 'CheckLogin');
-$router->post('/article/{id}', 'DefaultController@storeAction', 'test.store');
+
+$router->middlewareGroup('CheckLogin', function ($middleware) use ($router) {
+	$router->get('/article/{id}', 'DefaultController@testAction', 'test.index', $middleware);
+	$router->post('/articles/{id}', 'DefaultController@storeAction', 'test.store', $middleware);
+});
 
 /** Security routes */
 $router->get('/login', 'SecurityController@loginAction', 'security.login');

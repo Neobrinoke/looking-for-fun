@@ -13,7 +13,14 @@ class Session
 	public function get(string $key)
 	{
 		$this->initSession();
-		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+		return $this->has($key) ? $_SESSION[$key] : null;
+	}
+
+	public function getFlash(string $key)
+	{
+		$value = $this->get($key);
+		$this->remove($key);
+		return $value;
 	}
 
 	/**
@@ -29,16 +36,6 @@ class Session
 	}
 
 	/**
-	 * Initialize session
-	 */
-	private function initSession()
-	{
-		if (session_status() === PHP_SESSION_NONE) {
-			session_start();
-		}
-	}
-
-	/**
 	 * Unset session value with key
 	 *
 	 * @param string $key
@@ -47,5 +44,27 @@ class Session
 	{
 		$this->initSession();
 		unset($_SESSION[$key]);
+	}
+
+	/**
+	 * Check if session have this key
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public function has(string $key)
+	{
+		$this->initSession();
+		return isset($_SESSION[$key]);
+	}
+
+	/**
+	 * Initialize session
+	 */
+	private function initSession()
+	{
+		if (session_status() === PHP_SESSION_NONE) {
+			session_start();
+		}
 	}
 }

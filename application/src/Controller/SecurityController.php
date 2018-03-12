@@ -53,6 +53,11 @@ class SecurityController extends Controller
 
 		if (empty($errors) && !is_null($user)) {
 			$this->auth()->initUser($user);
+
+			if ($this->session()->has('last_uri')) {
+				return $this->redirect($this->session()->getFlash('last_uri'));
+			}
+
 			return $this->redirectToRoute('home');
 		}
 

@@ -3,6 +3,7 @@
 namespace App\Framework\Router;
 
 use App\Controller\Controller;
+use App\Framework\Session\Session;
 use GuzzleHttp\Psr7\Request;
 use function PHPSTORM_META\type;
 use Psr\Container\ContainerInterface;
@@ -82,16 +83,18 @@ class Route
 	 * Execute the callback
 	 *
 	 * @param ContainerInterface $container
+	 * @param string $uri
 	 * @return mixed
 	 * @throws \Psr\Container\ContainerExceptionInterface
 	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function call(ContainerInterface $container)
+	public function call(ContainerInterface $container, string $uri)
 	{
 		/** Middleware system */
 		if (!is_null($this->getMiddleware())) { // If we have a middleware defined
 			$middleware = $container->get(self::DEFAULT_MIDDLEWARE_PATH . $this->getMiddleware());
 			if (!is_bool($middleware->handle())) { // If return of middleware are not a boolean
+				$container->get(Session::class)->set('last_uri', $uri);
 				return $middleware->handle(); // return the response of middleware
 			}
 		}
