@@ -8,26 +8,7 @@
 	<header class="ui fixed inverted menu">
 		<div class="ui container">
 			<a href="<?= $router->generateUri('home') ?>" class="header item">Accueil</a>
-			<a href="#" class="item">Home</a>
-			<div class="ui simple dropdown item">
-				Dropdown <i class="dropdown icon"></i>
-				<div class="menu">
-					<a class="item" href="#">Link Item</a>
-					<a class="item" href="#">Link Item</a>
-					<div class="divider"></div>
-					<div class="header">Header Item</div>
-					<div class="item">
-						<i class="dropdown icon"></i>
-						Sub Menu
-						<div class="menu">
-							<a class="item" href="#">Link Item</a>
-							<a class="item" href="#">Link Item</a>
-						</div>
-					</div>
-					<a class="item" href="#">Link Item</a>
-				</div>
-			</div>
-
+			<a href="<?= $router->generateUri('gameGroup.index') ?>" class="item">Groupes</a>
 			<div class="right menu">
 				<?php if ($auth->isLogged()): ?>
 					<a class="item" href="#"><?= $auth->user()->getName() ?></a>
@@ -40,12 +21,7 @@
 		</div>
 	</header>
 
-	<main class="ui main text container">
-		<div class="ui text container">
-			<h1 class="ui inverted header">À la recherche de joueurs ?</h1>
-			<h2>Trouve des personnes avec qui jouer !<br>Que ce sois pour le fun ou pour tryhard !</h2>
-			<div class="ui huge primary button">Crée un groupe !<i class="right arrow icon"></i></div>
-		</div>
+	<main class="ui container">
 		<?= $layout ?>
 	</main>
 

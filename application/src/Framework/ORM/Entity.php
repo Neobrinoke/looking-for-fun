@@ -29,7 +29,6 @@ abstract class Entity
 	 * @param int $id
 	 * @return Entity|null
 	 * @throws \Exception
-	 * @throws ReflectionException
 	 */
 	public static function find(int $id): ?Entity
 	{
@@ -47,7 +46,6 @@ abstract class Entity
 	 *
 	 * @return array
 	 * @throws \Exception
-	 * @throws ReflectionException
 	 */
 	public static function all(): array
 	{
@@ -69,7 +67,6 @@ abstract class Entity
 	 * @param array $options
 	 * @return Entity|null
 	 * @throws \Exception
-	 * @throws ReflectionException
 	 */
 	public static function findOneBy(array $options = []): ?Entity
 	{
@@ -94,7 +91,6 @@ abstract class Entity
 	 * @param array $options
 	 * @return array
 	 * @throws \Exception
-	 * @throws ReflectionException
 	 */
 	public static function findBy(array $options = []): array
 	{
@@ -123,7 +119,6 @@ abstract class Entity
 	 *
 	 * @param array $values
 	 * @return Entity
-	 * @throws ReflectionException
 	 * @throws \Exception
 	 */
 	public static function generateWithForm(array $values): Entity
@@ -244,7 +239,6 @@ abstract class Entity
 	 *
 	 * @param $results
 	 * @return Entity|null
-	 * @throws ReflectionException
 	 * @throws \Exception
 	 */
 	private function injectEntityProperties($results): ?Entity
@@ -258,23 +252,31 @@ abstract class Entity
 		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
-			$value = @$results[camelToSnakeCase(substr($methodName, 3))]; // @ for bypass the notice
+			$resultsKey = camelToSnakeCase(substr($methodName, 3));
+
+			try {
+				$reflectionClass = new ReflectionClass($method->getParameters()[0]->getType()->getName());
+				$className = $reflectionClass->getName();
+				$isEntity = preg_match('/App__Entity/', str_replace('\\', '__', $className));
+			} catch (ReflectionException $e) {
+				$reflectionClass = null;
+				$className = null;
+				$isEntity = false;
+			}
+
+			$value = @$results[$resultsKey]; // @ for bypass the notice
+			if ($isEntity) {
+				$value = @$results[($resultsKey . '_id')]; // @ for bypass the notice
+			}
+
 			if (!isset($value)) {
 				continue;
 			}
 
-			try {
-				$reflectionClass = new ReflectionClass($method->getParameters()[0]->getType()->getName());
-			} catch (ReflectionException $e) {
-				$reflectionClass = null;
-			}
-
-			if (!is_null($reflectionClass)) { // need instantiable parameter
-				$className = $reflectionClass->getName();
-
+			if (!is_null($reflectionClass) && !is_null($className)) { // need instantiable parameter
 				if ($className == 'DateTime') {
-					$this->$methodName(is_null($value) ? null : new $className($value));
-				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
+					$this->$methodName(is_null($value) ? null : new \DateTime($value));
+				} else if ($isEntity) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
 					/** @var Entity $className */
 					$entity = $className::find($value);
 					if (is_null($entity)) {

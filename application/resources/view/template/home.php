@@ -1,14 +1,38 @@
 <?php ob_start(); ?>
 	<link rel="stylesheet" href="/css/home.css">
-	<?php if (isset($css)) echo $css; ?>
+<?php if (isset($css)) echo $css; ?>
 <?php $css = ob_get_clean(); ?>
 
 <?php ob_start(); ?>
 
+	<div class="ui large top fixed hidden menu">
+		<div class="ui container">
+			<a class="item" href="<?= $router->generateUri('home') ?>">Accueil</a>
+			<a class="item" href="<?= $router->generateUri('gameGroup.index') ?>">Groupes</a>
+			<div class="right menu">
+				<?php if ($auth->isLogged()): ?>
+					<div class="item">
+						<a class="ui button" href="#"><?= $auth->user()->getName() ?></a>
+					</div>
+					<div class="item">
+						<a class="ui primary button" href="<?= $router->generateUri('security.logout') ?>">Deconnexion</a>
+					</div>
+				<?php else: ?>
+					<div class="item">
+						<a class="ui button" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
+					</div>
+					<div class="item">
+						<a class="ui primary button" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+
 	<!-- Sidebar Menu -->
 	<header class="ui vertical inverted sidebar menu left">
 		<a class="item" href="<?= $router->generateUri('home') ?>">Accueil</a>
-		<a class="item" href="<?= $router->generateUri('gameGroup.index') ?>">Groupes de jeu</a>
+		<a class="item" href="<?= $router->generateUri('gameGroup.index') ?>">Groupes</a>
 	</header>
 
 	<!-- Page Contents -->
@@ -20,7 +44,7 @@
 						<i class="sidebar icon"></i>
 					</a>
 					<a class="item" href="<?= $router->generateUri('home') ?>">Accueil</a>
-					<a class="item" href="<?= $router->generateUri('gameGroup.index') ?>">Groupes de jeu</a>
+					<a class="item" href="<?= $router->generateUri('gameGroup.index') ?>">Groupes</a>
 					<div class="right item">
 						<?php if ($auth->isLogged()): ?>
 							<a class="ui inverted button" href="#"><?= $auth->user()->getName() ?></a>
@@ -48,7 +72,7 @@
 
 <?php ob_start(); ?>
 	<script src="/js/home.js"></script>
-	<?php if (isset($js)) echo $js; ?>
+<?php if (isset($js)) echo $js; ?>
 <?php $js = ob_get_clean(); ?>
 
 <?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>
