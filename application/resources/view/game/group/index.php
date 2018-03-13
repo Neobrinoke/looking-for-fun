@@ -6,4 +6,4 @@
 
 <?php $layout = ob_get_clean(); ?>
 
-<?= $renderer->renderView('template.home', compact('layout')); ?>
+<?= $renderer->renderView('template.layout', compact('layout')); ?>
