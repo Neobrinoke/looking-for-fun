@@ -1,55 +1,46 @@
+<?php
+/** @var \App\Framework\Renderer\Renderer $renderer */
+/** @var \App\Framework\Router\Router $router */
+/** @var \App\Framework\Session\Session $session */
+/** @var \App\Framework\Authentication\Auth $auth */
+
+/** @var array $errors */
+/** @var array $old */
+?>
+
 <?php ob_start(); ?>
 
 	<h1 class="ui teal image header">S'enregistrer</h1>
 
-	<form class="ui large form <?= !empty($errors) ? 'error' : '' ?>" action="<?= $router->generateUri('security.store') ?>" method="POST">
+	<form class="ui large form <?= isError($errors) ?>" action="<?= $router->generateUri('security.store') ?>" method="POST">
 		<div class="ui stacked segment">
-			<div class="ui error message">
-				<div class="header">Quelques erreurs restes à corriger</div>
-				<ul class="list">
-					<?php foreach ($errors as $error): ?>
-						<?php if (is_array($error)): ?>
-							<?php foreach ($error as $err): ?>
-								<li><?= $err ?></li>
-							<?php endforeach; ?>
-						<?php else: ?>
-							<li><?= $error ?></li>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				</ul>
-			</div>
+			<?= $renderer->renderView('message.error', compact('errors')) ?>
 
-			<div class="field <?= isset($errors['name']) ? 'error' : '' ?>">
+			<div class="field <?= isError($errors, 'name') ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
 					<input type="text" name="name" placeholder="Nom d'utilisateur" value="<?= old($old, 'name') ?>">
 				</div>
 			</div>
-			<div class="field <?= isset($errors['login']) ? 'error' : '' ?>">
+			<div class="field <?= isError($errors, 'login') ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
 					<input type="text" name="login" placeholder="Identifiant" value="<?= old($old, 'login') ?>">
 				</div>
 			</div>
-			<div class="field <?= isset($errors['email']) ? 'error' : '' ?>">
+			<div class="field <?= isError($errors, 'email') ?>">
 				<div class="ui left icon input">
 					<i class="envelope icon"></i>
 					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old($old, 'email') ?>">
 				</div>
 			</div>
-			<div class="field <?= isset($errors['email']) ? 'error' : '' ?>">
-				<div class="ui left icon input">
-					<i class="envelope icon"></i>
-					<input type="text" name="email_conf" placeholder="Adresse e-mail (confirmation)" value="<?= old($old, 'email_conf') ?>">
-				</div>
-			</div>
-			<div class="field <?= isset($errors['password']) ? 'error' : '' ?>">
+			<div class="field <?= isError($errors, 'password') ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
 					<input type="password" name="password" placeholder="Mot de passe">
 				</div>
 			</div>
-			<div class="field <?= isset($errors['password']) ? 'error' : '' ?>">
+			<div class="field <?= isError($errors, 'password') ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
 					<input type="password" name="password_conf" placeholder="Mot de passe (confirmation)">

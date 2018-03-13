@@ -25,7 +25,6 @@ class SecurityController extends Controller
 	 * @param ServerRequestInterface $request
 	 * @return \GuzzleHttp\Psr7\Response
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	public function loginCheckAction(ServerRequestInterface $request)
 	{
@@ -88,7 +87,7 @@ class SecurityController extends Controller
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|required',
 			'login' => 'min:3|required|unique:User',
-			'email' => 'email|confirm|required|unique:User',
+			'email' => 'email|required|unique:User',
 			'password' => 'min:8|confirm|required'
 		]);
 

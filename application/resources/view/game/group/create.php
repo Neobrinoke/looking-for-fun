@@ -1,10 +1,39 @@
+<?php
+/** @var \App\Framework\Renderer\Renderer $renderer */
+/** @var \App\Framework\Router\Router $router */
+/** @var \App\Framework\Session\Session $session */
+/** @var \App\Framework\Authentication\Auth $auth */
+
+/** @var array $errors */
+/** @var array $old */
+?>
+
 <?php ob_start(); ?>
 
-	<form action="<?= $router->generateUri('gameGroup.store') ?>" method="POST">
-		<input type="text" name="name" placeholder="Nom du group">
-		<textarea name="description" placeholder="Description du group" cols="30" rows="10"></textarea>
-		<button type="submit">Créer</button>
-	</form>
+	<div class="ui segment">
+		<h2 class="ui header">
+			<a class="ui basic button" href="<?= $router->generateUri('gameGroup.index') ?>">
+				<i class="left arrow icon"></i>
+				Retour à la liste
+			</a>
+		</h2>
+		<div class="ui clearing divider"></div>
+		<form class="ui form <?= isError($errors) ?>" action="<?= $router->generateUri('gameGroup.store') ?>" method="POST">
+
+			<?= $renderer->renderView('message.error', compact('errors')) ?>
+
+			<div class="field <?= isError($errors, 'name') ?>">
+				<label for="name">Nom du group</label>
+				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= old($old, 'name') ?>">
+			</div>
+			<div class="field <?= isError($errors, 'description') ?>">
+				<label for="description">Description</label>
+				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= old($old, 'description') ?></textarea>
+			</div>
+			<button class="ui button" type="submit">Créer</button>
+		</form>
+	</div>
+
 
 <?php $layout = ob_get_clean(); ?>
 

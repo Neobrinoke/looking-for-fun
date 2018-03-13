@@ -14,7 +14,6 @@ class GameGroupController extends Controller
 	 *
 	 * @return \GuzzleHttp\Psr7\Response
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	public function indexAction()
 	{
@@ -41,6 +40,8 @@ class GameGroupController extends Controller
 	 */
 	public function storeAction(ServerRequestInterface $request)
 	{
+		$old = $request->getParsedBody();
+
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|max:15|required',
 			'description' => 'min:15|max:255|required'
@@ -56,6 +57,6 @@ class GameGroupController extends Controller
 			return $this->redirectToRoute('gameGroup.index');
 		}
 
-		return $this->renderView('game.group.create', compact('errors'));
+		return $this->renderView('game.group.create', compact('old', 'errors'));
 	}
 }

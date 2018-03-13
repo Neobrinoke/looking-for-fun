@@ -54,3 +54,23 @@ function old(array $values, string $key)
 {
 	return isset($values[$key]) ? $values[$key] : '';
 }
+
+/**
+ * Return class if error
+ *
+ * @param array $values
+ * @param null|string $key
+ * @return string
+ */
+function isError(array $values, ?string $key = null)
+{
+	if (!is_null($key) && !isset($values[$key])) {
+		return '';
+	}
+
+	if (empty($values)) {
+		return '';
+	}
+
+	return 'error';
+}

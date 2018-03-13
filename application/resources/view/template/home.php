@@ -1,6 +1,13 @@
+<?php
+/** @var \App\Framework\Renderer\Renderer $renderer */
+/** @var \App\Framework\Router\Router $router */
+/** @var \App\Framework\Session\Session $session */
+/** @var \App\Framework\Authentication\Auth $auth */
+?>
+
 <?php ob_start(); ?>
 	<link rel="stylesheet" href="/css/home.css">
-<?php if (isset($css)) echo $css; ?>
+	<?php if (isset($css)) echo $css; ?>
 <?php $css = ob_get_clean(); ?>
 
 <?php ob_start(); ?>
@@ -72,7 +79,7 @@
 
 <?php ob_start(); ?>
 	<script src="/js/home.js"></script>
-<?php if (isset($js)) echo $js; ?>
+	<?php if (isset($js)) echo $js; ?>
 <?php $js = ob_get_clean(); ?>
 
 <?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>
