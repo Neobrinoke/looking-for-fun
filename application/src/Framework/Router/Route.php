@@ -32,8 +32,8 @@ class Route
 	/** @var array */
 	private $params = [];
 
-	/** @var null|string */
-	private $middleware;
+	/** @var array */
+	private $middleware = [];
 
 	/**
 	 * Route constructor.
@@ -41,18 +41,16 @@ class Route
 	 * @param string $method
 	 * @param string $path
 	 * @param string $regex
-	 * @param string $name
 	 * @param string|callable $callback
-	 * @param null|string $middleware
+	 * @param string $name
 	 */
-	public function __construct(string $method, string $path, string $regex, string $name, $callback, ?string $middleware = null)
+	public function __construct(string $method, string $path, string $regex, $callback, string $name)
 	{
 		$this->method = $method;
 		$this->regex = $regex;
 		$this->path = $path;
-		$this->name = $name;
 		$this->callback = $callback;
-		$this->middleware = $middleware;
+		$this->name = $name;
 	}
 
 	/**
@@ -91,8 +89,8 @@ class Route
 	public function call(ContainerInterface $container, string $uri)
 	{
 		/** Middleware system */
-		if (!is_null($this->getMiddleware())) { // If we have a middleware defined
-			$middleware = $container->get(self::DEFAULT_MIDDLEWARE_PATH . $this->getMiddleware());
+		foreach ($this->middleware as $middle) { // If we have a middleware defined
+			$middleware = $container->get($middle);
 			if (!is_bool($middleware->handle())) { // If return of middleware are not a boolean
 				$container->get(Session::class)->set('last_uri', $uri);
 				return $middleware->handle(); // return the response of middleware
@@ -128,6 +126,25 @@ class Route
 	}
 
 	/**
+	 * Add one or multiple middleware
+	 *
+	 * @param string|array $middlewares
+	 * @return $this
+	 */
+	public function middleware($middlewares): Route
+	{
+		if (is_string($middlewares)) {
+			$middlewares = func_get_args();
+		}
+
+		foreach ($middlewares as $middleware) {
+			$this->middleware[] = self::DEFAULT_MIDDLEWARE_PATH . $middleware;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getMethod(): string
@@ -136,106 +153,10 @@ class Route
 	}
 
 	/**
-	 * @param string $method
-	 */
-	public function setMethod(string $method): void
-	{
-		$this->method = $method;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getPath(): string
 	{
 		return $this->path;
-	}
-
-	/**
-	 * @param string $path
-	 */
-	public function setPath(string $path): void
-	{
-		$this->path = $path;
-	}
-
-	/**
-	 * @return callable|string
-	 */
-	public function getCallback()
-	{
-		return $this->callback;
-	}
-
-	/**
-	 * @param callable|string $callback
-	 */
-	public function setCallback($callback): void
-	{
-		$this->callback = $callback;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getName(): string
-	{
-		return $this->name;
-	}
-
-	/**
-	 * @param string $name
-	 */
-	public function setName(string $name): void
-	{
-		$this->name = $name;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRegex(): string
-	{
-		return $this->regex;
-	}
-
-	/**
-	 * @param string $regex
-	 */
-	public function setRegex(string $regex): void
-	{
-		$this->regex = $regex;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getParams(): array
-	{
-		return $this->params;
-	}
-
-	/**
-	 * @param array $params
-	 */
-	public function setParams(array $params): void
-	{
-		$this->params = $params;
-	}
-
-	/**
-	 * @return null|string
-	 */
-	public function getMiddleware(): ?string
-	{
-		return $this->middleware;
-	}
-
-	/**
-	 * @param null|string $middleware
-	 */
-	public function setMiddleware(?string $middleware): void
-	{
-		$this->middleware = $middleware;
 	}
 }
