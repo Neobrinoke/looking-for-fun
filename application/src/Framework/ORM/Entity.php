@@ -29,16 +29,17 @@ abstract class Entity
 	 * Find one by id
 	 *
 	 * @param int $id
+	 * @param bool $byPassSafeDelete
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	public static function find(int $id): ?Entity
+	public static function find(int $id, bool $byPassSafeDelete = false): ?Entity
 	{
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
 		$queryBuilder->where('id = :id');
-		if (static::SAFE_DELETE) {
+		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 		$queryBuilder->value($id, 'id');
@@ -50,10 +51,11 @@ abstract class Entity
 	 * Find one by something
 	 *
 	 * @param array $options
+	 * @param bool $byPassSafeDelete
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	public static function findOneBy(array $options = []): ?Entity
+	public static function findOneBy(array $options = [], bool $byPassSafeDelete = false): ?Entity
 	{
 		if (empty($options)) {
 			return null;
@@ -62,7 +64,7 @@ abstract class Entity
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
-		if (static::SAFE_DELETE) {
+		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 
@@ -77,15 +79,16 @@ abstract class Entity
 	/**
 	 * Find all
 	 *
+	 * @param bool $byPassSafeDelete
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function all(): array
+	public static function all(bool $byPassSafeDelete = false): array
 	{
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
-		if (static::SAFE_DELETE) {
+		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 
@@ -101,10 +104,11 @@ abstract class Entity
 	 * Find all by something
 	 *
 	 * @param array $options
+	 * @param bool $byPassSafeDelete
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function findBy(array $options = []): array
+	public static function findBy(array $options = [], bool $byPassSafeDelete = false): array
 	{
 		if (empty($options)) {
 			return [];
@@ -113,7 +117,7 @@ abstract class Entity
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
-		if (static::SAFE_DELETE) {
+		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 
