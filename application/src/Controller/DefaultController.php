@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Framework\Controller\Controller;
+use PDO;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DefaultController extends Controller
@@ -17,12 +18,17 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * @param $id
 	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
 	 */
-	public function testAction(int $id)
+	public function testAction()
 	{
-		return $this->renderView('default.test', compact('id'));
+		$user = User::findOneBy([
+			'login' => 'neobrinokeneo'
+		]);
+		$user->delete();
+
+		return $this->renderView('default.test');
 	}
 
 	/**

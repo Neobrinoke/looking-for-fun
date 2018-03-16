@@ -9,6 +9,7 @@ class QueryBuilder
 	public const QUERY_TYPE_SELECT = 'SELECT';
 	public const QUERY_TYPE_INSERT = 'INSERT';
 	public const QUERY_TYPE_UPDATE = 'UPDATE';
+	public const QUERY_TYPE_DELETE = 'DELETE';
 	public const QUERY_FETCH_TYPE = PDO::FETCH_ASSOC;
 
 	/** @var string */
@@ -162,6 +163,8 @@ class QueryBuilder
 			if (!empty($this->conditions)) {
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
+		} else if($this->type === self::QUERY_TYPE_DELETE) {
+			$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . implode(' AND ', $this->conditions);
 		} else {
 			throw new \Exception('Invalid query builder type');
 		}
@@ -202,6 +205,8 @@ class QueryBuilder
 	 */
 	public function execute(): bool
 	{
+		var_dump($this->values);
+
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		return $statement->execute($this->values);
 	}

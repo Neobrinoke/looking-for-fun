@@ -10,6 +10,8 @@ use DateTime;
  */
 class User extends Entity
 {
+	public const SAFE_DELETE = true;
+
 	/**
 	 * @var int
 	 * @Column(name="id")

@@ -9,6 +9,8 @@ use ReflectionProperty;
 
 abstract class Entity
 {
+	public const SAFE_DELETE = false;
+	public const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 	public const METHOD_TYPE_GET = 'get';
 	public const METHOD_TYPE_SET = 'set';
 
@@ -36,29 +38,12 @@ abstract class Entity
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
 		$queryBuilder->where('id = :id');
+		if (static::SAFE_DELETE) {
+			$queryBuilder->where('deleted_at IS NULL');
+		}
 		$queryBuilder->value($id, 'id');
 
 		return (new static())->injectEntityProperties($queryBuilder->getResult());
-	}
-
-	/**
-	 * Find all
-	 *
-	 * @return array
-	 * @throws \Exception
-	 */
-	public static function all(): array
-	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(static::getTableName());
-
-		$entities = [];
-		foreach ($queryBuilder->getResults() as $result) {
-			$entities[] = (new static())->injectEntityProperties($result);
-		}
-
-		return $entities;
 	}
 
 	/**
@@ -77,12 +62,39 @@ abstract class Entity
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
+		if (static::SAFE_DELETE) {
+			$queryBuilder->where('deleted_at IS NULL');
+		}
+
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
 		$queryBuilder->values($options);
 
 		return (new static())->injectEntityProperties($queryBuilder->getResult());
+	}
+
+	/**
+	 * Find all
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function all(): array
+	{
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(static::getTableName());
+		if (static::SAFE_DELETE) {
+			$queryBuilder->where('deleted_at IS NULL');
+		}
+
+		$entities = [];
+		foreach ($queryBuilder->getResults() as $result) {
+			$entities[] = (new static())->injectEntityProperties($result);
+		}
+
+		return $entities;
 	}
 
 	/**
@@ -101,6 +113,10 @@ abstract class Entity
 		$queryBuilder = new QueryBuilder();
 		$queryBuilder->field('*');
 		$queryBuilder->table(static::getTableName());
+		if (static::SAFE_DELETE) {
+			$queryBuilder->where('deleted_at IS NULL');
+		}
+
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
@@ -186,6 +202,29 @@ abstract class Entity
 	}
 
 	/**
+	 * Delete current entity from table
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function delete(): bool
+	{
+		$options = ['id' => $this->getId()];
+
+		if (static::SAFE_DELETE) {
+			$options['deleted_at'] = (new \DateTime())->format(self::DATE_TIME_FORMAT);
+		}
+
+		$queryBuilder = new QueryBuilder(static::SAFE_DELETE ? QueryBuilder::QUERY_TYPE_UPDATE : QueryBuilder::QUERY_TYPE_DELETE);
+		$queryBuilder->table(static::getTableName());
+		$queryBuilder->field('deleted_at');
+		$queryBuilder->values($options);
+		$queryBuilder->where('id = :id');
+
+		return $queryBuilder->execute();
+	}
+
+	/**
 	 * Retrieve entity properties for PDO Execute
 	 *
 	 * @return array
@@ -214,7 +253,7 @@ abstract class Entity
 				if ($className == 'DateTime') {
 					/** @var \DateTime $var */
 					$var = $this->$methodName();
-					$results[$key] = is_null($var) ? null : $var->format('Y-m-d H:i:s');
+					$results[$key] = is_null($var) ? null : $var->format(self::DATE_TIME_FORMAT);
 				} else if (preg_match('/App__Entity/', str_replace('\\', '__', $className))) { // If $className contain App\Entity, that mean it's a local Entity, we need to find it
 					$key = $key . '_id'; //@Todo Trouver une autre façon de rajouter le _id
 					/** @var Entity $entity2 */
@@ -371,6 +410,4 @@ abstract class Entity
 
 		return $methods;
 	}
-
-	// @Todo faire la method delete();
 }

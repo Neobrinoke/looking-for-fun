@@ -14,3 +14,6 @@ $router->post('/login', 'SecurityController@loginCheckAction', 'security.loginCh
 $router->get('/register', 'SecurityController@registerAction', 'security.register')->middleware('Guest');
 $router->post('/register', 'SecurityController@storeAction', 'security.store')->middleware('Guest');
 $router->get('/logout', 'SecurityController@logoutAction', 'security.logout')->middleware('Auth');
+
+/** Tests Routes */
+$router->get('/test', 'DefaultController@testAction', 'test.test');
