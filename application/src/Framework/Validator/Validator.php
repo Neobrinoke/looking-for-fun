@@ -46,7 +46,7 @@ class Validator
 	 * @return array
 	 * @throws \Exception
 	 */
-	public function validate()
+	public function validate(): array
 	{
 		$errors = [];
 		foreach ($this->validators as $var => $rules) {
@@ -87,8 +87,10 @@ class Validator
 
 				if ($key == self::VALIDATOR_UNIQUE) {
 					$value = 'App\\Entity\\' . $value;
+
+					/** True for bypass the safe delete option of entity, we do not need entity can have the same value as an deleted entity */
 					/** @var Entity $value */
-					$entity = $value::findOneBy([$var => $this->values[$var]]);
+					$entity = $value::findOneBy([$var => $this->values[$var]], true);
 					if (!is_null($entity)) {
 						$errors[$var] = 'Le champ ' . $var . ' doit être unique.';
 					}

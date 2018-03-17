@@ -14,9 +14,6 @@ class AppTest extends TestCase
 	/** @var ContainerInterface */
 	private $container;
 
-	/**
-	 * @throws \Exception
-	 */
 	public function setUp()
 	{
 		$this->container = (new ContainerBuilder())->build();

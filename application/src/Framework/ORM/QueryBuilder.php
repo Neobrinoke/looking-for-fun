@@ -40,9 +40,11 @@ class QueryBuilder
 	}
 
 	/**
-	 * Function for get PDO
+	 * Retrieve or initialize a new instance of PDO
+	 *
+	 * @return PDO
 	 */
-	private function getPDO()
+	private function getPDO(): PDO
 	{
 		if (is_null($this->pdoInstance)) {
 			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
@@ -137,7 +139,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * Return formatted query
+	 * Retrieve formatted query
 	 *
 	 * @return string
 	 * @throws \Exception
@@ -172,7 +174,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * Return pdo fetch
+	 * Retrieve result for current query
 	 *
 	 * @return mixed
 	 * @throws \Exception
@@ -185,7 +187,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * Return pdo fetch
+	 * Retrieve results for current query
 	 *
 	 * @return mixed
 	 * @throws \Exception
@@ -212,7 +214,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * Return the last inserted id
+	 * Retrieve the last inserted id
 	 *
 	 * @return int
 	 */

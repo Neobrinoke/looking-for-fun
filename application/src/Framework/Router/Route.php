@@ -54,7 +54,7 @@ class Route
 	}
 
 	/**
-	 * Return true or false
+	 * Return true if route matched or false
 	 *
 	 * @param ServerRequestInterface $request
 	 * @return bool
@@ -143,8 +143,9 @@ class Route
 
 		return $this;
 	}
-
 	/**
+	 * Retrieve the method for current route
+	 *
 	 * @return string
 	 */
 	public function getMethod(): string
@@ -153,10 +154,33 @@ class Route
 	}
 
 	/**
+	 * Retrieve the path for current route
+	 *
 	 * @return string
 	 */
 	public function getPath(): string
 	{
 		return $this->path;
+	}
+
+	/**
+	 * Retrieve the name for current route
+	 *
+	 * @return string
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+
+	/**
+	 * Retrieve all params for current route
+	 *
+	 * @return array
+	 */
+	public function getParams(): array
+	{
+		return $this->params;
 	}
 }

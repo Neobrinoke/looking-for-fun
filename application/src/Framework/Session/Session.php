@@ -8,7 +8,7 @@ class Session
 	 * Retrieve session value with key
 	 *
 	 * @param string $key
-	 * @return null
+	 * @return mixed
 	 */
 	public function get(string $key)
 	{
@@ -16,6 +16,12 @@ class Session
 		return $this->has($key) ? $_SESSION[$key] : null;
 	}
 
+	/**
+	 * Retrieve session value with key and delete itself
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */
 	public function getFlash(string $key)
 	{
 		$value = $this->get($key);
@@ -29,7 +35,7 @@ class Session
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function set(string $key, $value)
+	public function set(string $key, $value): void
 	{
 		$this->initSession();
 		$_SESSION[$key] = $value;
@@ -40,7 +46,7 @@ class Session
 	 *
 	 * @param string $key
 	 */
-	public function remove(string $key)
+	public function remove(string $key): void
 	{
 		$this->initSession();
 		unset($_SESSION[$key]);
@@ -52,7 +58,7 @@ class Session
 	 * @param string $key
 	 * @return bool
 	 */
-	public function has(string $key)
+	public function has(string $key): bool
 	{
 		$this->initSession();
 		return isset($_SESSION[$key]);
@@ -61,7 +67,7 @@ class Session
 	/**
 	 * Initialize session
 	 */
-	private function initSession()
+	private function initSession(): void
 	{
 		if (session_status() === PHP_SESSION_NONE) {
 			session_start();

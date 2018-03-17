@@ -80,7 +80,7 @@ abstract class Entity
 	 * Find all
 	 *
 	 * @param bool $byPassSafeDelete
-	 * @return array
+	 * @return entity[]
 	 * @throws \Exception
 	 */
 	public static function all(bool $byPassSafeDelete = false): array
@@ -105,7 +105,7 @@ abstract class Entity
 	 *
 	 * @param array $options
 	 * @param bool $byPassSafeDelete
-	 * @return array
+	 * @return entity[]
 	 * @throws \Exception
 	 */
 	public static function findBy(array $options = [], bool $byPassSafeDelete = false): array
@@ -240,7 +240,6 @@ abstract class Entity
 
 		$methods = static::getAllMethods(static::METHOD_TYPE_GET);
 
-		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
 			$key = camelToSnakeCase(substr($methodName, 3));
@@ -388,7 +387,7 @@ abstract class Entity
 	 * Return all method by type ['get', 'set']
 	 *
 	 * @param string $type
-	 * @return array
+	 * @return ReflectionMethod[]
 	 * @throws \Exception
 	 */
 	private static function getAllMethods(string $type): array

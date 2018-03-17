@@ -46,7 +46,7 @@ class Controller
 	 * @param array $headers
 	 * @return Response
 	 */
-	protected function response(?string $body = null, int $status = 200, array $headers = [])
+	protected function response(?string $body = null, int $status = 200, array $headers = []): Response
 	{
 		return new Response($status, $headers, $body);
 	}
@@ -57,7 +57,7 @@ class Controller
 	 * @param string $url
 	 * @return Response
 	 */
-	protected function redirect(string $url)
+	protected function redirect(string $url): Response
 	{
 		return new Response(301, ['Location' => $url]);
 	}
@@ -70,7 +70,7 @@ class Controller
 	 * @return Response
 	 * @throws \Exception
 	 */
-	protected function redirectToRoute(string $route, array $params = [])
+	protected function redirectToRoute(string $route, array $params = []): Response
 	{
 		return $this->redirect($this->generateUri($route, $params));
 	}
@@ -80,10 +80,10 @@ class Controller
 	 *
 	 * @param string $route
 	 * @param array $params
-	 * @return Router
+	 * @return string
 	 * @throws \Exception
 	 */
-	protected function generateUri(string $route, array $params = [])
+	protected function generateUri(string $route, array $params = []): string
 	{
 		return $this->router->generateUri($route, $params);
 	}
@@ -95,7 +95,7 @@ class Controller
 	 * @param array $params
 	 * @return Response
 	 */
-	protected function renderView(string $view, array $params = [])
+	protected function renderView(string $view, array $params = []): Response
 	{
 		return $this->response($this->renderer->renderView($view, $params));
 	}
@@ -105,7 +105,7 @@ class Controller
 	 *
 	 * @return Session
 	 */
-	protected function session()
+	protected function session(): Session
 	{
 		return $this->session;
 	}
@@ -115,7 +115,7 @@ class Controller
 	 *
 	 * @return Auth
 	 */
-	protected function auth()
+	protected function auth(): Auth
 	{
 		return $this->auth;
 	}

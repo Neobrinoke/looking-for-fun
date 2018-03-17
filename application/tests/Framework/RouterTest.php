@@ -18,8 +18,8 @@ class RouterTest extends TestCase
 
 	public function setUp()
 	{
-		$this->router = new Router();
 		$this->container = (new ContainerBuilder())->build();
+		$this->router = $this->container->get(Router::class);
 	}
 
 	public function testGetMethod()
@@ -33,7 +33,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('groups', $route->getName());
-		$this->assertEquals('hello', $route->call($this->container));
+		$this->assertEquals('hello', $route->call($this->container, $request->getUri()->getPath()));
 	}
 
 	public function testGetMethodIfUrlDoesNotExist()
@@ -64,7 +64,7 @@ class RouterTest extends TestCase
 		$route = $this->router->run($request);
 
 		$this->assertEquals('group.delete', $route->getName());
-		$this->assertEquals('hello 8', $route->call($this->container));
+		$this->assertEquals('hello 8', $route->call($this->container, $request->getUri()->getPath()));
 		$this->assertContains('8', $route->getParams());
 
 		// Test invalid route

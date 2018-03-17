@@ -25,7 +25,7 @@ class Auth
 	 *
 	 * @param User $user
 	 */
-	public function initUser(User $user)
+	public function initUser(User $user): void
 	{
 		$this->session->set('user_id', $user->getId());
 	}
@@ -35,9 +35,8 @@ class Auth
 	 *
 	 * @return User
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
-	public function user()
+	public function user(): User
 	{
 		if (!$this->isLogged()) {
 			return null;
@@ -53,7 +52,7 @@ class Auth
 	 *
 	 * @return bool
 	 */
-	public function isLogged()
+	public function isLogged(): bool
 	{
 		return $this->session->has('user_id');
 	}
@@ -61,7 +60,7 @@ class Auth
 	/**
 	 * Logout current user
 	 */
-	public function logout()
+	public function logout(): void
 	{
 		$this->session->remove('user_id');
 	}
