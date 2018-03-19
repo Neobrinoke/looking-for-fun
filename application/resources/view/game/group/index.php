@@ -33,7 +33,7 @@
 						<td><?= $gameGroup->getName() ?></td>
 						<td><?= $gameGroup->getDescription() ?></td>
 						<td><?= $gameGroup->getOwner()->getName() ?></td>
-						<td><?= $gameGroup->getCreatedAt()->format('Y/m/d H:i:s') ?></td>
+						<td><?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

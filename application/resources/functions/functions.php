@@ -74,3 +74,35 @@ function isError(array $values, ?string $key = null)
 
 	return 'error';
 }
+
+/**
+ * Return ago formated date
+ *
+ * @param string $date
+ * @return string
+ */
+function ago_date_format(string $date)
+{
+	$time = time() - strtotime($date);
+
+	if ($time < 1) {
+		return '0 seconds';
+	}
+
+	$conditions = [
+		365 * 24 * 60 * 60 => 'année',
+		30 * 24 * 60 * 60 => 'mois',
+		24 * 60 * 60 => 'jour',
+		60 * 60 => 'heure',
+		60 => 'minute',
+		1 => 'seconde'
+	];
+
+	foreach ($conditions as $secs => $str) {
+		$d = $time / $secs;
+		if ($d >= 1) {
+			$r = round($d);
+			return 'il y a ' . $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
+		}
+	}
+}
