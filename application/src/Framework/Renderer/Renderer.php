@@ -12,13 +12,11 @@ class Renderer
 
 	/** @var Router */
 	private $router;
-	/**
-	 * @var Session
-	 */
+
+	/** @var Session */
 	private $session;
-	/**
-	 * @var Auth
-	 */
+
+	/** @var Auth */
 	private $auth;
 
 	/**
