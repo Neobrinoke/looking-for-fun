@@ -33,26 +33,49 @@ class QueryBuilder
 	/** @var PDO */
 	private $pdoInstance;
 
+
 	/**
-	 * QueryBuilder constructor.
-	 * @param string $type
+	 * Create queryBuilder with select type
+	 *
+	 * @return QueryBuilder
 	 */
-	public function __construct(string $type = self::QUERY_TYPE_SELECT)
+	public function select(): QueryBuilder
 	{
-		$this->type = $type;
+		$this->type = self::QUERY_TYPE_SELECT;
+		return $this;
 	}
 
 	/**
-	 * Retrieve or initialize a new instance of PDO
+	 * Create queryBuilder with insert type
 	 *
-	 * @return PDO
+	 * @return QueryBuilder
 	 */
-	private function getPDO(): PDO
+	public function insert(): QueryBuilder
 	{
-		if (is_null($this->pdoInstance)) {
-			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
-		}
-		return $this->pdoInstance;
+		$this->type = self::QUERY_TYPE_INSERT;
+		return $this;
+	}
+
+	/**
+	 * Create queryBuilder with update type
+	 *
+	 * @return QueryBuilder
+	 */
+	public function update(): QueryBuilder
+	{
+		$this->type = self::QUERY_TYPE_UPDATE;
+		return $this;
+	}
+
+	/**
+	 * Create queryBuilder with delete type
+	 *
+	 * @return QueryBuilder
+	 */
+	public function delete(): QueryBuilder
+	{
+		$this->type = self::QUERY_TYPE_DELETE;
+		return $this;
 	}
 
 	/**
@@ -185,7 +208,11 @@ class QueryBuilder
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
 		} else if ($this->type === self::QUERY_TYPE_DELETE) {
-			$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . implode(' AND ', $this->conditions);
+			$sql = 'DELETE FROM ' . $this->table;
+
+			if(!empty($this->conditions)) {
+				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
+			}
 		} else {
 			throw new \Exception('Invalid query builder type');
 		}
@@ -238,5 +265,18 @@ class QueryBuilder
 	public function getLastInsertId(): int
 	{
 		return $this->getPDO()->lastInsertId();
+	}
+
+	/**
+	 * Retrieve or initialize a new instance of PDO
+	 *
+	 * @return PDO
+	 */
+	private function getPDO(): PDO
+	{
+		if (is_null($this->pdoInstance)) {
+			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
+		}
+		return $this->pdoInstance;
 	}
 }

@@ -35,10 +35,12 @@ abstract class Entity
 	 */
 	public static function find(int $id, bool $byPassSafeDelete = false): ?Entity
 	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(static::getTableName());
-		$queryBuilder->where('id = :id');
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table(static::getTableName())
+			->where('id = :id');
+
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
@@ -61,9 +63,11 @@ abstract class Entity
 			return null;
 		}
 
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(static::getTableName());
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table(static::getTableName());
+
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
@@ -71,6 +75,7 @@ abstract class Entity
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
+
 		$queryBuilder->values($options);
 
 		return (new static())->injectEntityProperties($queryBuilder->getResult());
@@ -85,15 +90,25 @@ abstract class Entity
 	 */
 	public static function all(bool $byPassSafeDelete = false): array
 	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(static::getTableName());
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table(static::getTableName());
+
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 
 		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
+
+	// @todo finir cette fonction
+	/*public static function allWithOrderBy(array $ordersBy = [], bool $byPassSafeDelete = false): array
+	{
+		if (empty($ordersBy)) {
+			throwException()
+		}
+	}*/
 
 	/**
 	 * Find all by something
@@ -109,9 +124,11 @@ abstract class Entity
 			return [];
 		}
 
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(static::getTableName());
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table(static::getTableName());
+
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
 		}
@@ -119,6 +136,7 @@ abstract class Entity
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
+
 		$queryBuilder->values($options);
 
 		return static::injectEntitiesProperties($queryBuilder->getResults());
@@ -160,12 +178,12 @@ abstract class Entity
 	 */
 	public function insert(): bool
 	{
-		$fields = static::getAllDatabaseFields();
+		$queryBuilder = (new QueryBuilder())
+			->insert()
+			->table(static::getTableName())
+			->fields(static::getAllDatabaseFields())
+			->values($this->retrieveEntityProperties());
 
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_INSERT);
-		$queryBuilder->table(static::getTableName());
-		$queryBuilder->fields($fields);
-		$queryBuilder->values($this->retrieveEntityProperties());
 		$result = $queryBuilder->execute();
 
 		$this->setId($queryBuilder->getLastInsertId());
@@ -181,16 +199,15 @@ abstract class Entity
 	 */
 	public function update(): bool
 	{
-		$fields = static::getAllDatabaseFields();
+		$values = $this->retrieveEntityProperties();
+		$values['id'] = $this->getId();
 
-		$options = $this->retrieveEntityProperties();
-		$options['id'] = $this->getId();
-
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_UPDATE);
-		$queryBuilder->table(static::getTableName());
-		$queryBuilder->fields($fields);
-		$queryBuilder->where('id = :id');
-		$queryBuilder->values($options);
+		$queryBuilder = (new QueryBuilder())
+			->update()
+			->table(static::getTableName())
+			->fields(static::getAllDatabaseFields())
+			->where('id = :id')
+			->values($values);
 
 		return $queryBuilder->execute();
 	}
@@ -203,17 +220,26 @@ abstract class Entity
 	 */
 	public function delete(): bool
 	{
-		$options = ['id' => $this->getId()];
+		$values = ['id' => $this->getId()];
 
 		if (static::SAFE_DELETE) {
-			$options['deleted_at'] = (new \DateTime())->format(self::DATE_TIME_FORMAT);
+			$values['deleted_at'] = (new \DateTime())->format(self::DATE_TIME_FORMAT);
 		}
 
-		$queryBuilder = new QueryBuilder(static::SAFE_DELETE ? QueryBuilder::QUERY_TYPE_UPDATE : QueryBuilder::QUERY_TYPE_DELETE);
-		$queryBuilder->table(static::getTableName());
-		$queryBuilder->field('deleted_at');
-		$queryBuilder->values($options);
-		$queryBuilder->where('id = :id');
+		if (static::SAFE_DELETE) {
+			$queryBuilder = (new QueryBuilder())
+				->update()
+				->table(static::getTableName())
+				->field('deleted_at')
+				->where('id = :id')
+				->values($values);
+		} else {
+			$queryBuilder = (new QueryBuilder())
+				->delete()
+				->table(static::getTableName())
+				->where('id = :id')
+				->values($values);
+		}
 
 		return $queryBuilder->execute();
 	}

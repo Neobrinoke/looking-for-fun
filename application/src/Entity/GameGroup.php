@@ -191,11 +191,13 @@ class GameGroup extends Entity
 	 */
 	public static function findAllOrderBy($field, $order = 'ASC')
 	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table(self::getTableName());
-		$queryBuilder->orderBy($field, $order);
+		$results = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table(self::getTableName())
+			->orderBy($field, $order)
+			->getResults();
 
-		return static::injectEntitiesProperties($queryBuilder->getResults());
+		return static::injectEntitiesProperties($results);
 	}
 }

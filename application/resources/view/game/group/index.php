@@ -24,7 +24,7 @@
 					<th>Nom</th>
 					<th>Description</th>
 					<th>Auteur</th>
-					<th>Crée le ...</th>
+					<th>Ajouté il y a ...</th>
 				</tr>
 			</thead>
 			<tbody>

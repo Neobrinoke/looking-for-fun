@@ -102,7 +102,7 @@ function ago_date_format(string $date)
 		$d = $time / $secs;
 		if ($d >= 1) {
 			$r = round($d);
-			return 'il y a ' . $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
+			return $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
 		}
 	}
 }

@@ -7,70 +7,86 @@ use PHPUnit\Framework\TestCase;
 
 class QueryBuilderTest extends TestCase
 {
-	public function testSelectFrom()
+	public function testSelect()
 	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table('users');
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table('users');
 
 		$this->assertEquals('SELECT * FROM users', $queryBuilder->getQuery());
 	}
 
-	public function testSelectFromWithCloseWhere()
+	public function testSelectWithCloseWhere()
 	{
-		$queryBuilder = new QueryBuilder();
-		$queryBuilder->field('*');
-		$queryBuilder->table('users');
-		$queryBuilder->where('id = :id');
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->field('*')
+			->table('users')
+			->where('id = :id');
 
 		$this->assertEquals('SELECT * FROM users WHERE id = :id', $queryBuilder->getQuery());
 	}
 
-	public function testInsertInto()
+	public function testInsert()
 	{
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_INSERT);
-		$queryBuilder->table('users');
-		$queryBuilder->fields(['name', 'login']);
+		$queryBuilder = (new QueryBuilder())
+			->insert()
+			->table('users')
+			->fields(['name', 'login']);
 
 		$this->assertEquals('INSERT INTO users (name, login) VALUES (:name, :login)', $queryBuilder->getQuery());
 	}
 
 	public function testUpdate()
 	{
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_UPDATE);
-		$queryBuilder->table('users');
-		$queryBuilder->fields(['name', 'login']);
+		$queryBuilder = (new QueryBuilder())
+			->update()
+			->table('users')
+			->fields(['name', 'login']);
 
 		$this->assertEquals('UPDATE users SET name = :name, login = :login', $queryBuilder->getQuery());
 	}
 
 	public function testUpdateWithCloseWhere()
 	{
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_UPDATE);
-		$queryBuilder->table('users');
-		$queryBuilder->fields(['name', 'login']);
-		$queryBuilder->where('id = :id');
+		$queryBuilder = (new QueryBuilder())
+			->update()
+			->table('users')
+			->fields(['name', 'login'])
+			->where('id = :id');
 
 		$this->assertEquals('UPDATE users SET name = :name, login = :login WHERE id = :id', $queryBuilder->getQuery());
 	}
 
-	public function testSelectWithOrderBy()
+	public function testDelete()
 	{
-		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_SELECT);
-		$queryBuilder->table('users');
-		$queryBuilder->field('*');
-		$queryBuilder->orderBy('name', 'ASC');
-		$queryBuilder->orderBy('login', 'DESC');
+		$queryBuilder = (new QueryBuilder())
+			->delete()
+			->table('users');
 
-		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
+		$this->assertEquals('DELETE FROM users', $queryBuilder->getQuery());
 	}
 
-	public function testQueryBuilderWithWrongQueryType()
+	public function testDeleteWithCloseWhere()
 	{
-		$this->expectException(\Exception::class);
-		$this->expectExceptionMessage('Invalid query builder type');
+		$queryBuilder = (new QueryBuilder())
+			->delete()
+			->table('users')
+			->where('id = :id');
 
-		$queryBuilder = new QueryBuilder('test');
-		$queryBuilder->getQuery();
+		$this->assertEquals('DELETE FROM users WHERE id = :id', $queryBuilder->getQuery());
+	}
+
+	public function testSelectWithOrderBy()
+	{
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->table('users')
+			->field('*')
+			->orderBy('name', 'ASC')
+			->orderBy('login', 'DESC');
+
+		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
 	}
 }
