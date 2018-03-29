@@ -80,7 +80,7 @@ abstract class Entity
 	 * Find all
 	 *
 	 * @param bool $byPassSafeDelete
-	 * @return entity[]
+	 * @return Entity[]
 	 * @throws \Exception
 	 */
 	public static function all(bool $byPassSafeDelete = false): array
@@ -92,12 +92,7 @@ abstract class Entity
 			$queryBuilder->where('deleted_at IS NULL');
 		}
 
-		$entities = [];
-		foreach ($queryBuilder->getResults() as $result) {
-			$entities[] = (new static())->injectEntityProperties($result);
-		}
-
-		return $entities;
+		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
 
 	/**
@@ -105,7 +100,7 @@ abstract class Entity
 	 *
 	 * @param array $options
 	 * @param bool $byPassSafeDelete
-	 * @return entity[]
+	 * @return Entity[]
 	 * @throws \Exception
 	 */
 	public static function findBy(array $options = [], bool $byPassSafeDelete = false): array
@@ -126,12 +121,7 @@ abstract class Entity
 		}
 		$queryBuilder->values($options);
 
-		$entities = [];
-		foreach ($queryBuilder->getResults() as $result) {
-			$entities[] = (new static())->injectEntityProperties($result);
-		}
-
-		return $entities;
+		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
 
 	/**
@@ -279,13 +269,13 @@ abstract class Entity
 	/**
 	 * Set current entity properties with array pdo result
 	 *
-	 * @param $results
+	 * @param $result
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	private function injectEntityProperties($results): ?Entity
+	protected function injectEntityProperties($result): ?Entity
 	{
-		if (!is_array($results)) {
+		if (!is_array($result)) {
 			return null;
 		}
 
@@ -294,7 +284,7 @@ abstract class Entity
 		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
-			$resultsKey = camelToSnakeCase(substr($methodName, 3));
+			$resultKey = camelToSnakeCase(substr($methodName, 3));
 
 			try {
 				$reflectionClass = new ReflectionClass($method->getParameters()[0]->getType()->getName());
@@ -306,9 +296,9 @@ abstract class Entity
 				$isEntity = false;
 			}
 
-			$value = @$results[$resultsKey]; // @ for bypass the notice
+			$value = @$result[$resultKey]; // @ for bypass the notice
 			if ($isEntity) {
-				$value = @$results[($resultsKey . '_id')]; // @ for bypass the notice
+				$value = @$result[($resultKey . '_id')]; // @ for bypass the notice
 			}
 
 			if (!isset($value)) {
@@ -337,12 +327,28 @@ abstract class Entity
 	}
 
 	/**
+	 * Set entities properties with array pdo result
+	 *
+	 * @param $results
+	 * @return Entity[]
+	 * @throws \Exception
+	 */
+	protected static function injectEntitiesProperties($results): array
+	{
+		$entities = [];
+		foreach ($results as $result) {
+			$entities[] = (new static())->injectEntityProperties($result);
+		}
+		return $entities;
+	}
+
+	/**
 	 * Parse php doc for get table name
 	 *
 	 * @return string
 	 * @throws \Exception
 	 */
-	private static function getTableName(): string
+	protected static function getTableName(): string
 	{
 		$reflectClass = new ReflectionClass(static::class);
 
@@ -361,7 +367,7 @@ abstract class Entity
 	 * @return array
 	 * @throws \Exception
 	 */
-	private static function getAllDatabaseFields(): array
+	protected static function getAllDatabaseFields(): array
 	{
 		$reflectClass = new ReflectionClass(static::class);
 
@@ -390,7 +396,7 @@ abstract class Entity
 	 * @return ReflectionMethod[]
 	 * @throws \Exception
 	 */
-	private static function getAllMethods(string $type): array
+	protected static function getAllMethods(string $type): array
 	{
 		$reflectClass = new ReflectionClass(static::class);
 

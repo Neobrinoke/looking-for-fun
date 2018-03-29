@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\GameGroup;
 use App\Framework\Controller\Controller;
+use App\Framework\ORM\QueryBuilder;
 use App\Framework\Validator\Validator;
+use MongoDB\Driver\Query;
 use Psr\Http\Message\ServerRequestInterface;
 
 class GameGroupController extends Controller
@@ -17,7 +19,7 @@ class GameGroupController extends Controller
 	 */
 	public function indexAction()
 	{
-		$gameGroups = GameGroup::all();
+		$gameGroups = GameGroup::findAllOrderBy('created_at', 'DESC');
 		return $this->renderView('game.group.index', compact('gameGroups'));
 	}
 

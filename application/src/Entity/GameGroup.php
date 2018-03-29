@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Framework\ORM\Entity;
+use App\Framework\ORM\QueryBuilder;
 use DateTime;
 
 /**
@@ -176,5 +177,25 @@ class GameGroup extends Entity
 	public function setDeletedAt(?DateTime $deletedAt): void
 	{
 		$this->deletedAt = $deletedAt;
+	}
+
+	/** Repository methods */
+
+	/**
+	 * Find all game groups by specified order by
+	 *
+	 * @param $field
+	 * @param string $order
+	 * @return Entity[]|array
+	 * @throws \Exception
+	 */
+	public static function findAllOrderBy($field, $order = 'ASC')
+	{
+		$queryBuilder = new QueryBuilder();
+		$queryBuilder->field('*');
+		$queryBuilder->table(self::getTableName());
+		$queryBuilder->orderBy($field, $order);
+
+		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
 }
