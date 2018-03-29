@@ -54,6 +54,17 @@ class QueryBuilderTest extends TestCase
 		$this->assertEquals('UPDATE users SET name = :name, login = :login WHERE id = :id', $queryBuilder->getQuery());
 	}
 
+	public function testSelectWithOrderBy()
+	{
+		$queryBuilder = new QueryBuilder(QueryBuilder::QUERY_TYPE_SELECT);
+		$queryBuilder->table('users');
+		$queryBuilder->field('*');
+		$queryBuilder->orderBy('name', 'ASC');
+		$queryBuilder->orderBy('login', 'DESC');
+
+		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
+	}
+
 	public function testQueryBuilderWithWrongQueryType()
 	{
 		$this->expectException(\Exception::class);

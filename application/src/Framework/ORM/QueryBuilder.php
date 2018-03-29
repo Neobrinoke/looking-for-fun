@@ -27,6 +27,9 @@ class QueryBuilder
 	/** @var string */
 	private $type = self::QUERY_TYPE_SELECT;
 
+	/** @var array */
+	private $ordersBy = [];
+
 	/** @var PDO */
 	private $pdoInstance;
 
@@ -124,7 +127,7 @@ class QueryBuilder
 	/**
 	 * Add value
 	 *
-	 * @param $value
+	 * @param mixed $value
 	 * @param null|string $key
 	 * @return QueryBuilder
 	 */
@@ -135,6 +138,19 @@ class QueryBuilder
 		} else {
 			$this->values[$key] = $value;
 		}
+		return $this;
+	}
+
+	/**
+	 * Add order by rules
+	 *
+	 * @param string $field
+	 * @param string $order
+	 * @return QueryBuilder
+	 */
+	public function orderBy(string $field, string $order = 'ASC'): QueryBuilder
+	{
+		$this->ordersBy[] = $field . ' ' . $order;
 		return $this;
 	}
 
@@ -151,6 +167,9 @@ class QueryBuilder
 			if (!empty($this->conditions)) {
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
+			if (!empty($this->ordersBy)) {
+				$sql .= ' ORDER BY ' . implode(', ', $this->ordersBy);
+			}
 		} else if ($this->type === self::QUERY_TYPE_INSERT) {
 			$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $this->fields) . ') VALUES (:' . implode(', :', $this->fields) . ')';
 		} else if ($this->type === self::QUERY_TYPE_UPDATE) {
@@ -165,7 +184,7 @@ class QueryBuilder
 			if (!empty($this->conditions)) {
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
-		} else if($this->type === self::QUERY_TYPE_DELETE) {
+		} else if ($this->type === self::QUERY_TYPE_DELETE) {
 			$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . implode(' AND ', $this->conditions);
 		} else {
 			throw new \Exception('Invalid query builder type');
@@ -207,8 +226,6 @@ class QueryBuilder
 	 */
 	public function execute(): bool
 	{
-		var_dump($this->values);
-
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		return $statement->execute($this->values);
 	}
