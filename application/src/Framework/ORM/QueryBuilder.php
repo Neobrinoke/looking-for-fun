@@ -165,7 +165,7 @@ class QueryBuilder
 	}
 
 	/**
-	 * Add order by rules
+	 * Add order rules
 	 *
 	 * @param string $field
 	 * @param string $order
@@ -174,6 +174,21 @@ class QueryBuilder
 	public function orderBy(string $field, string $order = 'ASC'): QueryBuilder
 	{
 		$this->ordersBy[] = $field . ' ' . $order;
+		return $this;
+	}
+
+	/**
+	 * Add orders rules
+	 *
+	 * @param array $ordersBy
+	 * @return QueryBuilder
+	 */
+	public function ordersBy(array $ordersBy): QueryBuilder
+	{
+		foreach ($ordersBy as $orderBy) {
+			$orderBy = explode(' ', $orderBy);
+			$this->orderBy($orderBy[0], $orderBy[1]);
+		}
 		return $this;
 	}
 
@@ -210,7 +225,7 @@ class QueryBuilder
 		} else if ($this->type === self::QUERY_TYPE_DELETE) {
 			$sql = 'DELETE FROM ' . $this->table;
 
-			if(!empty($this->conditions)) {
+			if (!empty($this->conditions)) {
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
 		} else {
@@ -222,23 +237,25 @@ class QueryBuilder
 	/**
 	 * Retrieve result for current query
 	 *
-	 * @return mixed
+	 * @return array|null
 	 * @throws \Exception
 	 */
-	public function getResult()
+	public function getResult(): ?array
 	{
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		$statement->execute($this->values);
-		return $statement->fetch(self::QUERY_FETCH_TYPE);
+		$results = $statement->fetch(self::QUERY_FETCH_TYPE);
+
+		return is_array($results) ? $results : null;
 	}
 
 	/**
 	 * Retrieve results for current query
 	 *
-	 * @return mixed
+	 * @return array
 	 * @throws \Exception
 	 */
-	public function getResults()
+	public function getResults(): array
 	{
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		$statement->execute($this->values);

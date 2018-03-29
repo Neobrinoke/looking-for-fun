@@ -57,12 +57,8 @@ abstract class Entity
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	public static function findOneBy(array $options = [], bool $byPassSafeDelete = false): ?Entity
+	public static function findOneBy(array $options, bool $byPassSafeDelete = false): ?Entity
 	{
-		if (empty($options)) {
-			return null;
-		}
-
 		$queryBuilder = (new QueryBuilder())
 			->select()
 			->field('*')
@@ -83,17 +79,20 @@ abstract class Entity
 
 	/**
 	 * Find all
+	 * Return array of entity or empty array if no records found
 	 *
+	 * @param array $ordersBy
 	 * @param bool $byPassSafeDelete
 	 * @return Entity[]
 	 * @throws \Exception
 	 */
-	public static function all(bool $byPassSafeDelete = false): array
+	public static function all(array $ordersBy = [], bool $byPassSafeDelete = false): array
 	{
 		$queryBuilder = (new QueryBuilder())
 			->select()
 			->field('*')
-			->table(static::getTableName());
+			->table(static::getTableName())
+			->ordersBy($ordersBy);
 
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
@@ -102,32 +101,24 @@ abstract class Entity
 		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
 
-	// @todo finir cette fonction
-	/*public static function allWithOrderBy(array $ordersBy = [], bool $byPassSafeDelete = false): array
-	{
-		if (empty($ordersBy)) {
-			throwException()
-		}
-	}*/
-
 	/**
 	 * Find all by something
+	 * Return array of entity or empty array if no records found
 	 *
 	 * @param array $options
+	 * @param array $ordersBy
 	 * @param bool $byPassSafeDelete
 	 * @return Entity[]
 	 * @throws \Exception
 	 */
-	public static function findBy(array $options = [], bool $byPassSafeDelete = false): array
+	public static function findBy(array $options, array $ordersBy = [], bool $byPassSafeDelete = false): array
 	{
-		if (empty($options)) {
-			return [];
-		}
-
 		$queryBuilder = (new QueryBuilder())
 			->select()
 			->field('*')
-			->table(static::getTableName());
+			->table(static::getTableName())
+			->values($options)
+			->ordersBy($ordersBy);
 
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
 			$queryBuilder->where('deleted_at IS NULL');
@@ -136,8 +127,6 @@ abstract class Entity
 		foreach ($options as $key => $value) {
 			$queryBuilder->where($key . ' = :' . $key);
 		}
-
-		$queryBuilder->values($options);
 
 		return static::injectEntitiesProperties($queryBuilder->getResults());
 	}
@@ -295,13 +284,13 @@ abstract class Entity
 	/**
 	 * Set current entity properties with array pdo result
 	 *
-	 * @param $result
+	 * @param array|null $results
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	protected function injectEntityProperties($result): ?Entity
+	protected function injectEntityProperties(?array $results): ?Entity
 	{
-		if (!is_array($result)) {
+		if(is_null($results)) {
 			return null;
 		}
 
@@ -310,7 +299,7 @@ abstract class Entity
 		/** @var ReflectionMethod $method */
 		foreach ($methods as $method) {
 			$methodName = $method->getName();
-			$resultKey = camelToSnakeCase(substr($methodName, 3));
+			$resultsKey = camelToSnakeCase(substr($methodName, 3));
 
 			try {
 				$reflectionClass = new ReflectionClass($method->getParameters()[0]->getType()->getName());
@@ -322,9 +311,9 @@ abstract class Entity
 				$isEntity = false;
 			}
 
-			$value = @$result[$resultKey]; // @ for bypass the notice
+			$value = @$results[$resultsKey]; // @ for bypass the notice
 			if ($isEntity) {
-				$value = @$result[($resultKey . '_id')]; // @ for bypass the notice
+				$value = @$results[($resultsKey . '_id')]; // @ for bypass the notice
 			}
 
 			if (!isset($value)) {
@@ -355,12 +344,16 @@ abstract class Entity
 	/**
 	 * Set entities properties with array pdo result
 	 *
-	 * @param $results
+	 * @param array|null $results
 	 * @return Entity[]
 	 * @throws \Exception
 	 */
-	protected static function injectEntitiesProperties($results): array
+	protected static function injectEntitiesProperties(?array $results): array
 	{
+		if(is_null($results)) {
+			return null;
+		}
+
 		$entities = [];
 		foreach ($results as $result) {
 			$entities[] = (new static())->injectEntityProperties($result);

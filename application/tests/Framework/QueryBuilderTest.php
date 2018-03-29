@@ -89,4 +89,18 @@ class QueryBuilderTest extends TestCase
 
 		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
 	}
+
+	public function testSelectWithOrdersBy()
+	{
+		$queryBuilder = (new QueryBuilder())
+			->select()
+			->table('users')
+			->field('*')
+			->ordersBy([
+				'name ASC',
+				'login DESC'
+			]);
+
+		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
+	}
 }

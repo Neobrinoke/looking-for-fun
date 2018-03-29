@@ -19,7 +19,7 @@ class GameGroupController extends Controller
 	 */
 	public function indexAction()
 	{
-		$gameGroups = GameGroup::findAllOrderBy('created_at', 'DESC');
+		$gameGroups = GameGroup::all(['created_at DESC']);
 		return $this->renderView('game.group.index', compact('gameGroups'));
 	}
 

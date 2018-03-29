@@ -178,26 +178,4 @@ class GameGroup extends Entity
 	{
 		$this->deletedAt = $deletedAt;
 	}
-
-	/** Repository methods */
-
-	/**
-	 * Find all game groups by specified order by
-	 *
-	 * @param $field
-	 * @param string $order
-	 * @return Entity[]|array
-	 * @throws \Exception
-	 */
-	public static function findAllOrderBy($field, $order = 'ASC')
-	{
-		$results = (new QueryBuilder())
-			->select()
-			->field('*')
-			->table(self::getTableName())
-			->orderBy($field, $order)
-			->getResults();
-
-		return static::injectEntitiesProperties($results);
-	}
 }
