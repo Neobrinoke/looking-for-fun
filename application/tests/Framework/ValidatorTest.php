@@ -14,7 +14,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testRequiredWithWrongValues()
@@ -24,7 +24,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['name' => 'Le champ name est requis.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 
 	public function testMaxWithValidValues()
@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testMaxWithWrongValues()
@@ -44,7 +44,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['name' => 'Le champ name doit être inférieur à 5 caractères.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 
 	public function testMinWithValidValues()
@@ -54,7 +54,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testMinWithWrongValues()
@@ -64,7 +64,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['name' => 'Le champ name doit être supérieur à 50 caractères.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 
 	public function testEmailWithValidValues()
@@ -74,7 +74,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testEmailWithWrongValues()
@@ -84,7 +84,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['email' => 'L\'email doit être un email valide.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 
 	public function testConfirmWithValidValues()
@@ -94,7 +94,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testConfirmWithWrongValues()
@@ -104,7 +104,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['password' => 'Le champ password doit être identique au champ de confirmation.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 
 	public function testUniqueWithValidValues()
@@ -114,7 +114,7 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals([], $validator->validate());
+		$this->assertTrue($validator->validate());
 	}
 
 	public function testUniqueWithWrongValues()
@@ -124,6 +124,6 @@ class ValidatorTest extends TestCase
 
 		$validator = new Validator($values, $rules);
 
-		$this->assertEquals(['email' => 'Le champ email doit être unique.'], $validator->validate());
+		$this->assertFalse($validator->validate());
 	}
 }

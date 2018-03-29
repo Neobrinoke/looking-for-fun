@@ -35,30 +35,26 @@ class SecurityController extends Controller
 			'password' => 'required'
 		]);
 
-		$errors = $validator->validate();
-
-		/** @var User $user */
-		$user = null;
-		if (empty($errors)) {
+		if ($validator->validate()) {
+			/** @var User $user */
 			$user = User::findOneBy([
 				'login' => $request->getParsedBody()['login'],
 				'password' => $request->getParsedBody()['password']
 			]);
 
-			if (is_null($user)) {
-				$errors[] = 'Utilisateur introuvable';
+			if (!is_null($user)) {
+				$this->auth()->initUser($user);
+
+				if ($this->session()->has('last_uri')) {
+					return $this->redirect($this->session()->getFlash('last_uri'));
+				}
+
+				return $this->redirectToRoute('home');
 			}
+			$errors[] = 'Utilisateur introuvable';
 		}
 
-		if (empty($errors) && !is_null($user)) {
-			$this->auth()->initUser($user);
-
-			if ($this->session()->has('last_uri')) {
-				return $this->redirect($this->session()->getFlash('last_uri'));
-			}
-
-			return $this->redirectToRoute('home');
-		}
+		$errors = $errors ?? $validator->getErrors();
 
 		return $this->renderView('security.login', compact('old', 'errors'));
 	}
@@ -91,13 +87,21 @@ class SecurityController extends Controller
 			'password' => 'min:8|confirm|required'
 		]);
 
-		$errors = $validator->validate();
-
-		if (empty($errors)) {
+		if ($validator->validate()) {
+			/** @var User $user */
 			$user = User::generateWithForm($request->getParsedBody());
 			$user->save();
+
+			$this->auth()->initUser($user);
+
+			if ($this->session()->has('last_uri')) {
+				return $this->redirect($this->session()->getFlash('last_uri'));
+			}
+
 			return $this->redirectToRoute('home');
 		}
+
+		$errors = $validator->getErrors();
 
 		return $this->renderView('security.register', compact('old', 'errors'));
 	}

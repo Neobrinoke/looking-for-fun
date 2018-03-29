@@ -49,15 +49,15 @@ class GameGroupController extends Controller
 			'description' => 'min:15|max:255|required'
 		]);
 
-		$errors = $validator->validate();
-
-		if (empty($errors)) {
+		if ($validator->validate()) {
 			/** @var GameGroup $gameGroup */
 			$gameGroup = GameGroup::generateWithForm($request->getParsedBody());
 			$gameGroup->setOwner($this->auth()->user());
 			$gameGroup->save();
 			return $this->redirectToRoute('gameGroup.index');
 		}
+
+		$errors = $validator->getErrors();
 
 		return $this->renderView('game.group.create', compact('old', 'errors'));
 	}

@@ -26,6 +26,7 @@ class DefaultController extends Controller
 		$user = User::findOneBy([
 			'login' => 'neobrinokeneo'
 		]);
+
 		if($user) {
 			$user->delete();
 		} else {

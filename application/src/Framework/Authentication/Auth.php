@@ -10,6 +10,9 @@ class Auth
 	/** @var Session */
 	private $session;
 
+	/** @var User */
+	private $user = null;
+
 	/**
 	 * Auth constructor.
 	 *
@@ -28,6 +31,7 @@ class Auth
 	public function initUser(User $user): void
 	{
 		$this->session->set('user_id', $user->getId());
+		$this->user = $user;
 	}
 
 	/**
@@ -42,9 +46,11 @@ class Auth
 			return null;
 		}
 
-		/** @var User $user */
-		$user = User::find($this->session->get('user_id'));
-		return $user;
+		if ($this->isLogged() && is_null($this->user)) {
+			$this->user = User::find($this->session->get('user_id'));
+		}
+
+		return $this->user;
 	}
 
 	/**
@@ -63,5 +69,6 @@ class Auth
 	public function logout(): void
 	{
 		$this->session->remove('user_id');
+		$this->user = null;
 	}
 }
