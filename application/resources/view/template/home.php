@@ -66,7 +66,7 @@
 			<div class="ui text container">
 				<h1 class="ui inverted header">À la recherche de joueurs ?</h1>
 				<h2>Trouve des personnes avec qui jouer !<br>Que ce sois pour le fun ou pour tryhard !</h2>
-				<div class="ui huge primary button">Crée un groupe !<i class="right arrow icon"></i></div>
+				<a href="<?= $router->generateUri('gameGroup.create') ?>" class="ui huge primary button">Crée un groupe !<i class="right arrow icon"></i></a>
 			</div>
 		</header>
 
