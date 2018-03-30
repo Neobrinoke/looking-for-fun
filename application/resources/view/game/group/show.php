@@ -19,8 +19,11 @@
 			</a>
 		</h2>
 		<div class="ui clearing divider"></div>
+		<div class="ui piled segment">
+			<h4 class="ui header"><?= $gameGroup->getName() ?> - Posté par <?= $gameGroup->getOwner()->getName() ?> il y a <?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></h4>
+			<p><?= $gameGroup->getDescription() ?></p>
+		</div>
 		<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>" class="ui primary button">Rejoindre le groupe</a>
-		<br><?php var_dump($gameGroup) ?>
 	</div>
 
 

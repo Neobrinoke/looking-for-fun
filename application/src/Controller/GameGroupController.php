@@ -48,7 +48,7 @@ class GameGroupController extends Controller
 		$old = $request->getParsedBody();
 
 		$validator = new Validator($request->getParsedBody(), [
-			'name' => 'min:3|max:15|required',
+			'name' => 'min:3|max:255|required',
 			'description' => 'min:15|max:255|required'
 		]);
 
@@ -102,7 +102,7 @@ class GameGroupController extends Controller
 		$old = $request->getParsedBody();
 
 		$validator = new Validator($request->getParsedBody(), [
-			'name' => 'min:3|max:15|required',
+			'name' => 'min:3|max:255|required',
 			'description' => 'min:15|max:255|required'
 		]);
 

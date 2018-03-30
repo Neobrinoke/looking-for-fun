@@ -18,38 +18,34 @@
 			</a>
 		</h2>
 		<div class="ui clearing divider"></div>
-		<table class="ui celled table">
-			<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Description</th>
-					<th>Auteur</th>
-					<th>Ajouté il y a ...</th>
-					<th>Modifié il y a ...</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
+		<?php if (empty($gameGroups)): ?>
+			<div class="ui warning message">
+				<p>Aucun groupe de jeu disponible actuellement.</p>
+				<p>Cliquez <a href="<?= $router->generateUri('gameGroup.create') ?>">ici</a> pour en créer un.</p>
+			</div>
+		<?php else: ?>
+			<div class="ui cards">
 				<?php foreach ($gameGroups as $gameGroup): ?>
-					<tr>
-						<td><?= $gameGroup->getName() ?></td>
-						<td><?= $gameGroup->getDescription() ?></td>
-						<td><?= $gameGroup->getOwner()->getName() ?></td>
-						<td><?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></td>
-						<td><?= ago_date_format($gameGroup->getUpdatedAt()->format('Y/m/d H:i:s')) ?></td>
-						<td>
-							<div class="ui buttons">
+					<div class="card">
+						<div class="content">
+							<img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+							<div class="header"><?= $gameGroup->getName() ?></div>
+							<div class="meta">Ajouté par <?= $gameGroup->getOwner()->getName() ?>, il y'a <?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></div>
+							<div class="description"><?= $gameGroup->getDescription() ?></div>
+						</div>
+						<div class="extra content">
+							<div class="ui fluid center vertical buttons">
+								<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>" class="ui green button">Postuler</a>
 								<?php if ($auth->user() && $auth->user()->getId() == $gameGroup->getOwner()->getId()): ?>
-									<a href="<?= $router->generateUri('gameGroup.edit', compact('gameGroup')) ?>" class="ui button">Editer</a>
-									<a href="<?= $router->generateUri('gameGroup.delete', compact('gameGroup')) ?>" class="ui button">Supprimer</a>
+									<a href="<?= $router->generateUri('gameGroup.edit', compact('gameGroup')) ?>" class="ui blue button">Editer</a>
+									<a href="<?= $router->generateUri('gameGroup.delete', compact('gameGroup')) ?>" class="ui red button">Supprimer</a>
 								<?php endif; ?>
-								<a href="<?= $router->generateUri('gameGroup.show', compact('gameGroup')) ?>" class="ui button">Afficher</a>
 							</div>
-						</td>
-					</tr>
+						</div>
+					</div>
 				<?php endforeach; ?>
-			</tbody>
-		</table>
+			</div>
+		<?php endif; ?>
 	</div>
 
 <?php $layout = ob_get_clean(); ?>
