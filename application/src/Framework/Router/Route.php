@@ -2,7 +2,7 @@
 
 namespace App\Framework\Router;
 
-use App\Framework\ORM\Entity;
+use App\Framework\Database\Entity;
 use App\Framework\Session\Session;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;

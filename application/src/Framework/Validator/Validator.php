@@ -2,7 +2,7 @@
 
 namespace App\Framework\Validator;
 
-use App\Framework\ORM\Entity;
+use App\Framework\Database\Entity;
 
 class Validator
 {

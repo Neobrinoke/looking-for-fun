@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Framework\ORM\Entity;
-use App\Framework\ORM\QueryBuilder;
+use App\Framework\Database\Entity;
+use App\Framework\Database\QueryBuilder;
 use DateTime;
 
 /**

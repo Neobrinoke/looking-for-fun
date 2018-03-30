@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\ORM;
+namespace App\Framework\Database;
 
 use PDO;
 
