@@ -1,11 +1,5 @@
 <?php
-/** @var \App\Framework\Renderer\Renderer $renderer */
-/** @var \App\Framework\Router\Router $router */
-/** @var \App\Framework\Session\Session $session */
-/** @var \App\Framework\Authentication\Auth $auth */
-
-/** @var array $gameGroups */
-/** @var \App\Entity\GameGroup $gameGroup */
+/** @var \App\Entity\GameGroup[] $gameGroups */
 ?>
 
 <?php ob_start(); ?>
@@ -35,7 +29,7 @@
 						</div>
 						<div class="extra content">
 							<div class="ui fluid center vertical buttons">
-								<?php if (auth()->user() && auth()->user()->getId() == $gameGroup->getOwner()->getId()): ?>
+								<?php if (auth()->isLogged() && auth()->user()->getId() == $gameGroup->getOwner()->getId()): ?>
 									<a href="<?= route('gameGroup.edit', compact('gameGroup')) ?>" class="ui blue button">Editer</a>
 									<a href="<?= route('gameGroup.delete', compact('gameGroup')) ?>" class="ui red button">Supprimer</a>
 								<?php else: ?>

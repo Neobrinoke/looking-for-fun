@@ -1,9 +1,4 @@
 <?php
-/** @var \App\Framework\Renderer\Renderer $renderer */
-/** @var \App\Framework\Router\Router $router */
-/** @var \App\Framework\Session\Session $session */
-/** @var \App\Framework\Authentication\Auth $auth */
-
 /** @var array $errors */
 /** @var array $old */
 /** @var \App\Entity\GameGroup $gameGroup */
