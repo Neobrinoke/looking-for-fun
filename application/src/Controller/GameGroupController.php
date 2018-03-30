@@ -24,7 +24,7 @@ class GameGroupController extends Controller
 	}
 
 	/**
-	 * Affiche la vue de création du groupe
+	 * Affiche la vue 'create' du groupe
 	 *
 	 * @return \GuzzleHttp\Psr7\Response
 	 */
@@ -60,5 +60,74 @@ class GameGroupController extends Controller
 		$errors = $validator->getErrors();
 
 		return $this->renderView('game.group.create', compact('old', 'errors'));
+	}
+
+	/**
+	 * Affiche la vue 'show' du groupe
+	 *
+	 * @param int $gameGroupId
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function showAction(int $gameGroupId)
+	{
+		$gameGroup = GameGroup::find($gameGroupId);
+		return $this->renderView('game.group.show', compact('gameGroup'));
+	}
+
+	/**
+	 * Affiche la page 'edit' du groupe
+	 *
+	 * @param int $gameGroupId
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function editAction(int $gameGroupId)
+	{
+		$gameGroup = GameGroup::find($gameGroupId);
+		return $this->renderView('game.group.edit', compact('gameGroup'));
+	}
+
+	/**
+	 * Met à jour le groupe en SQL
+	 *
+	 * @param ServerRequestInterface $request
+	 * @param int $gameGroupId
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function updateAction(ServerRequestInterface $request, int $gameGroupId)
+	{
+		$gameGroup = GameGroup::find($gameGroupId);
+
+		$old = $request->getParsedBody();
+
+		$validator = new Validator($request->getParsedBody(), [
+			'name' => 'min:3|max:15|required',
+			'description' => 'min:15|max:255|required'
+		]);
+
+		if ($validator->validate()) {
+			$gameGroup->fill($request->getParsedBody());
+			$gameGroup->save();
+			return $this->redirectToRoute('gameGroup.index');
+		}
+
+		$errors = $validator->getErrors();
+
+		return $this->renderView('game.group.edit', compact('old', 'errors', 'gameGroup'));
+	}
+
+	/**
+	 * Supprime le groupe
+	 *
+	 * @param int $gameGroupId
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function deleteAction(int $gameGroupId)
+	{
+		GameGroup::find($gameGroupId)->delete();
+		return $this->redirectToRoute('gameGroup.index');
 	}
 }

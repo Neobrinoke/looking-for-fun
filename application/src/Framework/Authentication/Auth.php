@@ -37,10 +37,10 @@ class Auth
 	/**
 	 * Return current logged user
 	 *
-	 * @return User
+	 * @return User|null
 	 * @throws \Exception
 	 */
-	public function user(): User
+	public function user(): ?User
 	{
 		if (!$this->isLogged()) {
 			return null;

@@ -25,6 +25,8 @@
 					<th>Description</th>
 					<th>Auteur</th>
 					<th>Ajouté il y a ...</th>
+					<th>Modifié il y a ...</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,6 +36,16 @@
 						<td><?= $gameGroup->getDescription() ?></td>
 						<td><?= $gameGroup->getOwner()->getName() ?></td>
 						<td><?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></td>
+						<td><?= ago_date_format($gameGroup->getUpdatedAt()->format('Y/m/d H:i:s')) ?></td>
+						<td>
+							<div class="ui buttons">
+								<?php if ($auth->user() && $auth->user()->getId() == $gameGroup->getOwner()->getId()): ?>
+									<a href="<?= $router->generateUri('gameGroup.edit', compact('gameGroup')) ?>" class="ui button">Editer</a>
+									<a href="<?= $router->generateUri('gameGroup.delete', compact('gameGroup')) ?>" class="ui button">Supprimer</a>
+								<?php endif; ?>
+								<a href="<?= $router->generateUri('gameGroup.show', compact('gameGroup')) ?>" class="ui button">Afficher</a>
+							</div>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

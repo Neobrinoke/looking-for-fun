@@ -145,6 +145,18 @@ abstract class Entity
 	}
 
 	/**
+	 * Fill current entity with
+	 *
+	 * @param array $values
+	 * @return Entity
+	 * @throws \Exception
+	 */
+	public function fill(array $values): Entity
+	{
+		return $this->injectEntityProperties($values);
+	}
+
+	/**
 	 * Save(insert or update) current entity
 	 *
 	 * @return bool

@@ -2,12 +2,12 @@
 
 namespace App\Framework\Router;
 
-use App\Controller\Controller;
+use App\Framework\ORM\Entity;
 use App\Framework\Session\Session;
-use GuzzleHttp\Psr7\Request;
-use function PHPSTORM_META\type;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
+use ReflectionException;
 
 class Route
 {
@@ -61,12 +61,23 @@ class Route
 	 */
 	public function match(ServerRequestInterface $request): bool
 	{
-		if ($request->getMethod() === $this->method) {
-			if (preg_match($this->regex, trim($request->getUri()->getPath(), '/'), $params)) {
-				array_shift($params);
+		if ($request->getMethod() === $this->getMethod()) {
+			if (preg_match($this->getRegex(), trim($request->getUri()->getPath(), '/'), $urlParams)) {
+				array_shift($urlParams);
+
+				preg_match($this->getRegex(), trim($this->getPath(), '/'), $pathParams);
+				array_shift($pathParams);
+
+				$params = [];
+				for ($i = 0; $i < sizeof($urlParams); $i++) {
+					$key = trim(trim($pathParams[$i], '{'), '}');
+					$value = $urlParams[$i];
+
+					$params[$key] = $value;
+				}
 
 				if ($request->getMethod() === 'POST') {
-					array_unshift($params, $request);
+					array_unshift($urlParams, $request);
 				}
 
 				$this->params = $params;
@@ -97,16 +108,36 @@ class Route
 			}
 		}
 
-		$callable = $this->callback;
+		$callable = $this->getCallback();
 
-		if (is_string($this->callback)) {
-			$actions = explode('@', $this->callback);
+		if (is_string($this->getCallback())) {
+			$actions = explode('@', $this->getCallback());
 			$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
 			$methodName = $actions[1];
 			$callable = [$container->get($className), $methodName];
 		}
 
-		return call_user_func_array($callable, $this->params);
+		$params = [];
+		foreach ($this->getParams() as $key => $value) {
+			$className = 'App\Entity\\' . ucfirst($key);
+
+			try {
+				$reflectionClass = new ReflectionClass($className);
+			} catch (ReflectionException $e) {
+				$reflectionClass = null;
+			}
+
+			if (!is_null($reflectionClass)) {
+				/** @var Entity $className */
+				$value = $className::find($value);
+			}
+
+			$params[$key] = $value;
+		}
+
+		var_dump($params);
+
+		return call_user_func_array($callable, $params);
 	}
 
 	/**
@@ -117,8 +148,11 @@ class Route
 	 */
 	public function getUri(array $params): string
 	{
-		$path = $this->path;
+		$path = $this->getPath();
 		foreach ($params as $key => $value) {
+			if ($value instanceof Entity) {
+				$value = $value->getId();
+			}
 			$path = str_replace('{' . $key . '}', $value, $path);
 		}
 
@@ -143,6 +177,17 @@ class Route
 
 		return $this;
 	}
+
+	/**
+	 * Retrieve the callback for current route
+	 *
+	 * @return callable|string
+	 */
+	public function getCallback()
+	{
+		return $this->callback;
+	}
+
 	/**
 	 * Retrieve the method for current route
 	 *
@@ -182,5 +227,15 @@ class Route
 	public function getParams(): array
 	{
 		return $this->params;
+	}
+
+	/**
+	 * Retrieve regex for current route
+	 *
+	 * @return string
+	 */
+	public function getRegex(): string
+	{
+		return $this->regex;
 	}
 }
