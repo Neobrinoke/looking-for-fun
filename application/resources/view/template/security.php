@@ -21,4 +21,4 @@
 
 <?php $js = ob_get_clean(); ?>
 
-<?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>
+<?= renderView('base', compact('content', 'css', 'js')); ?>

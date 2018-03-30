@@ -42,10 +42,6 @@ class Renderer
 	 */
 	public function renderView(string $view, array $params = []): string
 	{
-		$params['renderer'] = $this;
-		$params['router'] = $this->router;
-		$params['session'] = $this->session;
-		$params['auth'] = $this->auth;
 		$params['errors'] = $params['errors'] ?? [];
 		$params['old'] = $params['old'] ?? [];
 

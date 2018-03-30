@@ -54,4 +54,4 @@
 
 <?php $layout = ob_get_clean(); ?>
 
-<?= $renderer->renderView('template.home', compact('layout')); ?>
+<?= renderView('template.home', compact('layout')); ?>
