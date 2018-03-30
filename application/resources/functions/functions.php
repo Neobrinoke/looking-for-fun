@@ -86,7 +86,7 @@ function ago_date_format(string $date)
 	$time = time() - strtotime($date);
 
 	if ($time < 1) {
-		return '0 seconds';
+		return 'à l\'instant';
 	}
 
 	$conditions = [
@@ -102,7 +102,7 @@ function ago_date_format(string $date)
 		$d = $time / $secs;
 		if ($d >= 1) {
 			$r = round($d);
-			return $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
+			return 'il y\'a ' . $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
 		}
 	}
 }

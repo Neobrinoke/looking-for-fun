@@ -30,15 +30,16 @@
 						<div class="content">
 							<img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
 							<div class="header"><?= $gameGroup->getName() ?></div>
-							<div class="meta">Ajouté par <?= $gameGroup->getOwner()->getName() ?>, il y'a <?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></div>
+							<div class="meta">Ajouté par <?= $gameGroup->getOwner()->getName() ?>, <?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></div>
 							<div class="description"><?= $gameGroup->getDescription() ?></div>
 						</div>
 						<div class="extra content">
 							<div class="ui fluid center vertical buttons">
-								<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>" class="ui green button">Postuler</a>
 								<?php if ($auth->user() && $auth->user()->getId() == $gameGroup->getOwner()->getId()): ?>
 									<a href="<?= $router->generateUri('gameGroup.edit', compact('gameGroup')) ?>" class="ui blue button">Editer</a>
 									<a href="<?= $router->generateUri('gameGroup.delete', compact('gameGroup')) ?>" class="ui red button">Supprimer</a>
+								<?php else: ?>
+									<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>" class="ui green button">Postuler</a>
 								<?php endif; ?>
 							</div>
 						</div>
