@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\GameGroup;
+use App\Entity\GameGroupUser;
 use App\Framework\Controller\Controller;
 use App\Framework\ORM\QueryBuilder;
 use App\Framework\Validator\Validator;
@@ -14,10 +15,11 @@ class GameGroupController extends Controller
 	/**
 	 * Affiche tous les groupes de jeu
 	 *
+	 * @param ServerRequestInterface $request
 	 * @return \GuzzleHttp\Psr7\Response
 	 * @throws \Exception
 	 */
-	public function indexAction()
+	public function indexAction(ServerRequestInterface $request)
 	{
 		$gameGroups = GameGroup::all(['created_at DESC']);
 		return $this->renderView('game.group.index', compact('gameGroups'));
@@ -26,9 +28,10 @@ class GameGroupController extends Controller
 	/**
 	 * Affiche la vue 'create' du groupe
 	 *
+	 * @param ServerRequestInterface $request
 	 * @return \GuzzleHttp\Psr7\Response
 	 */
-	public function createAction()
+	public function createAction(ServerRequestInterface $request)
 	{
 		return $this->renderView('game.group.create');
 	}
@@ -65,26 +68,24 @@ class GameGroupController extends Controller
 	/**
 	 * Affiche la vue 'show' du groupe
 	 *
-	 * @param int $gameGroupId
+	 * @param ServerRequestInterface $request
+	 * @param GameGroup $gameGroup
 	 * @return \GuzzleHttp\Psr7\Response
-	 * @throws \Exception
 	 */
-	public function showAction(int $gameGroupId)
+	public function showAction(ServerRequestInterface $request, GameGroup $gameGroup)
 	{
-		$gameGroup = GameGroup::find($gameGroupId);
 		return $this->renderView('game.group.show', compact('gameGroup'));
 	}
 
 	/**
 	 * Affiche la page 'edit' du groupe
 	 *
-	 * @param int $gameGroupId
+	 * @param ServerRequestInterface $request
+	 * @param GameGroup $gameGroup
 	 * @return \GuzzleHttp\Psr7\Response
-	 * @throws \Exception
 	 */
-	public function editAction(int $gameGroupId)
+	public function editAction(ServerRequestInterface $request, GameGroup $gameGroup)
 	{
-		$gameGroup = GameGroup::find($gameGroupId);
 		return $this->renderView('game.group.edit', compact('gameGroup'));
 	}
 
@@ -92,14 +93,12 @@ class GameGroupController extends Controller
 	 * Met à jour le groupe en SQL
 	 *
 	 * @param ServerRequestInterface $request
-	 * @param int $gameGroupId
+	 * @param GameGroup $gameGroup
 	 * @return \GuzzleHttp\Psr7\Response
 	 * @throws \Exception
 	 */
-	public function updateAction(ServerRequestInterface $request, int $gameGroupId)
+	public function updateAction(ServerRequestInterface $request, GameGroup $gameGroup)
 	{
-		$gameGroup = GameGroup::find($gameGroupId);
-
 		$old = $request->getParsedBody();
 
 		$validator = new Validator($request->getParsedBody(), [
@@ -121,13 +120,52 @@ class GameGroupController extends Controller
 	/**
 	 * Supprime le groupe
 	 *
-	 * @param int $gameGroupId
+	 * @param ServerRequestInterface $request
+	 * @param GameGroup $gameGroup
 	 * @return \GuzzleHttp\Psr7\Response
 	 * @throws \Exception
 	 */
-	public function deleteAction(int $gameGroupId)
+	public function deleteAction(ServerRequestInterface $request, GameGroup $gameGroup)
 	{
-		GameGroup::find($gameGroupId)->delete();
+		$gameGroup->delete();
+
+		return $this->redirectToRoute('gameGroup.index');
+	}
+
+	/**
+	 * Rejoin le groupe
+	 *
+	 * @param ServerRequestInterface $request
+	 * @param GameGroup $gameGroup
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function joinAction(ServerRequestInterface $request, GameGroup $gameGroup)
+	{
+		$gameGroupUser = new GameGroupUser();
+		$gameGroupUser->setGameGroup($gameGroup);
+		$gameGroupUser->setUser($this->auth()->user());
+		$gameGroupUser->save();
+
+		return $this->redirectToRoute('gameGroup.index');
+	}
+
+	/**
+	 * Expulse un membre du group
+	 *
+	 * @param ServerRequestInterface $request
+	 * @param GameGroup $gameGroup
+	 * @param int $userId
+	 * @return \GuzzleHttp\Psr7\Response
+	 * @throws \Exception
+	 */
+	public function expelAction(ServerRequestInterface $request, GameGroup $gameGroup, int $userId)
+	{
+		GameGroupUser::findOneBy([
+			'user_id' => $userId,
+			'game_group_id' => $gameGroup->getId()
+		])->delete();
+
 		return $this->redirectToRoute('gameGroup.index');
 	}
 }

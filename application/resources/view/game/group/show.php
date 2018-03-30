@@ -19,8 +19,8 @@
 			</a>
 		</h2>
 		<div class="ui clearing divider"></div>
-		<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>">Rejoindre le groupe</a>
-		<?php var_dump($gameGroup) ?>
+		<a href="<?= $router->generateUri('gameGroup.join', compact('gameGroup')) ?>" class="ui primary button">Rejoindre le groupe</a>
+		<br><?php var_dump($gameGroup) ?>
 	</div>
 
 

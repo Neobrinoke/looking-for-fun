@@ -13,6 +13,7 @@ class Route
 {
 	public const DEFAULT_CONTROLLER_PATH = 'App\\Controller\\';
 	public const DEFAULT_MIDDLEWARE_PATH = 'App\\Middleware\\';
+	public const DEFAULT_ENTITY_PATH = 'App\\Entity\\';
 
 	/** @var string */
 	private $method;
@@ -76,9 +77,7 @@ class Route
 					$params[$key] = $value;
 				}
 
-				if ($request->getMethod() === 'POST') {
-					array_unshift($urlParams, $request);
-				}
+				array_unshift($params, $request);
 
 				$this->params = $params;
 				return true;
@@ -94,6 +93,7 @@ class Route
 	 * @param ContainerInterface $container
 	 * @param string $uri
 	 * @return mixed
+	 * @throws \Exception
 	 * @throws \Psr\Container\ContainerExceptionInterface
 	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
@@ -119,7 +119,7 @@ class Route
 
 		$params = [];
 		foreach ($this->getParams() as $key => $value) {
-			$className = 'App\Entity\\' . ucfirst($key);
+			$className = self::DEFAULT_ENTITY_PATH . ucfirst($key);
 
 			try {
 				$reflectionClass = new ReflectionClass($className);
@@ -134,8 +134,6 @@ class Route
 
 			$params[$key] = $value;
 		}
-
-		var_dump($params);
 
 		return call_user_func_array($callable, $params);
 	}
@@ -163,7 +161,7 @@ class Route
 	 * Add one or multiple middleware
 	 *
 	 * @param string|array $middlewares
-	 * @return $this
+	 * @return Route
 	 */
 	public function middleware($middlewares): Route
 	{

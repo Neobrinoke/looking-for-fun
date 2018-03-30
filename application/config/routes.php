@@ -11,6 +11,8 @@ $router->get('/group/{gameGroup}', 'GameGroupController@showAction', 'gameGroup.
 $router->get('/group/edit/{gameGroup}', 'GameGroupController@editAction', 'gameGroup.edit')->middleware('Auth');
 $router->post('/group/edit/{gameGroup}', 'GameGroupController@updateAction', 'gameGroup.update')->middleware('Auth');
 $router->get('/group/delete/{gameGroup}', 'GameGroupController@deleteAction', 'gameGroup.delete')->middleware('Auth');
+$router->get('/group/join/{gameGroup}', 'GameGroupController@joinAction', 'gameGroup.join')->middleware('Auth');
+$router->get('/group/expel/{gameGroup}/{userId}', 'GameGroupController@expelAction', 'gameGroup.expel')->middleware('Auth');
 
 /** Security Routes */
 $router->get('/login', 'SecurityController@loginAction', 'security.login')->middleware('Guest');
