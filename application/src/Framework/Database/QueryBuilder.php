@@ -33,6 +33,17 @@ class QueryBuilder
 	/** @var PDO */
 	private $pdoInstance;
 
+	/**
+	 * QueryBuilder constructor.
+	 *
+	 * @param PDO|null $pdoInstance
+	 */
+	public function __construct(PDO $pdoInstance = null)
+	{
+		if (!is_null($pdoInstance)) {
+			$this->pdoInstance = $pdoInstance;
+		}
+	}
 
 	/**
 	 * Create queryBuilder with select type
@@ -292,7 +303,9 @@ class QueryBuilder
 	private function getPDO(): PDO
 	{
 		if (is_null($this->pdoInstance)) {
-			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD);
+			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD, [
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+			]);
 		}
 		return $this->pdoInstance;
 	}

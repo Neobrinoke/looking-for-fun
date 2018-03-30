@@ -14,6 +14,10 @@ return [
 			'user' => DB_USERNAME,
 			'pass' => DB_PASSWORD,
 			'port' => DB_PORT
+		],
+		'test' => [
+			'adapter' => 'sqlite',
+			'connection' => null
 		]
 	]
 ];

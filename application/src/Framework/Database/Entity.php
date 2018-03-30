@@ -300,7 +300,7 @@ abstract class Entity
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	protected function injectEntityProperties(?array $results): ?Entity
+	public function injectEntityProperties(?array $results): ?Entity
 	{
 		if(is_null($results)) {
 			return null;
