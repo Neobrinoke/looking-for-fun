@@ -1,9 +1,4 @@
 <?php
-/** @var \App\Framework\Renderer\Renderer $renderer */
-/** @var \App\Framework\Router\Router $router */
-/** @var \App\Framework\Session\Session $session */
-/** @var \App\Framework\Authentication\Auth $auth */
-
 /** @var array $errors */
 /** @var array $old */
 ?>
@@ -12,10 +7,10 @@
 
 	<h1 class="ui teal image header">Se connecter</h1>
 
-	<form class="ui large form <?= isError($errors) ?>" action="<?= $router->generateUri('security.loginCheck') ?>" method="POST">
+	<form class="ui large form <?= isError($errors) ?>" action="<?= route('security.loginCheck') ?>" method="POST">
 		<div class="ui stacked segment">
 
-			<?= $renderer->renderView('message.error', compact('errors')) ?>
+			<?= renderView('message.error', compact('errors')) ?>
 
 			<div class="field <?= isError($errors) ?>">
 				<div class="ui left icon input">
@@ -34,12 +29,12 @@
 	</form>
 
 	<section class="ui message">
-		Nouveau ? <a href="<?= $router->generateUri('security.register') ?>">Enregistez-toi !</a>
+		Nouveau ? <a href="<?= route('security.register') ?>">Enregistez-toi !</a>
 		<br>
 		<br>
-		<a href="<?= $router->generateUri('home') ?>">Retour au site</a>
+		<a href="<?= route('home') ?>">Retour au site</a>
 	</section>
 
 <?php $layout = ob_get_clean(); ?>
 
-<?= $renderer->renderView('template.security', compact('layout')); ?>
+<?= renderView('template.security', compact('layout')); ?>

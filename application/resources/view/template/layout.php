@@ -1,10 +1,3 @@
-<?php
-/** @var \App\Framework\Renderer\Renderer $renderer */
-/** @var \App\Framework\Router\Router $router */
-/** @var \App\Framework\Session\Session $session */
-/** @var \App\Framework\Authentication\Auth $auth */
-?>
-
 <?php ob_start(); ?>
 	<link rel="stylesheet" href="/css/layout.css">
 	<?php if (isset($css)) echo $css; ?>
@@ -14,15 +7,15 @@
 
 	<header class="ui fixed inverted menu">
 		<div class="ui container">
-			<a href="<?= $router->generateUri('home') ?>" class="header item">Accueil</a>
-			<a href="<?= $router->generateUri('gameGroup.index') ?>" class="item">Groupes</a>
+			<a href="<?= route('home') ?>" class="header item">Accueil</a>
+			<a href="<?= route('gameGroup.index') ?>" class="item">Groupes</a>
 			<div class="right menu">
-				<?php if ($auth->isLogged()): ?>
-					<a class="item" href="#"><?= $auth->user()->getName() ?></a>
-					<a class="item" href="<?= $router->generateUri('security.logout') ?>">Deconnexion</a>
+				<?php if (auth()->isLogged()): ?>
+					<a class="item" href="#"><?= auth()->user()->getName() ?></a>
+					<a class="item" href="<?= route('security.logout') ?>">Deconnexion</a>
 				<?php else: ?>
-					<a class="item" href="<?= $router->generateUri('security.login') ?>">Se connecter</a>
-					<a class="item" href="<?= $router->generateUri('security.register') ?>">S'inscrire</a>
+					<a class="item" href="<?= route('security.login') ?>">Se connecter</a>
+					<a class="item" href="<?= route('security.register') ?>">S'inscrire</a>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -32,7 +25,7 @@
 		<?= $layout ?>
 	</main>
 
-	<?= $renderer->renderView('template.footer') ?>
+	<?= renderView('template.footer') ?>
 
 <?php $content = ob_get_clean(); ?>
 
@@ -40,4 +33,4 @@
 	<?php if (isset($js)) echo $js; ?>
 <?php $js = ob_get_clean(); ?>
 
-<?= $renderer->renderView('base', compact('content', 'css', 'js')); ?>
+<?= renderView('base', compact('content', 'css', 'js')); ?>

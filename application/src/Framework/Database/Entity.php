@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\ORM;
+namespace App\Framework\Database;
 
 use ReflectionClass;
 use ReflectionException;
@@ -283,7 +283,7 @@ abstract class Entity
 					}
 					$results[$key] = $entity2->getId();
 				} else {
-					throw new \Exception(sprintf("Object type (%s) does not managed by this ORM actually", $className));
+					throw new \Exception(sprintf("Object type (%s) does not managed by this Database actually", $className));
 				}
 			} else {
 				$results[$key] = $this->$methodName();
@@ -300,7 +300,7 @@ abstract class Entity
 	 * @return Entity|null
 	 * @throws \Exception
 	 */
-	protected function injectEntityProperties(?array $results): ?Entity
+	public function injectEntityProperties(?array $results): ?Entity
 	{
 		if(is_null($results)) {
 			return null;
@@ -343,7 +343,7 @@ abstract class Entity
 					}
 					$this->$methodName($entity);
 				} else {
-					throw new \Exception(sprintf("Instantiable type (%s) does not managed by this ORM actually", $className));
+					throw new \Exception(sprintf("Instantiable type (%s) does not managed by this Database actually", $className));
 				}
 			} else {
 				$this->$methodName($value);

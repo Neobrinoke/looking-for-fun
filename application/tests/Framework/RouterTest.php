@@ -7,6 +7,7 @@ use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class RouterTest extends TestCase
 {
@@ -57,7 +58,7 @@ class RouterTest extends TestCase
 			return 'dqsdqsdqas';
 		}, 'groups');
 
-		$this->router->get('/group/remove/{id}', function ($id) {
+		$this->router->get('/group/remove/{id}', function (ServerRequestInterface $request, int $id) {
 			return 'hello ' . $id;
 		}, 'group.delete');
 

@@ -62,7 +62,7 @@ function old(array $values, string $key)
  * @param null|string $key
  * @return string
  */
-function isError(array $values, ?string $key = null)
+function isError(array $values, ?string $key = null): string
 {
 	if (!is_null($key) && !isset($values[$key])) {
 		return '';
@@ -81,7 +81,7 @@ function isError(array $values, ?string $key = null)
  * @param string $date
  * @return string
  */
-function ago_date_format(string $date)
+function ago_date_format(string $date): string
 {
 	$time = time() - strtotime($date);
 
@@ -105,4 +105,6 @@ function ago_date_format(string $date)
 			return 'il y\'a ' . $r . ' ' . $str . ($r > 1 && $str != 'mois' ? 's' : '');
 		}
 	}
+
+	return "";
 }

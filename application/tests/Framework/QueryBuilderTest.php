@@ -2,7 +2,7 @@
 
 namespace Framework;
 
-use App\Framework\ORM\QueryBuilder;
+use App\Framework\Database\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 
 class QueryBuilderTest extends TestCase

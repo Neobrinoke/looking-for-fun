@@ -1,0 +1,17 @@
+<?php
+
+use $useClassName;
+
+class $className extends $baseClassName
+{
+	public function up()
+	{
+		$this->table('TABLE_HERE')
+		    ->create();
+	}
+
+	public function down()
+	{
+		$this->table('TALBE_HERE')->drop();
+	}
+}

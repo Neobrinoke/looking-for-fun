@@ -1,9 +1,9 @@
 {
-	"name": "neobrinoke/application",
+	"name": "neobrinoke/framework",
 	"authors": [
 		{
-			"name": "neobrinoke2",
-			"email": "alexis.salvador.pro@gmail.com"
+			"name": "Neobrinoke",
+			"email": "neobrinoke@gmail.com"
 		}
 	],
 	"autoload": {
@@ -12,14 +12,16 @@
 		},
 		"files": [
 			"config/config.php",
-			"resources/functions/functions.php"
+			"resources/helper/loader.php"
 		]
 	},
 	"require-dev": {
-		"phpunit/phpunit": "7"
+		"phpunit/phpunit": "7",
+		"robmorgan/phinx": "^0.9.2"
 	},
 	"require": {
 		"guzzlehttp/psr7": "^1.4",
-		"php-di/php-di": "^6.0"
+		"php-di/php-di": "^6.0",
+		"fzaninotto/faker": "^1.7"
 	}
 }
