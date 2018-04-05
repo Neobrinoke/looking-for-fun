@@ -6,8 +6,7 @@ ini_set("display_errors", 1);
 // Autoload
 require('../vendor/autoload.php');
 
-$builder = new \DI\ContainerBuilder();
-$container = $builder->build();
+$container = (new \DI\ContainerBuilder())->build();
 
 // Routes config
 $router = $container->get(\App\Framework\Router\Router::class);

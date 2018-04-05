@@ -3,6 +3,7 @@
 namespace Tests\Framework;
 
 use App\Entity\User;
+use App\Framework\Database\PdoAdapter;
 use App\Framework\Database\QueryBuilder;
 use PDO;
 use Phinx\Config\Config;
@@ -18,12 +19,10 @@ class EntityTest extends TestCase
 
 	public function setUp()
 	{
-		$this->pdo = new PDO('sqlite::memory:', null, null, [
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-		]);
+		$this->pdo = (new PdoAdapter(true))->getConnection();
 
 		$configArray = require(__DIR__ . '/../../phinx.php');
-		$configArray['environments']['test']['connection'] = $configArray['environments']['test']['connection'] ?? $this->pdo;
+		$configArray['environments']['test']['connection'] = $this->pdo;
 
 		$config = new Config($configArray);
 		$manager = new Manager($config, new StringInput(' '), new NullOutput());
