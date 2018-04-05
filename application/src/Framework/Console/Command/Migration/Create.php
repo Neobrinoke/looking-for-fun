@@ -3,6 +3,7 @@
 namespace App\Framework\Console\Command\Migration;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -10,9 +11,10 @@ class Create extends Command
 {
 	protected function configure()
 	{
-		$this->setName('app:create-user');
+		$this->setName('create:user');
 		$this->setDescription('Creates a new user.');
 		$this->setHelp('This command allows you to create a user...');
+		$this->addArgument('username', InputArgument::REQUIRED, 'The username of the user.');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -23,9 +25,6 @@ class Create extends Command
 			'',
 		]);
 
-		$output->writeln('Whoa!');
-
-		$output->write('You are about to ');
-		$output->write('create a user.');
+		$output->writeln('Username: '.$input->getArgument('username'));
 	}
 }
