@@ -3,11 +3,11 @@
 namespace App\Framework\Console;
 
 use App\Framework\Console\Command;
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsoleApp extends Application
+class Application extends SymfonyApplication
 {
 	/**
 	 * Class Constructor.
@@ -21,6 +21,10 @@ class ConsoleApp extends Application
 		$this->addCommands([
 			new Command\Migration\Create()
 		]);
+
+		$commands = require __DIR__ . '/../../../config/commands.php';
+
+		$this->addCommands($commands);
 	}
 
 	/**

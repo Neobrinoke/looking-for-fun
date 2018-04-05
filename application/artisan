@@ -4,9 +4,9 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-use App\Framework\Console\ConsoleApp;
+use App\Framework\Console\Application;
 
-$application = new ConsoleApp();
+$application = new Application();
 
 // ... register commands
 
