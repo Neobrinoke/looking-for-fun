@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+// application.php
+
+require __DIR__.'/vendor/autoload.php';
+
+use App\Framework\Console\ConsoleApp;
+
+$application = new ConsoleApp();
+
+// ... register commands
+
+$application->run();
