@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Tests\Framework;
 
 use App\Entity\User;
 use App\Framework\Database\QueryBuilder;
@@ -22,7 +22,7 @@ class EntityTest extends TestCase
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 		]);
 
-		$configArray = require('phinx.php');
+		$configArray = require(__DIR__ . '/../../phinx.php');
 		$configArray['environments']['test']['connection'] = $configArray['environments']['test']['connection'] ?? $this->pdo;
 
 		$config = new Config($configArray);

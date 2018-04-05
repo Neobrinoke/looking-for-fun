@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Tests\Framework;
 
 use App\Framework\Database\QueryBuilder;
 use PHPUnit\Framework\TestCase;

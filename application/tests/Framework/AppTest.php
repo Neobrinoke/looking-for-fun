@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Tests\Framework;
 
 use App\Framework\App;
 use App\Framework\Router\Router;
@@ -21,7 +21,7 @@ class AppTest extends TestCase
 
 	public function testRedirectTrailingSlash()
 	{
-		$app = new App($this->container);
+		$app = new App();
 		$response = $app->run(new ServerRequest('GET', '/azerty/'));
 
 		$this->assertContains('/azerty', $response->getHeader('Location'));
@@ -43,7 +43,7 @@ class AppTest extends TestCase
 
 	public function testError404()
 	{
-		$app = new App($this->container);
+		$app = new App();
 		$response = $app->run(new ServerRequest('GET', '/azerty'));
 
 		$this->assertContains('<h1>Erreur 404</h1>', (string)$response->getBody());

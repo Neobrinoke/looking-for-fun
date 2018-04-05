@@ -14,11 +14,11 @@ return [
 		'default_database' => 'development',
 		'development' => [
 			'adapter' => 'mysql',
-			'host' => DB_HOST,
-			'name' => DB_DATABASE,
-			'user' => DB_USERNAME,
-			'pass' => DB_PASSWORD,
-			'port' => DB_PORT
+			'host' => env('DB_HOST'),
+			'name' => env('DB_DATABASE'),
+			'user' => env('DB_USERNAME'),
+			'pass' => env('DB_PASSWORD'),
+			'port' => env('DB_PORT')
 		],
 		'test' => [
 			'adapter' => 'sqlite',

@@ -1,5 +1,8 @@
 <?php
 
+/** @var \App\Framework\Router\Router $router */
+global $router;
+
 /** Base Routes */
 $router->get('/', 'DefaultController@homeAction', 'home');
 

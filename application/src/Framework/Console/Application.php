@@ -12,7 +12,7 @@ class Application extends SymfonyApplication
 	/**
 	 * Class Constructor.
 	 *
-	 * Initialize the Phinx console application.
+	 * Initialize the console application.
 	 */
 	public function __construct()
 	{
@@ -37,8 +37,6 @@ class Application extends SymfonyApplication
 	 */
 	public function doRun(InputInterface $input, OutputInterface $output)
 	{
-		// always show the version information except when the user invokes the help
-		// command as that already does it
 		if ($input->hasParameterOption(['--help', '-h']) === false && $input->getFirstArgument() !== null) {
 			$output->writeln($this->getLongVersion());
 			$output->writeln('');

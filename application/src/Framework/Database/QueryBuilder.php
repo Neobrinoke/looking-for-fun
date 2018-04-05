@@ -303,7 +303,7 @@ class QueryBuilder
 	private function getPDO(): PDO
 	{
 		if (is_null($this->pdoInstance)) {
-			$this->pdoInstance = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE . ';port=' . DB_PORT . '', DB_USERNAME, DB_PASSWORD, [
+			$this->pdoInstance = new PDO('mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE') . ';port=' . env('DB_PORT') . '', env('DB_USERNAME'), env('DB_PASSWORD'), [
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 			]);
 		}

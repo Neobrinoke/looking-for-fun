@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Tests\Framework;
 
 use App\Framework\Validator\Validator;
 use PHPUnit\Framework\TestCase;

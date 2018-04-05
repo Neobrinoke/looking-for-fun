@@ -4,7 +4,9 @@ namespace App\Framework;
 
 use App\Framework\Router\Route;
 use App\Framework\Router\Router;
+use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\Response;
+use josegonzalez\Dotenv\Loader;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,9 +19,13 @@ class App
 	/**
 	 * App constructor.
 	 * @param ContainerInterface $container
+	 * @throws \Exception
 	 */
-	public function __construct(ContainerInterface $container)
+	public function __construct(ContainerInterface $container = null)
 	{
+		if (is_null($container)) {
+			$container = (new ContainerBuilder())->build();
+		}
 		$this->container = $container;
 	}
 
@@ -34,6 +40,14 @@ class App
 	 */
 	public function run(ServerRequestInterface $request): ResponseInterface
 	{
+		$envFile = __DIR__ . '/../../.env';
+
+		if (!file_exists($envFile)) {
+			throw new \Exception('Dot file env does not exist');
+		}
+
+		(new Loader($envFile))->parse()->putenv(true);
+
 		$uri = $request->getUri()->getPath();
 		if (!empty($uri) && $uri !== "/" && $uri[-1] === "/") {
 			return new Response(301, ['Location' => substr($uri, 0, -1)]);
