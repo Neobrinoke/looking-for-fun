@@ -3,22 +3,28 @@
 use function DI\env;
 
 return [
-	'default' => env('DB_CONNECTION', 'mysql'),
-	'connections' => [
-		'mysql' => [
-			'driver' => 'mysql',
-			'host' => env('DB_HOST', '127.0.0.1'),
-			'port' => env('DB_PORT', '3306'),
-			'database' => env('DB_DATABASE', 'forge'),
-			'username' => env('DB_USERNAME', 'forge'),
-			'password' => env('DB_PASSWORD', ''),
-			'unix_socket' => env('DB_SOCKET', ''),
-			'charset' => 'utf8mb4',
-			'collation' => 'utf8mb4_unicode_ci',
-			'prefix' => '',
-			'strict' => true,
-			'engine' => null,
-		]
+	'migration_base_class' => 'App\Framework\Database\Migration',
+	'seed_base_class' => 'App\Framework\Database\Seeder',
+	'paths' => [
+		'migrations' => __DIR__ . '/database/migrations',
+		'seeds' => __DIR__ . '/database/seeds'
 	],
-	'migrations' => 'migrations_log',
+	'templates' => [
+		'file' => __DIR__ . '/src/Framework/Database/Template/migration_template_file.txt',
+	],
+	'environments' => [
+		'default_database' => 'development',
+		'development' => [
+			'adapter' => 'mysql',
+			'host' => env('DB_HOST'),
+			'name' => env('DB_DATABASE'),
+			'user' => env('DB_USERNAME'),
+			'pass' => env('DB_PASSWORD'),
+			'port' => env('DB_PORT')
+		],
+		'test' => [
+			'adapter' => 'sqlite',
+			'connection' => null
+		]
+	]
 ];

@@ -21,7 +21,7 @@ class EntityTest extends TestCase
 	{
 		$this->pdo = (new PdoAdapter(true))->getConnection();
 
-		$configArray = require(__DIR__ . '/../../phinx.php');
+		$configArray = require(__DIR__ . '/../../config/database.php');
 		$configArray['environments']['test']['connection'] = $this->pdo;
 
 		$config = new Config($configArray);
