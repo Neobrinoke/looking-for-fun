@@ -145,3 +145,9 @@ function env($key, $default = null)
 
 	return $value;
 }
+
+function container(): \Psr\Container\ContainerInterface
+{
+	global $container;
+	return $container;
+}

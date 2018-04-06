@@ -4,13 +4,12 @@
  * Return router instance
  *
  * @return \App\Framework\Router\Router|mixed
- * @throws \DI\DependencyException
- * @throws \DI\NotFoundException
+ * @throws \Psr\Container\ContainerExceptionInterface
+ * @throws \Psr\Container\NotFoundExceptionInterface
  */
 function router(): \App\Framework\Router\Router
 {
-	global $container;
-	return $container->get(\App\Framework\Router\Router::class);
+	return container()->get(\App\Framework\Router\Router::class);
 }
 
 /**
@@ -20,8 +19,8 @@ function router(): \App\Framework\Router\Router
  * @param array $params
  * @return string
  * @throws Exception
- * @throws \DI\DependencyException
- * @throws \DI\NotFoundException
+ * @throws \Psr\Container\ContainerExceptionInterface
+ * @throws \Psr\Container\NotFoundExceptionInterface
  */
 function route(string $name, array $params = []): string
 {

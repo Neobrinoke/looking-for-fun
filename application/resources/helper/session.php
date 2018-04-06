@@ -4,11 +4,10 @@
  * Return session instance
  *
  * @return \App\Framework\Session\Session|mixed
- * @throws \DI\DependencyException
- * @throws \DI\NotFoundException
+ * @throws \Psr\Container\ContainerExceptionInterface
+ * @throws \Psr\Container\NotFoundExceptionInterface
  */
 function session(): \App\Framework\Session\Session
 {
-	global $container;
-	return $container->get(\App\Framework\Session\Session::class);
+	return container()->get(\App\Framework\Session\Session::class);
 }

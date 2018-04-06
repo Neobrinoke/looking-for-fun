@@ -1,7 +1,5 @@
 <?php
 
-use function DI\env;
-
 return [
 	'migration_base_class' => 'App\Framework\Database\Migration',
 	'seed_base_class' => 'App\Framework\Database\Seeder',
