@@ -9,7 +9,6 @@ require('../vendor/autoload.php');
 $container = (new \DI\ContainerBuilder())->build();
 
 // Routes config
-$router = $container->get(\App\Framework\Router\Router::class);
 require('../config/routes.php');
 
 // Application start

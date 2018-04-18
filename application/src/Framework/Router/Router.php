@@ -2,21 +2,12 @@
 
 namespace App\Framework\Router;
 
-use App\Framework\Session\Session;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router
 {
 	/** @var array */
 	private $routes = [];
-
-	/** @var Session */
-	private $session;
-
-	public function __construct(Session $session)
-	{
-		$this->session = $session;
-	}
 
 	/**
 	 * Add get route
@@ -25,10 +16,12 @@ class Router
 	 * @param string|callable $callback
 	 * @param string $name
 	 * @return Route
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function get(string $path, $callback, string $name): Route
+	public static function get(string $path, $callback, string $name): Route
 	{
-		return $this->addRoute('GET', $path, $callback, $name);
+		return container()->get(self::class)->addRoute('GET', $path, $callback, $name);
 	}
 
 	/**
@@ -38,10 +31,12 @@ class Router
 	 * @param string|callable $callback
 	 * @param string $name
 	 * @return Route
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function post(string $path, $callback, string $name): Route
+	public static function post(string $path, $callback, string $name): Route
 	{
-		return $this->addRoute('POST', $path, $callback, $name);
+		return container()->get(self::class)->addRoute('POST', $path, $callback, $name);
 	}
 
 	/**

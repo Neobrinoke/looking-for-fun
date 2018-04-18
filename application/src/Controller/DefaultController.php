@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Framework\Controller\Controller;
-use PDO;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DefaultController extends Controller

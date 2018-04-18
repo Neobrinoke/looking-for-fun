@@ -20,6 +20,14 @@ return [
 			'pass' => env('DB_PASSWORD'),
 			'port' => env('DB_PORT')
 		],
+		'prod' => [
+			'adapter' => 'mysql',
+			'host' => env('DB_HOST'),
+			'name' => 'looking_for_fun2',
+			'user' => env('DB_USERNAME'),
+			'pass' => env('DB_PASSWORD'),
+			'port' => env('DB_PORT')
+		],
 		'test' => [
 			'adapter' => 'sqlite',
 			'connection' => null

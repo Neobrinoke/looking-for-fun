@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Entity\GameGroup;
 use App\Entity\GameGroupUser;
 use App\Framework\Controller\Controller;
-use App\Framework\Database\QueryBuilder;
 use App\Framework\Validator\Validator;
-use MongoDB\Driver\Query;
 use Psr\Http\Message\ServerRequestInterface;
 
 class GameGroupController extends Controller
