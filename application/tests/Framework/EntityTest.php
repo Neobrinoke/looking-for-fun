@@ -19,11 +19,7 @@ class EntityTest extends TestCase
 
 	public function setUp()
 	{
-<<<<<<< HEAD
-		return; // @todo finir ce test (pour ça je dois avoir un adapter PDO)
-=======
 		return; // @Todo generer un nouveau test quand l'adapter sera fix
->>>>>>> f57cd059dff8de40d81af7b95b5d7010e1b11566
 		$this->pdo = (new PdoAdapter(true))->getConnection();
 
 		$configArray = require(__DIR__ . '/../../config/database.php');
