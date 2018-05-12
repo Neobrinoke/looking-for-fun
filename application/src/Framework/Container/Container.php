@@ -3,6 +3,7 @@
 namespace App\Framework\Container;
 
 use Exception;
+use GuzzleHttp\Psr7\ServerRequest;
 use ReflectionClass;
 use ReflectionException;
 
@@ -16,6 +17,13 @@ class Container
 
 	/** @var array */
 	private $resolvers = [];
+
+	public function __construct()
+	{
+		$this->set('request', function () {
+			return ServerRequest::fromGlobals();
+		});
+	}
 
 	/**
 	 * Get instance of this container
@@ -37,18 +45,20 @@ class Container
 	 * @param $key
 	 * @param $resolver
 	 */
-	public function set($key, $resolver)
+	public function set(string $key, callable $resolver)
 	{
 		$this->resolvers[$key] = $resolver;
 	}
 
 	/**
+	 * Retrieve instance
+	 *
 	 * @param $key
 	 * @return mixed
 	 * @throws ReflectionException
 	 * @throws Exception
 	 */
-	public function get($key)
+	public function get(string $key)
 	{
 		if (!isset($this->instances[$key])) {
 			if (isset($this->resolvers[$key])) {

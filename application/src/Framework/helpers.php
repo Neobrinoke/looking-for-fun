@@ -1,5 +1,11 @@
 <?php
 
+use App\Framework\Authentication\Auth;
+use App\Framework\Container\Container;
+use App\Framework\Renderer\Renderer;
+use App\Framework\Router\Router;
+use App\Framework\Session\Session;
+
 /**
  * Return protected variable
  *
@@ -150,14 +156,77 @@ function env($key, $default = null)
  * Return instance of container or instance of $key
  *
  * @param null $key
- * @return \App\Framework\Container\Container|mixed
+ * @return Container|mixed
  * @throws Exception
  * @throws ReflectionException
  */
 function app($key = null)
 {
 	if (is_null($key)) {
-		return \App\Framework\Container\Container::getInstance();
+		return Container::getInstance();
 	}
-	return \App\Framework\Container\Container::getInstance()->get($key);
+	return Container::getInstance()->get($key);
+}
+
+/**
+ * Return auth instance
+ *
+ * @return Auth
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function auth(): Auth
+{
+	return app(Auth::class);
+}
+
+/**
+ * Render a named view
+ *
+ * @param string $name
+ * @param array $params
+ * @return string
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function renderView(string $name, array $params = []): string
+{
+	return app(Renderer::class)->renderView($name, $params);
+}
+
+/**
+ * Return router instance
+ *
+ * @return Router|mixed
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function router(): Router
+{
+	return app(Router::class);
+}
+
+/**
+ * Return href for named route
+ *
+ * @param string $name
+ * @param array $params
+ * @return string
+ * @throws Exception
+ */
+function route(string $name, array $params = []): string
+{
+	return router()->generateUri($name, $params);
+}
+
+/**
+ * Return session instance
+ *
+ * @return Session
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function session(): Session
+{
+	return app(Session::class);
 }

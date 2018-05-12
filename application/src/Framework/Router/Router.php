@@ -21,7 +21,7 @@ class Router
 	 */
 	public static function get(string $path, $callback, string $name): Route
 	{
-		return app()->get(self::class)->addRoute('GET', $path, $callback, $name);
+		return app(self::class)->addRoute('GET', $path, $callback, $name);
 	}
 
 	/**
@@ -36,7 +36,7 @@ class Router
 	 */
 	public static function post(string $path, $callback, string $name): Route
 	{
-		return app()->get(self::class)->addRoute('POST', $path, $callback, $name);
+		return app(self::class)->addRoute('POST', $path, $callback, $name);
 	}
 
 	/**

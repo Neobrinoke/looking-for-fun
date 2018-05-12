@@ -7,12 +7,13 @@
 		}
 	],
 	"autoload": {
+		"files": [
+			"src/Framework/helpers.php",
+			"config/routes.php"
+		],
 		"psr-4": {
 			"App\\": "src/"
-		},
-		"files": [
-			"resources/helper/loader.php"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {
