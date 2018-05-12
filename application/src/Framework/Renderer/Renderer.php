@@ -5,6 +5,8 @@ namespace App\Framework\Renderer;
 use App\Framework\Authentication\Auth;
 use App\Framework\Router\Router;
 use App\Framework\Session\Session;
+use App\Framework\Support\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Renderer
 {
@@ -42,8 +44,7 @@ class Renderer
 	 */
 	public function renderView(string $view, array $params = []): string
 	{
-		$params['errors'] = $params['errors'] ?? [];
-		$params['old'] = $params['old'] ?? [];
+		$params['errors'] = $params['errors'] ?? new Collection();
 
 		ob_start();
 		extract($params);

@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Framework\Controller\Controller;
 use App\Framework\Http\Request;
 use App\Framework\Http\Response;
+use App\Framework\Support\Collection;
 use App\Framework\Validator\Validator;
 
 class SecurityController extends Controller
@@ -50,10 +51,10 @@ class SecurityController extends Controller
 
 				return $this->redirectToRoute('home');
 			}
-			$errors[] = 'Utilisateur introuvable';
+			$validator->getErrors()->add('Utilisateur introuvable');
 		}
 
-		$errors = $errors ?? $validator->getErrors();
+		$errors = $validator->getErrors();
 
 		return $this->renderView('security.login', compact('errors'));
 	}

@@ -1,23 +1,22 @@
 <?php
-/** @var array $errors */
+/** @var \App\Framework\Support\Collection $errors */
 ?>
 
 <?php ob_start(); ?>
 
 	<h1 class="ui teal image header">Se connecter</h1>
 
-	<form class="ui large form <?= isError($errors) ?>" action="<?= route('security.loginCheck') ?>" method="POST">
-		<div class="ui stacked segment">
+	<form class="ui large form <?= $errors->any() ? 'error' : '' ?>" action="<?= route('security.loginCheck') ?>" method="POST">
+			<div class="ui stacked segment">
+				<?= renderView('message.error', ['errors' => $errors->all()]) ?>
 
-			<?= renderView('message.error', compact('errors')) ?>
-
-			<div class="field <?= isError($errors) ?>">
+			<div class="field <?= $errors->any() ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
 					<input type="text" name="login" placeholder="Identifiant" value="<?= old('login') ?>">
 				</div>
 			</div>
-			<div class="field <?= isError($errors) ?>">
+			<div class="field <?= $errors->any() ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
 					<input type="password" name="password" placeholder="Mot de passe">

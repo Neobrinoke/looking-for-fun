@@ -96,8 +96,6 @@ class GameGroupController extends Controller
 	 */
 	public function updateAction(Request $request, GameGroup $gameGroup)
 	{
-		$old = $request->getParsedBody();
-
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|max:255|required',
 			'description' => 'min:15|max:255|required'
@@ -111,7 +109,7 @@ class GameGroupController extends Controller
 
 		$errors = $validator->getErrors();
 
-		return $this->renderView('game.group.edit', compact('old', 'errors', 'gameGroup'));
+		return $this->renderView('game.group.edit', compact('errors', 'gameGroup'));
 	}
 
 	/**

@@ -4,6 +4,15 @@ namespace App\Framework\Session;
 
 class Session
 {
+	/** @var array */
+	private $session = [];
+
+	public function __construct()
+	{
+		$this->init();
+		$this->session = $_SESSION;
+	}
+
 	/**
 	 * Retrieve session value with key
 	 *
@@ -12,8 +21,7 @@ class Session
 	 */
 	public function get(string $key)
 	{
-		$this->initSession();
-		return $this->has($key) ? $_SESSION[$key] : null;
+		return $this->has($key) ? $this->session[$key] : null;
 	}
 
 	/**
@@ -37,8 +45,8 @@ class Session
 	 */
 	public function set(string $key, $value): void
 	{
-		$this->initSession();
-		$_SESSION[$key] = $value;
+		$this->session[$key] = $value;
+		$this->update();
 	}
 
 	/**
@@ -48,8 +56,8 @@ class Session
 	 */
 	public function remove(string $key): void
 	{
-		$this->initSession();
-		unset($_SESSION[$key]);
+		unset($this->session[$key]);
+		$this->update();
 	}
 
 	/**
@@ -60,14 +68,21 @@ class Session
 	 */
 	public function has(string $key): bool
 	{
-		$this->initSession();
-		return isset($_SESSION[$key]);
+		return isset($this->session[$key]);
+	}
+
+	/**
+	 * Update session
+	 */
+	private function update()
+	{
+		$_SESSION = $this->session;
 	}
 
 	/**
 	 * Initialize session
 	 */
-	private function initSession(): void
+	private function init(): void
 	{
 		if (session_status() === PHP_SESSION_NONE) {
 			session_start();

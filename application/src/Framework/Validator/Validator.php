@@ -3,6 +3,7 @@
 namespace App\Framework\Validator;
 
 use App\Framework\Database\Entity;
+use App\Framework\Support\Collection;
 
 class Validator
 {
@@ -28,8 +29,8 @@ class Validator
 	/** @var array */
 	private $validators = [];
 
-	/** @var array */
-	private $errors = [];
+	/** @var Collection */
+	private $errors;
 
 	/** @var array */
 	private $newVars = [];
@@ -42,6 +43,7 @@ class Validator
 	 */
 	public function __construct(array $values, array $validators)
 	{
+		$this->errors = new Collection();
 		$this->values = $values;
 		$this->validators = $this->parseValidators($validators);
 	}
@@ -62,31 +64,31 @@ class Validator
 
 				if ($key == self::VALIDATOR_MIN) {
 					if (strlen($this->values[$var]) < $value) {
-						$this->errors[$var] = 'Le champ ' . $var . ' doit être supérieur à ' . $value . ' caractères.';
+						$this->errors->set($var, sprintf("Le champ %s doit être supérieur à %s caractères.", $var, $value));
 					}
 				}
 
 				if ($key == self::VALIDATOR_MAX) {
 					if (strlen($this->values[$var]) > $value) {
-						$this->errors[$var] = 'Le champ ' . $var . ' doit être inférieur à ' . $value . ' caractères.';
+						$this->errors->set($var, sprintf("Le champ %s doit être inférieur à %s caractères.", $var, $value));
 					}
 				}
 
 				if ($key == self::VALIDATOR_REQUIRED) {
 					if (!isValid($this->values[$var])) {
-						$this->errors[$var] = 'Le champ ' . $var . ' est requis.';
+						$this->errors->set($var, sprintf("Le champ %s est requis.", $var));
 					}
 				}
 
 				if ($key == self::VALIDATOR_EMAIL) {
 					if (!filter_var($this->values[$var], FILTER_VALIDATE_EMAIL)) {
-						$this->errors[$var] = 'L\'email doit être un email valide.';
+						$this->errors->set($var, sprintf("L'email doit être un email valide."));
 					}
 				}
 
 				if ($key == self::VALIDATOR_CONFIRM) {
-					if ($this->values[$var] != @$this->values[$var . '_conf']) {
-						$this->errors[$var] = 'Le champ ' . $var . ' doit être identique au champ de confirmation.';
+					if (!isset($this->values[$var . '_conf']) || $this->values[$var] != $this->values[$var . '_conf']) {
+						$this->errors->set($var, sprintf("Le champ %s doit être identique au champ de confirmation.", $var));
 					}
 				}
 
@@ -97,21 +99,21 @@ class Validator
 					/** @var Entity $value */
 					$entity = $value::findOneBy([$var => $this->values[$var]], true);
 					if (!is_null($entity)) {
-						$this->errors[$var] = 'Le champ ' . $var . ' doit être unique.';
+						$this->errors->set($var, sprintf("Le champ %s doit être unique.", $var));
 					}
 				}
 			}
 		}
 
-		return empty($this->errors);
+		return $this->getErrors()->isEmpty();
 	}
 
 	/**
 	 * Return errors
 	 *
-	 * @return array
+	 * @return Collection
 	 */
-	public function getErrors(): array
+	public function getErrors(): Collection
 	{
 		return $this->errors;
 	}

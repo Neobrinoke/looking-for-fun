@@ -1,40 +1,40 @@
 <?php
-/** @var array $errors */
+/** @var \App\Framework\Support\Collection $errors */
 ?>
 
 <?php ob_start(); ?>
 
 	<h1 class="ui teal image header">S'enregistrer</h1>
 
-	<form class="ui large form <?= isError($errors) ?>" action="<?= route('security.store') ?>" method="POST">
+	<form class="ui large form <?= $errors->any() ? 'error' : '' ?>" action="<?= route('security.store') ?>" method="POST">
 		<div class="ui stacked segment">
-			<?= renderView('message.error', compact('errors')) ?>
+			<?= renderView('message.error', ['errors' => $errors->all()]) ?>
 
-			<div class="field <?= isError($errors, 'name') ?>">
+			<div class="field <?= $errors->has('name') ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
 					<input type="text" name="name" placeholder="Nom d'utilisateur" value="<?= old('name') ?>">
 				</div>
 			</div>
-			<div class="field <?= isError($errors, 'login') ?>">
+			<div class="field <?= $errors->has('login') ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
 					<input type="text" name="login" placeholder="Identifiant" value="<?= old('login') ?>">
 				</div>
 			</div>
-			<div class="field <?= isError($errors, 'email') ?>">
+			<div class="field <?= $errors->has('email') ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="envelope icon"></i>
 					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old('email') ?>">
 				</div>
 			</div>
-			<div class="field <?= isError($errors, 'password') ?>">
+			<div class="field <?= $errors->has('password') ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
 					<input type="password" name="password" placeholder="Mot de passe">
 				</div>
 			</div>
-			<div class="field <?= isError($errors, 'password') ?>">
+			<div class="field <?= $errors->has('password') ? 'error' : '' ?>">
 				<div class="ui left icon input">
 					<i class="lock icon"></i>
 					<input type="password" name="password_conf" placeholder="Mot de passe (confirmation)">

@@ -1,5 +1,5 @@
 <?php
-/** @var array $errors */
+/** @var \App\Framework\Support\Collection $errors */
 /** @var \App\Entity\GameGroup $gameGroup */
 ?>
 
@@ -13,17 +13,16 @@
 			</a>
 		</h2>
 		<div class="ui clearing divider"></div>
-		<form class="ui form <?= isError($errors) ?>" action="<?= route('gameGroup.update', compact('gameGroup')) ?>" method="POST">
+		<form class="ui form <?= $errors->any() ? 'error' : '' ?>" action="<?= route('gameGroup.update', compact('gameGroup')) ?>" method="POST">
+			<?= renderView('message.error', ['errors' => $errors->all()]) ?>
 
-			<?= renderView('message.error', compact('errors')) ?>
-
-			<div class="field <?= isError($errors, 'name') ?>">
+			<div class="field <?= $errors->has('name') ? 'error' : '' ?>">
 				<label for="name">Nom du group</label>
-				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= $gameGroup->getName() ?>">
+				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= old('name') ?? $gameGroup->getName() ?>">
 			</div>
-			<div class="field <?= isError($errors, 'description') ?>">
+			<div class="field <?= $errors->has('description') ? 'error' : '' ?>">
 				<label for="description">Description</label>
-				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= $gameGroup->getDescription() ?></textarea>
+				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= old('description') ?? $gameGroup->getDescription() ?></textarea>
 			</div>
 			<button class="ui button" type="submit">Modifier</button>
 		</form>

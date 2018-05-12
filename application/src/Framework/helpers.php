@@ -51,26 +51,6 @@ function camelToSnakeCase(string $input): string
 }
 
 /**
- * Return class if error
- *
- * @param array $values
- * @param null|string $key
- * @return string
- */
-function isError(array $values, ?string $key = null): string
-{
-	if (!is_null($key) && !isset($values[$key])) {
-		return '';
-	}
-
-	if (empty($values)) {
-		return '';
-	}
-
-	return 'error';
-}
-
-/**
  * Return ago formated date
  *
  * @param string $date
@@ -236,11 +216,11 @@ function request(): ServerRequest
  * Return old value with array and key
  *
  * @param string $key
- * @return mixed|string
+ * @return mixed|null
  * @throws Exception
  * @throws ReflectionException
  */
 function old(string $key)
 {
-	return session()->get('old_form')[$key] ?? '';
+	return session()->get('old_form')[$key] ?? null;
 }

@@ -1,5 +1,5 @@
 <?php
-/** @var array $errors */
+/** @var \App\Framework\Support\Collection $errors */
 ?>
 
 <?php ob_start(); ?>
@@ -12,15 +12,14 @@
 			</a>
 		</h2>
 		<div class="ui clearing divider"></div>
-		<form class="ui form <?= isError($errors) ?>" action="<?= route('gameGroup.store') ?>" method="POST">
+		<form class="ui form <?= $errors->any() ? 'error' : '' ?>" action="<?= route('gameGroup.store') ?>" method="POST">
+			<?= renderView('message.error', ['errors' => $errors->all()]) ?>
 
-			<?= renderView('message.error', compact('errors')) ?>
-
-			<div class="field <?= isError($errors, 'name') ?>">
+			<div class="field <?= $errors->has('name') ? 'error' : '' ?>">
 				<label for="name">Nom du group</label>
 				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= old('name') ?>">
 			</div>
-			<div class="field <?= isError($errors, 'description') ?>">
+			<div class="field <?= $errors->has('description') ? 'error' : '' ?>">
 				<label for="description">Description</label>
 				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= old('description') ?></textarea>
 			</div>
