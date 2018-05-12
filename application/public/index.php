@@ -7,6 +7,9 @@ ini_set("display_errors", 1);
 // Autoload
 require('../vendor/autoload.php');
 
+// Routes
+require('../config/routes.php');
+
 // Application start
 $app = new \App\Framework\App();
 
