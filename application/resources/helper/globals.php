@@ -146,8 +146,18 @@ function env($key, $default = null)
 	return $value;
 }
 
-function container(): \Psr\Container\ContainerInterface
+/**
+ * Return instance of container or instance of $key
+ *
+ * @param null $key
+ * @return \App\Framework\Container\Container|mixed
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function app($key = null)
 {
-	global $container;
-	return $container;
+	if (is_null($key)) {
+		return \App\Framework\Container\Container::getInstance();
+	}
+	return \App\Framework\Container\Container::getInstance()->get($key);
 }

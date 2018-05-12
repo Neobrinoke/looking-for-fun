@@ -4,31 +4,13 @@ namespace App\Framework;
 
 use App\Framework\Router\Route;
 use App\Framework\Router\Router;
-use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\Response;
 use josegonzalez\Dotenv\Loader;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class App
 {
-	/** @var ContainerInterface */
-	public $container;
-
-	/**
-	 * App constructor.
-	 * @param ContainerInterface $container
-	 * @throws \Exception
-	 */
-	public function __construct(ContainerInterface $container = null)
-	{
-		if (is_null($container)) {
-			$container = (new ContainerBuilder())->build();
-		}
-		$this->container = $container;
-	}
-
 	/**
 	 * Run the main application
 	 *
@@ -54,9 +36,9 @@ class App
 		}
 
 		/** @var Route $route */
-		$route = $this->container->get(Router::class)->run($request);
+		$route = app(Router::class)->run($request);
 		if (!is_null($route)) {
-			$response = $route->call($this->container, $uri);
+			$response = $route->call($uri);
 			if (is_string($response)) {
 				return new Response(200, [], $response);
 			} else if ($response instanceof Response) {

@@ -6,10 +6,10 @@
  * @param string $name
  * @param array $params
  * @return string
- * @throws \Psr\Container\ContainerExceptionInterface
- * @throws \Psr\Container\NotFoundExceptionInterface
+ * @throws Exception
+ * @throws ReflectionException
  */
 function renderView(string $name, array $params = []): string
 {
-	return container()->get(\App\Framework\Renderer\Renderer::class)->renderView($name, $params);
+	return app(\App\Framework\Renderer\Renderer::class)->renderView($name, $params);
 }

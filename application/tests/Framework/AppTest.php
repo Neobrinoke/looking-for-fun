@@ -4,21 +4,11 @@ namespace Tests\Framework;
 
 use App\Framework\App;
 use App\Framework\Router\Router;
-use DI\ContainerBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 
 class AppTest extends TestCase
 {
-	/** @var ContainerInterface */
-	private $container;
-
-	public function setUp()
-	{
-		$this->container = (new ContainerBuilder())->build();
-	}
-
 	public function testRedirectTrailingSlash()
 	{
 		$app = new App();
@@ -30,11 +20,11 @@ class AppTest extends TestCase
 
 	public function testUrl()
 	{
-		$this->container->get(Router::class)->get('/azerty', function () {
+		Router::get('/azerty', function () {
 			return '<h1>Azerty</h1>';
 		}, 'azerty');
 
-		$app = new App($this->container);
+		$app = new App();
 		$response = $app->run(new ServerRequest('GET', '/azerty'));
 
 		$this->assertContains('<h1>Azerty</h1>', (string)$response->getBody());
@@ -44,7 +34,7 @@ class AppTest extends TestCase
 	public function testError404()
 	{
 		$app = new App();
-		$response = $app->run(new ServerRequest('GET', '/azerty'));
+		$response = $app->run(new ServerRequest('GET', '/notexist'));
 
 		$this->assertContains('<h1>Erreur 404</h1>', (string)$response->getBody());
 		$this->assertEquals(404, $response->getStatusCode());

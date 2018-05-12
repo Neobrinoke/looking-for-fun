@@ -16,12 +16,12 @@ class Router
 	 * @param string|callable $callback
 	 * @param string $name
 	 * @return Route
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
+	 * @throws \Exception
+	 * @throws \ReflectionException
 	 */
 	public static function get(string $path, $callback, string $name): Route
 	{
-		return container()->get(self::class)->addRoute('GET', $path, $callback, $name);
+		return app()->get(self::class)->addRoute('GET', $path, $callback, $name);
 	}
 
 	/**
@@ -31,12 +31,12 @@ class Router
 	 * @param string|callable $callback
 	 * @param string $name
 	 * @return Route
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
+	 * @throws \Exception
+	 * @throws \ReflectionException
 	 */
 	public static function post(string $path, $callback, string $name): Route
 	{
-		return container()->get(self::class)->addRoute('POST', $path, $callback, $name);
+		return app()->get(self::class)->addRoute('POST', $path, $callback, $name);
 	}
 
 	/**

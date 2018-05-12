@@ -2,9 +2,7 @@
 
 namespace App\Framework\Router;
 
-use App\Framework\Database\Entity;
-use App\Framework\Session\Session;
-use Psr\Container\ContainerInterface;
+use App\Framework\Database\Entity;;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -90,20 +88,19 @@ class Route
 	/**
 	 * Execute the callback
 	 *
-	 * @param ContainerInterface $container
 	 * @param string $uri
 	 * @return mixed
 	 * @throws \Exception
 	 * @throws \Psr\Container\ContainerExceptionInterface
 	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function call(ContainerInterface $container, string $uri)
+	public function call(string $uri)
 	{
 		/** Middleware system */
 		foreach ($this->middleware as $middle) { // If we have a middleware defined
-			$middleware = $container->get($middle);
+			$middleware = app($middle);
 			if (!is_bool($middleware->handle())) { // If return of middleware are not a boolean
-				$container->get(Session::class)->set('last_uri', $uri);
+				session()->set('last_uri', $uri);
 				return $middleware->handle(); // return the response of middleware
 			}
 		}
@@ -114,7 +111,7 @@ class Route
 			$actions = explode('@', $this->getCallback());
 			$className = self::DEFAULT_CONTROLLER_PATH . $actions[0];
 			$methodName = $actions[1];
-			$callable = [$container->get($className), $methodName];
+			$callable = [app($className), $methodName];
 		}
 
 		$params = [];

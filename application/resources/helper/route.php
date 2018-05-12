@@ -4,12 +4,12 @@
  * Return router instance
  *
  * @return \App\Framework\Router\Router|mixed
- * @throws \Psr\Container\ContainerExceptionInterface
- * @throws \Psr\Container\NotFoundExceptionInterface
+ * @throws Exception
+ * @throws ReflectionException
  */
 function router(): \App\Framework\Router\Router
 {
-	return container()->get(\App\Framework\Router\Router::class);
+	return app(\App\Framework\Router\Router::class);
 }
 
 /**
@@ -19,8 +19,6 @@ function router(): \App\Framework\Router\Router
  * @param array $params
  * @return string
  * @throws Exception
- * @throws \Psr\Container\ContainerExceptionInterface
- * @throws \Psr\Container\NotFoundExceptionInterface
  */
 function route(string $name, array $params = []): string
 {
