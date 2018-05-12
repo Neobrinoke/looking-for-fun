@@ -2,10 +2,10 @@
 
 use App\Framework\Authentication\Auth;
 use App\Framework\Container\Container;
+use App\Framework\Http\Request;
 use App\Framework\Renderer\Renderer;
 use App\Framework\Router\Router;
 use App\Framework\Session\Session;
-use GuzzleHttp\Psr7\ServerRequest;
 
 /**
  * Return protected variable
@@ -203,11 +203,11 @@ function session(): Session
 /**
  * Return current request
  *
- * @return ServerRequest
+ * @return Request
  * @throws Exception
  * @throws ReflectionException
  */
-function request(): ServerRequest
+function request(): Request
 {
 	return app('request');
 }
