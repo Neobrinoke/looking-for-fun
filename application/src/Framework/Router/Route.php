@@ -3,7 +3,8 @@
 namespace App\Framework\Router;
 
 use App\Framework\Database\Entity;;
-use Psr\Http\Message\ServerRequestInterface;
+
+use App\Framework\Http\Request;
 use ReflectionClass;
 use ReflectionException;
 
@@ -55,10 +56,10 @@ class Route
 	/**
 	 * Return true if route matched or false
 	 *
-	 * @param ServerRequestInterface $request
+	 * @param Request $request
 	 * @return bool
 	 */
-	public function match(ServerRequestInterface $request): bool
+	public function match(Request $request): bool
 	{
 		if ($request->getMethod() === $this->getMethod()) {
 			if (preg_match($this->getRegex(), trim($request->getUri()->getPath(), '/'), $urlParams)) {

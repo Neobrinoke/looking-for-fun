@@ -2,15 +2,14 @@
 
 namespace Tests\Framework;
 
-use GuzzleHttp\Psr7\ServerRequest;
+use App\Framework\Http\Request;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
 
 class RouterTest extends TestCase
 {
 	public function testGetMethod()
 	{
-		$request = new ServerRequest('GET', '/groups');
+		$request = new Request('GET', '/groups');
 
 		router()->get('/groups', function () {
 			return 'hello';
@@ -24,7 +23,7 @@ class RouterTest extends TestCase
 
 	public function testGetMethodIfUrlDoesNotExist()
 	{
-		$request = new ServerRequest('GET', '/groupsaze');
+		$request = new Request('GET', '/groupsaze');
 
 		router()->get('/groups', function () {
 			return 'hello';
@@ -37,13 +36,13 @@ class RouterTest extends TestCase
 
 	public function testGetMethodWithParameters()
 	{
-		$request = new ServerRequest('GET', '/group/remove/8');
+		$request = new Request('GET', '/group/remove/8');
 
 		router()->get('/groups', function () {
 			return 'dqsdqsdqas';
 		}, 'groups');
 
-		router()->get('/group/remove/{id}', function (ServerRequestInterface $request, int $id) {
+		router()->get('/group/remove/{id}', function (Request $request, int $id) {
 			return 'hello ' . $id;
 		}, 'group.delete');
 
@@ -54,7 +53,7 @@ class RouterTest extends TestCase
 		$this->assertContains('8', $route->getParams());
 
 		// Test invalid route
-		$route = router()->run(new ServerRequest('GET', '/group/add'));
+		$route = router()->run(new Request('GET', '/group/add'));
 		$this->assertEquals(null, $route);
 	}
 

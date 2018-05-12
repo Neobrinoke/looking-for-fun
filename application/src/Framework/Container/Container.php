@@ -2,8 +2,8 @@
 
 namespace App\Framework\Container;
 
+use App\Framework\Http\Request;
 use Exception;
-use GuzzleHttp\Psr7\ServerRequest;
 use ReflectionClass;
 use ReflectionException;
 
@@ -21,7 +21,7 @@ class Container
 	public function __construct()
 	{
 		$this->set('request', function () {
-			return ServerRequest::fromGlobals();
+			return Request::fromGlobals();
 		});
 	}
 

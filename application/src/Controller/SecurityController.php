@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Framework\Controller\Controller;
+use App\Framework\Http\Request;
+use App\Framework\Http\Response;
 use App\Framework\Validator\Validator;
-use Psr\Http\Message\ServerRequestInterface;
 
 class SecurityController extends Controller
 {
 	/**
 	 * Show form for login
 	 *
-	 * @return \GuzzleHttp\Psr7\Response
+	 * @return Response
 	 */
 	public function loginAction()
 	{
@@ -22,14 +23,12 @@ class SecurityController extends Controller
 	/**
 	 * Show form for login
 	 *
-	 * @param ServerRequestInterface $request
-	 * @return \GuzzleHttp\Psr7\Response
+	 * @param Request $request
+	 * @return Response
 	 * @throws \Exception
 	 */
-	public function loginCheckAction(ServerRequestInterface $request)
+	public function loginCheckAction(Request $request)
 	{
-		$old = $request->getParsedBody();
-
 		$validator = new Validator($request->getParsedBody(), [
 			'login' => 'min:3|required',
 			'password' => 'required'
@@ -56,13 +55,13 @@ class SecurityController extends Controller
 
 		$errors = $errors ?? $validator->getErrors();
 
-		return $this->renderView('security.login', compact('old', 'errors'));
+		return $this->renderView('security.login', compact('errors'));
 	}
 
 	/**
 	 * Show form for register
 	 *
-	 * @return \GuzzleHttp\Psr7\Response
+	 * @return Response
 	 */
 	public function registerAction()
 	{
@@ -72,14 +71,12 @@ class SecurityController extends Controller
 	/**
 	 * Store the register request
 	 *
-	 * @param ServerRequestInterface $request
-	 * @return \GuzzleHttp\Psr7\Response
+	 * @param Request $request
+	 * @return Response
 	 * @throws \Exception
 	 */
-	public function storeAction(ServerRequestInterface $request)
+	public function storeAction(Request $request)
 	{
-		$old = $request->getParsedBody();
-
 		$validator = new Validator($request->getParsedBody(), [
 			'name' => 'min:3|required',
 			'login' => 'min:3|required|unique:User',
@@ -103,7 +100,7 @@ class SecurityController extends Controller
 
 		$errors = $validator->getErrors();
 
-		return $this->renderView('security.register', compact('old', 'errors'));
+		return $this->renderView('security.register', compact('errors'));
 	}
 
 	/**

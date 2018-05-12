@@ -14,7 +14,7 @@ require('../config/routes.php');
 $app = new \App\Framework\App();
 
 // Response
-$response = $app->run(\GuzzleHttp\Psr7\ServerRequest::fromGlobals());
+$response = $app->run(\App\Framework\Http\Request::fromGlobals());
 
 // Send response on the browser
-\App\Framework\App::send($response);
+$response->send();

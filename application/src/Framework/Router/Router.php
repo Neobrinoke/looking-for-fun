@@ -2,7 +2,7 @@
 
 namespace App\Framework\Router;
 
-use Psr\Http\Message\ServerRequestInterface;
+use App\Framework\Http\Request;
 
 class Router
 {
@@ -42,10 +42,10 @@ class Router
 	/**
 	 * Return the matched route
 	 *
-	 * @param ServerRequestInterface $request
+	 * @param Request $request
 	 * @return Route|null
 	 */
-	public function run(ServerRequestInterface $request): ?Route
+	public function run(Request $request): ?Route
 	{
 		/** @var Route $route */
 		foreach ($this->routes as $route) {

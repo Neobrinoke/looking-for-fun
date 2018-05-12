@@ -6,7 +6,7 @@ use App\Framework\Authentication\Auth;
 use App\Framework\Renderer\Renderer;
 use App\Framework\Router\Router;
 use App\Framework\Session\Session;
-use GuzzleHttp\Psr7\Response;
+use App\Framework\Http\Response;
 
 class Controller
 {

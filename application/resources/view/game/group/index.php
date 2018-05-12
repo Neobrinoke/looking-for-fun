@@ -24,7 +24,7 @@
 						<div class="content">
 							<img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
 							<div class="header"><?= $gameGroup->getName() ?></div>
-							<div class="meta">Ajouté par <?= $gameGroup->getOwner()->getName() ?>, <?= ago_date_format($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></div>
+							<div class="meta">Ajouté par <?= $gameGroup->getOwner()->getName() ?>, <?= agoDateFormat($gameGroup->getCreatedAt()->format('Y/m/d H:i:s')) ?></div>
 							<div class="description"><?= $gameGroup->getDescription() ?></div>
 						</div>
 						<div class="extra content">

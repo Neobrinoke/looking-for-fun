@@ -1,6 +1,5 @@
 <?php
 /** @var array $errors */
-/** @var array $old */
 ?>
 
 <?php ob_start(); ?>
@@ -19,11 +18,11 @@
 
 			<div class="field <?= isError($errors, 'name') ?>">
 				<label for="name">Nom du group</label>
-				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= old($old, 'name') ?>">
+				<input type="text" id="name" name="name" placeholder="Nom du group" value="<?= old('name') ?>">
 			</div>
 			<div class="field <?= isError($errors, 'description') ?>">
 				<label for="description">Description</label>
-				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= old($old, 'description') ?></textarea>
+				<textarea id="description" name="description" placeholder="Description du group" cols="30" rows="10"><?= old('description') ?></textarea>
 			</div>
 			<button class="ui button" type="submit">Créer</button>
 		</form>

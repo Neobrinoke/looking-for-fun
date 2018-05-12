@@ -1,6 +1,5 @@
 <?php
 /** @var array $errors */
-/** @var array $old */
 /** @var \App\Entity\GameGroup $gameGroup */
 ?>
 

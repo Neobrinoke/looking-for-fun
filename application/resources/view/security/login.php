@@ -1,6 +1,5 @@
 <?php
 /** @var array $errors */
-/** @var array $old */
 ?>
 
 <?php ob_start(); ?>
@@ -15,7 +14,7 @@
 			<div class="field <?= isError($errors) ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="login" placeholder="Identifiant" value="<?= old($old, 'login') ?>">
+					<input type="text" name="login" placeholder="Identifiant" value="<?= old('login') ?>">
 				</div>
 			</div>
 			<div class="field <?= isError($errors) ?>">

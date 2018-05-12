@@ -5,6 +5,7 @@ use App\Framework\Container\Container;
 use App\Framework\Renderer\Renderer;
 use App\Framework\Router\Router;
 use App\Framework\Session\Session;
+use GuzzleHttp\Psr7\ServerRequest;
 
 /**
  * Return protected variable
@@ -50,18 +51,6 @@ function camelToSnakeCase(string $input): string
 }
 
 /**
- * Return old value with array and key
- *
- * @param array $values
- * @param string $key
- * @return mixed|string
- */
-function old(array $values, string $key)
-{
-	return isset($values[$key]) ? $values[$key] : '';
-}
-
-/**
  * Return class if error
  *
  * @param array $values
@@ -87,7 +76,7 @@ function isError(array $values, ?string $key = null): string
  * @param string $date
  * @return string
  */
-function ago_date_format(string $date): string
+function agoDateFormat(string $date): string
 {
 	$time = time() - strtotime($date);
 
@@ -229,4 +218,29 @@ function route(string $name, array $params = []): string
 function session(): Session
 {
 	return app(Session::class);
+}
+
+/**
+ * Return current request
+ *
+ * @return ServerRequest
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function request(): ServerRequest
+{
+	return app('request');
+}
+
+/**
+ * Return old value with array and key
+ *
+ * @param string $key
+ * @return mixed|string
+ * @throws Exception
+ * @throws ReflectionException
+ */
+function old(string $key)
+{
+	return session()->get('old_form')[$key] ?? '';
 }

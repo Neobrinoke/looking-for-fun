@@ -25,7 +25,9 @@ class PdoAdapter
 					$dsn = 'mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_DATABASE') . ';port=' . env('DB_PORT') . '';
 			}
 
-			$options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+			$options = [
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+			];
 
 			if ($isTest) {
 				$this->pdo = new PDO('sqlite::memory:', null, null, $options);

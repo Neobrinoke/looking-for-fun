@@ -2,25 +2,18 @@
 
 namespace App\Framework;
 
+use App\Framework\Http\Request;
+use App\Framework\Http\Response;
 use App\Framework\Router\Route;
-use App\Framework\Router\Router;
-use GuzzleHttp\Psr7\Response;
 use josegonzalez\Dotenv\Loader;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class App
 {
 	/**
-	 * Run the main application
-	 *
-	 * @param ServerRequestInterface $request
-	 * @return ResponseInterface
+	 * App constructor.
 	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
-	public function run(ServerRequestInterface $request): ResponseInterface
+	public function __construct()
 	{
 		$envFile = __DIR__ . '/../../.env';
 
@@ -29,14 +22,27 @@ class App
 		}
 
 		(new Loader($envFile))->parse()->putenv(true);
+	}
 
+	/**
+	 * Run the main application
+	 *
+	 * @param Request $request
+	 * @return Response
+	 * @throws \Exception
+	 * @throws \Psr\Container\ContainerExceptionInterface
+	 * @throws \Psr\Container\NotFoundExceptionInterface
+	 * @throws \ReflectionException
+	 */
+	public function run(Request $request): Response
+	{
 		$uri = $request->getUri()->getPath();
 		if (!empty($uri) && $uri !== "/" && $uri[-1] === "/") {
 			return new Response(301, ['Location' => substr($uri, 0, -1)]);
 		}
 
 		/** @var Route $route */
-		$route = app(Router::class)->run($request);
+		$route = router()->run($request);
 		if (!is_null($route)) {
 			$response = $route->call($uri);
 			if (is_string($response)) {
@@ -49,37 +55,5 @@ class App
 		}
 
 		return new Response(404, [], '<h1>Erreur 404</h1>');
-	}
-
-	/**
-	 * Send response on the browser
-	 *
-	 * @param ResponseInterface $response
-	 */
-	public static function send(ResponseInterface $response)
-	{
-		$http_line = sprintf('HTTP/%s %s %s',
-			$response->getProtocolVersion(),
-			$response->getStatusCode(),
-			$response->getReasonPhrase()
-		);
-
-		header($http_line, true, $response->getStatusCode());
-
-		foreach ($response->getHeaders() as $name => $values) {
-			foreach ($values as $value) {
-				header("$name: $value", false);
-			}
-		}
-
-		$stream = $response->getBody();
-
-		if ($stream->isSeekable()) {
-			$stream->rewind();
-		}
-
-		while (!$stream->eof()) {
-			echo $stream->read(1024 * 8);
-		}
 	}
 }

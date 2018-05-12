@@ -1,6 +1,5 @@
 <?php
 /** @var array $errors */
-/** @var array $old */
 ?>
 
 <?php ob_start(); ?>
@@ -14,19 +13,19 @@
 			<div class="field <?= isError($errors, 'name') ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="name" placeholder="Nom d'utilisateur" value="<?= old($old, 'name') ?>">
+					<input type="text" name="name" placeholder="Nom d'utilisateur" value="<?= old('name') ?>">
 				</div>
 			</div>
 			<div class="field <?= isError($errors, 'login') ?>">
 				<div class="ui left icon input">
 					<i class="user icon"></i>
-					<input type="text" name="login" placeholder="Identifiant" value="<?= old($old, 'login') ?>">
+					<input type="text" name="login" placeholder="Identifiant" value="<?= old('login') ?>">
 				</div>
 			</div>
 			<div class="field <?= isError($errors, 'email') ?>">
 				<div class="ui left icon input">
 					<i class="envelope icon"></i>
-					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old($old, 'email') ?>">
+					<input type="text" name="email" placeholder="Adresse e-mail" value="<?= old('email') ?>">
 				</div>
 			</div>
 			<div class="field <?= isError($errors, 'password') ?>">
