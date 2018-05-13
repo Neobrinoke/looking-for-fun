@@ -92,8 +92,6 @@ class Route
 	 * @param string $uri
 	 * @return mixed
 	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
 	 */
 	public function call(string $uri)
 	{

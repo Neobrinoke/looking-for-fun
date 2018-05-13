@@ -17,7 +17,6 @@ class Router
 	 * @param string $name
 	 * @return Route
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	public static function get(string $path, $callback, string $name): Route
 	{
@@ -32,7 +31,6 @@ class Router
 	 * @param string $name
 	 * @return Route
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	public static function post(string $path, $callback, string $name): Route
 	{

@@ -30,9 +30,6 @@ class App
 	 * @param Request $request
 	 * @return Response
 	 * @throws \Exception
-	 * @throws \Psr\Container\ContainerExceptionInterface
-	 * @throws \Psr\Container\NotFoundExceptionInterface
-	 * @throws \ReflectionException
 	 */
 	public function run(Request $request): Response
 	{

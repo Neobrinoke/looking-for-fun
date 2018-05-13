@@ -67,4 +67,21 @@ class Collection extends ArrayCollection
 
 		return new Collection($tabMerged);
 	}
+
+	/**
+	 * Execute a callback over each item.
+	 *
+	 * @param  callable  $callback
+	 * @return $this
+	 */
+	public function each(callable $callback)
+	{
+		foreach ($this->all() as $key => $item) {
+			if ($callback($item, $key) === false) {
+				break;
+			}
+		}
+
+		return $this;
+	}
 }

@@ -2,6 +2,8 @@
 
 namespace App\Framework\Database;
 
+use App\Framework\Database\QueryBuilder\QueryBuilder;
+use App\Framework\Database\QueryBuilder\SelectQueryBuilder;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -35,9 +37,7 @@ abstract class Entity
 	 */
 	public static function find(int $id, bool $byPassSafeDelete = false): ?Entity
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table(static::getTableName())
 			->where('id = :id');
 
@@ -59,9 +59,7 @@ abstract class Entity
 	 */
 	public static function findOneBy(array $options, bool $byPassSafeDelete = false): ?Entity
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table(static::getTableName());
 
 		if (static::SAFE_DELETE && !$byPassSafeDelete) {
@@ -88,9 +86,7 @@ abstract class Entity
 	 */
 	public static function all(array $ordersBy = [], bool $byPassSafeDelete = false): array
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table(static::getTableName())
 			->ordersBy($ordersBy);
 
@@ -113,9 +109,7 @@ abstract class Entity
 	 */
 	public static function findBy(array $options, array $ordersBy = [], bool $byPassSafeDelete = false): array
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table(static::getTableName())
 			->values($options)
 			->ordersBy($ordersBy);

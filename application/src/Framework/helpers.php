@@ -127,7 +127,6 @@ function env($key, $default = null)
  * @param null $key
  * @return Container|mixed
  * @throws Exception
- * @throws ReflectionException
  */
 function app($key = null)
 {
@@ -142,7 +141,6 @@ function app($key = null)
  *
  * @return Auth
  * @throws Exception
- * @throws ReflectionException
  */
 function auth(): Auth
 {
@@ -156,7 +154,6 @@ function auth(): Auth
  * @param array $params
  * @return string
  * @throws Exception
- * @throws ReflectionException
  */
 function renderView(string $name, array $params = []): string
 {
@@ -168,7 +165,6 @@ function renderView(string $name, array $params = []): string
  *
  * @return Router|mixed
  * @throws Exception
- * @throws ReflectionException
  */
 function router(): Router
 {
@@ -193,7 +189,6 @@ function route(string $name, array $params = []): string
  *
  * @return Session
  * @throws Exception
- * @throws ReflectionException
  */
 function session(): Session
 {
@@ -205,7 +200,6 @@ function session(): Session
  *
  * @return Request
  * @throws Exception
- * @throws ReflectionException
  */
 function request(): Request
 {
@@ -218,7 +212,6 @@ function request(): Request
  * @param string $key
  * @return mixed|null
  * @throws Exception
- * @throws ReflectionException
  */
 function old(string $key)
 {

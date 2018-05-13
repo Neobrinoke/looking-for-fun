@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\Database;
+namespace App\Framework\Database\QueryBuilder;
 
 use PDO;
 
@@ -13,32 +13,37 @@ class QueryBuilder
 	public const QUERY_FETCH_TYPE = PDO::FETCH_ASSOC;
 
 	/** @var string */
-	private $table = '';
+	protected $table = '';
 
 	/** @var array */
-	private $fields = [];
+	protected $fields = [];
 
 	/** @var array */
-	private $conditions = [];
+	protected $conditions = [];
 
 	/** @var array */
-	private $values = [];
+	protected $values = [];
 
 	/** @var string */
-	private $type = self::QUERY_TYPE_SELECT;
+	protected $type = self::QUERY_TYPE_SELECT;
 
 	/** @var array */
-	private $ordersBy = [];
+	protected $ordersBy = [];
+
+	/** @var string */
+	protected $className = '';
 
 	/**
-	 * Create queryBuilder with select type
+	 * QueryBuilder constructor.
 	 *
-	 * @return QueryBuilder
+	 * @param $modelClassName
 	 */
-	public function select(): QueryBuilder
+	public function __construct($modelClassName = null)
 	{
-		$this->type = self::QUERY_TYPE_SELECT;
-		return $this;
+		if (!is_null($modelClassName)) {
+			$this->className = $modelClassName;
+			$this->table = $modelClassName::TABLE;
+		}
 	}
 
 	/**
@@ -192,7 +197,6 @@ class QueryBuilder
 	 * Retrieve formatted query
 	 *
 	 * @return string
-	 * @throws \Exception
 	 */
 	public function getQuery(): string
 	{
@@ -224,8 +228,6 @@ class QueryBuilder
 			if (!empty($this->conditions)) {
 				$sql .= ' WHERE ' . implode(' AND ', $this->conditions);
 			}
-		} else {
-			throw new \Exception('Invalid query builder type');
 		}
 		return $sql;
 	}
@@ -233,16 +235,17 @@ class QueryBuilder
 	/**
 	 * Retrieve result for current query
 	 *
-	 * @return array|null
+	 * @return mixed|null
 	 * @throws \Exception
 	 */
-	public function getResult(): ?array
+	public function getResult()
 	{
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		$statement->execute($this->values);
-		$results = $statement->fetch(self::QUERY_FETCH_TYPE);
+		$statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+		$results = $statement->fetch();
 
-		return is_array($results) ? $results : null;
+		return $results ?: null;
 	}
 
 	/**
@@ -255,7 +258,8 @@ class QueryBuilder
 	{
 		$statement = $this->getPDO()->prepare($this->getQuery());
 		$statement->execute($this->values);
-		return $statement->fetchAll(self::QUERY_FETCH_TYPE);
+		$statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className);
+		return $statement->fetchAll();
 	}
 
 	/**
@@ -275,7 +279,6 @@ class QueryBuilder
 	 *
 	 * @return int
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	public function getLastInsertId(): int
 	{
@@ -287,7 +290,6 @@ class QueryBuilder
 	 *
 	 * @return PDO
 	 * @throws \Exception
-	 * @throws \ReflectionException
 	 */
 	private function getPDO(): PDO
 	{

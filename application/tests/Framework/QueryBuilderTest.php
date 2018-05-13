@@ -2,16 +2,15 @@
 
 namespace Tests\Framework;
 
-use App\Framework\Database\QueryBuilder;
+use App\Framework\Database\QueryBuilder\QueryBuilder;
+use App\Framework\Database\QueryBuilder\SelectQueryBuilder;
 use PHPUnit\Framework\TestCase;
 
 class QueryBuilderTest extends TestCase
 {
 	public function testSelect()
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table('users');
 
 		$this->assertEquals('SELECT * FROM users', $queryBuilder->getQuery());
@@ -19,13 +18,33 @@ class QueryBuilderTest extends TestCase
 
 	public function testSelectWithCloseWhere()
 	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->field('*')
+		$queryBuilder = (new SelectQueryBuilder())
 			->table('users')
 			->where('id = :id');
 
 		$this->assertEquals('SELECT * FROM users WHERE id = :id', $queryBuilder->getQuery());
+	}
+
+	public function testSelectWithOrderBy()
+	{
+		$queryBuilder = (new SelectQueryBuilder())
+			->table('users')
+			->orderBy('name', 'ASC')
+			->orderBy('login', 'DESC');
+
+		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
+	}
+
+	public function testSelectWithOrdersBy()
+	{
+		$queryBuilder = (new SelectQueryBuilder())
+			->table('users')
+			->ordersBy([
+				'name ASC',
+				'login DESC'
+			]);
+
+		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
 	}
 
 	public function testInsert()
@@ -76,31 +95,5 @@ class QueryBuilderTest extends TestCase
 			->where('id = :id');
 
 		$this->assertEquals('DELETE FROM users WHERE id = :id', $queryBuilder->getQuery());
-	}
-
-	public function testSelectWithOrderBy()
-	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->table('users')
-			->field('*')
-			->orderBy('name', 'ASC')
-			->orderBy('login', 'DESC');
-
-		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
-	}
-
-	public function testSelectWithOrdersBy()
-	{
-		$queryBuilder = (new QueryBuilder())
-			->select()
-			->table('users')
-			->field('*')
-			->ordersBy([
-				'name ASC',
-				'login DESC'
-			]);
-
-		$this->assertEquals('SELECT * FROM users ORDER BY name ASC, login DESC', $queryBuilder->getQuery());
 	}
 }

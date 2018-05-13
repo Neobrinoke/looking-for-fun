@@ -14,4 +14,12 @@ class DefaultController extends Controller
 	{
 		return $this->renderView('default.default');
 	}
+
+	/**
+	 * @return Response
+	 */
+	public function testAction()
+	{
+		return new Response();
+	}
 }

@@ -3,6 +3,7 @@
 namespace App\Framework\Validator;
 
 use App\Framework\Database\Entity;
+use App\Framework\Database\Model;
 use App\Framework\Support\Collection;
 
 class Validator
@@ -96,8 +97,8 @@ class Validator
 					$value = 'App\\Entity\\' . $value;
 
 					/** True for bypass the safe delete option of entity, we do not need entity can have the same value as an deleted entity */
-					/** @var Entity $value */
-					$entity = $value::findOneBy([$var => $this->values[$var]], true);
+					/** @var Model $value */
+					$entity = $value::findOneBy([$var => $this->values[$var]]);
 					if (!is_null($entity)) {
 						$this->errors->set($var, sprintf("Le champ %s doit être unique.", $var));
 					}

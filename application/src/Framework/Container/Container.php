@@ -5,9 +5,7 @@ namespace App\Framework\Container;
 use App\Framework\Database\PdoAdapter;
 use App\Framework\Http\Request;
 use App\Framework\Support\Collection;
-use Exception;
 use ReflectionClass;
-use ReflectionException;
 
 class Container
 {
@@ -68,8 +66,7 @@ class Container
 	 *
 	 * @param $key
 	 * @return mixed
-	 * @throws ReflectionException
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	public function get(string $key)
 	{
@@ -94,7 +91,7 @@ class Container
 						$this->instances->set($key, $reflectedClass->newInstance());
 					}
 				} else {
-					throw new Exception(sprintf("%s is not an instantiable Class", $key));
+					throw new \Exception(sprintf("%s is not an instantiable Class", $key));
 				}
 			}
 		}
