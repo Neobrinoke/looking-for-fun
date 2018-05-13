@@ -30,23 +30,6 @@ class QueryBuilder
 	/** @var array */
 	private $ordersBy = [];
 
-	/** @var PDO */
-	private $pdoInstance;
-
-	/**
-	 * QueryBuilder constructor.
-	 *
-	 * @param PDO|null $pdoInstance
-	 */
-	public function __construct(PDO $pdoInstance = null)
-	{
-		if (is_null($pdoInstance)) {
-			$this->pdoInstance = (new PdoAdapter())->getConnection();
-		} else {
-			$this->pdoInstance = $pdoInstance;
-		}
-	}
-
 	/**
 	 * Create queryBuilder with select type
 	 *
@@ -291,6 +274,8 @@ class QueryBuilder
 	 * Retrieve the last inserted id
 	 *
 	 * @return int
+	 * @throws \Exception
+	 * @throws \ReflectionException
 	 */
 	public function getLastInsertId(): int
 	{
@@ -301,9 +286,11 @@ class QueryBuilder
 	 * Retrieve or initialize a new instance of PDO
 	 *
 	 * @return PDO
+	 * @throws \Exception
+	 * @throws \ReflectionException
 	 */
 	private function getPDO(): PDO
 	{
-		return $this->pdoInstance;
+		return app('pdo_instance');
 	}
 }

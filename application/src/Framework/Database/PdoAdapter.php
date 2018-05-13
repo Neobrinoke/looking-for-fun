@@ -6,10 +6,10 @@ use PDO;
 
 class PdoAdapter
 {
+	public const ADAPTER_MYSQL = 'mysql';
+
 	/** @var PDO */
 	private $pdo = null;
-
-	public const ADAPTER_MYSQL = 'mysql';
 
 	/**
 	 * Adapter constructor.

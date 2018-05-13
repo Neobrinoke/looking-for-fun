@@ -2,7 +2,9 @@
 
 namespace App\Framework\Container;
 
+use App\Framework\Database\PdoAdapter;
 use App\Framework\Http\Request;
+use App\Framework\Support\Collection;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
@@ -12,17 +14,28 @@ class Container
 	/** @var Container */
 	private static $instance = null;
 
-	/** @var array */
-	private $instances = [];
+	/** @var Collection */
+	private $instances;
 
-	/** @var array */
-	private $resolvers = [];
+	/** @var Collection */
+	private $resolvers;
 
 	public function __construct()
 	{
-		$this->set('request', function () {
-			return Request::fromGlobals();
-		});
+		$this->instances = new Collection();
+		$this->resolvers = new Collection();
+
+		if (!$this->resolvers->has('request')) {
+			$this->set('request', function () {
+				return Request::fromGlobals();
+			});
+		}
+
+		if (!$this->resolvers->has('pdo_instance')) {
+			$this->set('pdo_instance', function () {
+				return (new PdoAdapter())->getConnection();
+			});
+		}
 	}
 
 	/**
@@ -47,7 +60,7 @@ class Container
 	 */
 	public function set(string $key, callable $resolver)
 	{
-		$this->resolvers[$key] = $resolver;
+		$this->resolvers->set($key, $resolver);
 	}
 
 	/**
@@ -60,25 +73,25 @@ class Container
 	 */
 	public function get(string $key)
 	{
-		if (!isset($this->instances[$key])) {
-			if (isset($this->resolvers[$key])) {
-				$this->instances[$key] = $this->resolvers[$key]();
+		if (!$this->instances->has($key)) {
+			if ($this->resolvers->has($key)) {
+				$this->instances->set($key, $this->resolvers->get($key)());
 			} else {
 				$reflectedClass = new ReflectionClass($key);
 				if ($reflectedClass->isInstantiable()) {
 					$constructor = $reflectedClass->getConstructor();
 					if ($constructor) {
-						$parameters = [];
+						$parameters = new Collection();
 						foreach ($reflectedClass->getConstructor()->getParameters() as $parameter) {
 							if ($parameter->getClass()) {
-								$parameters[] = $this->get($parameter->getClass()->getName());
+								$parameters->add($this->get($parameter->getClass()->getName()));
 							} else {
-								$parameters[] = $parameter->getDefaultValue();
+								$parameters->add($this->get($parameter->getDefaultValue()));
 							}
 						}
-						$this->instances[$key] = $reflectedClass->newInstanceArgs($parameters);
+						$this->instances->set($key, $reflectedClass->newInstanceArgs($parameters->all()));
 					} else {
-						$this->instances[$key] = $reflectedClass->newInstance();
+						$this->instances->set($key, $reflectedClass->newInstance());
 					}
 				} else {
 					throw new Exception(sprintf("%s is not an instantiable Class", $key));
@@ -86,6 +99,6 @@ class Container
 			}
 		}
 
-		return $this->instances[$key];
+		return $this->instances->get($key);
 	}
 }
