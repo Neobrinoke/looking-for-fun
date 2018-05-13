@@ -20,7 +20,7 @@ class GameGroup extends Model
 	public $created_at;
 	/** @var string */
 	public $updated_at;
-	/** @var string */
+	/** @var string|null */
 	public $deleted_at;
 
 	/**
@@ -120,17 +120,17 @@ class GameGroup extends Model
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getDeletedAt(): string
+	public function getDeletedAt(): ?string
 	{
 		return $this->deleted_at;
 	}
 
 	/**
-	 * @param string $deleted_at
+	 * @param null|string $deleted_at
 	 */
-	public function setDeletedAt(string $deleted_at): void
+	public function setDeletedAt(?string $deleted_at): void
 	{
 		$this->deleted_at = $deleted_at;
 	}

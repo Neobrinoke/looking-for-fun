@@ -12,10 +12,10 @@ class Model
 	/**
 	 * Create new query builder.
 	 *
-	 * @param null $class
+	 * @param null|string $class
 	 * @return SelectQueryBuilder
 	 */
-	public static function query($class = null)
+	public static function query(?string $class = null): SelectQueryBuilder
 	{
 		return new SelectQueryBuilder($class ?? static::class);
 	}
@@ -23,10 +23,10 @@ class Model
 	/**
 	 * Retrieve first element.
 	 *
-	 * @return Model
+	 * @return Model|null
 	 * @throws \Exception
 	 */
-	public static function first()
+	public static function first(): ?Model
 	{
 		return self::query()->getResult();
 	}
@@ -112,7 +112,7 @@ class Model
 	 * @return Model|mixed
 	 * @throws \Exception
 	 */
-	protected function hasOne(string $related, string $foreignKey, string $localKey)
+	protected function hasOne(string $related, string $foreignKey, string $localKey): Collection
 	{
 		return self::query($related)
 			->where(sprintf("%s = ?", $localKey))
@@ -129,7 +129,7 @@ class Model
 	 * @return Model|mixed
 	 * @throws \Exception
 	 */
-	protected function hasMany(string $related, string $foreignKey, string $localKey)
+	protected function hasMany(string $related, string $foreignKey, string $localKey): Collection
 	{
 		return new Collection(self::query($related)
 			->where(sprintf("%s = ?", $localKey))
