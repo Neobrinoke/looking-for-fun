@@ -7,7 +7,9 @@ use App\Framework\Support\Collection;
 
 class Model
 {
-	const TABLE = 'undefined';
+	public const TABLE = 'undefined';
+	public const SAFE_DELETE = false;
+	public const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 
 	/**
 	 * Create new query builder.

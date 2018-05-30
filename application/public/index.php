@@ -1,7 +1,6 @@
 <?php
 
 //@todo retirer ça plus tard
-
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
@@ -21,10 +20,8 @@ $response = $app->run(\App\Framework\Http\Request::fromGlobals());
 $response->send();
 
 
-$gameGroupsAll = \App\Model\GameGroup::all();
+/** @var \App\Model\User $user */
+$user = \App\Model\User::first();
 
-$gameGroupsFiltered = $gameGroupsAll->filter(function (\App\Model\GameGroup $gameGroup) {
-	return $gameGroup->getOwnerId() === 1;
-});
-
-var_dump($gameGroupsFiltered);
+var_dump($user);
+var_dump($user->getGameGroups());

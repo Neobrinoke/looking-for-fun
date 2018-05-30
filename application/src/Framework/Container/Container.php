@@ -2,7 +2,7 @@
 
 namespace App\Framework\Container;
 
-use App\Framework\Database\PdoAdapter;
+use App\Framework\Database\Adapter\PdoAdapter;
 use App\Framework\Http\Request;
 use App\Framework\Support\Collection;
 use ReflectionClass;

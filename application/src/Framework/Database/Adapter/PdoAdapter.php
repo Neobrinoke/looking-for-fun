@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Framework\Database;
+namespace App\Framework\Database\Adapter;
 
 use PDO;
 
-class PdoAdapter
+class PdoAdapter extends Adapter
 {
 	public const ADAPTER_MYSQL = 'mysql';
 
